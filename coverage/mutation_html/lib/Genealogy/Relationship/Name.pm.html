@@ -635,12 +635,17 @@ Approximate LCSAJ segments: 9<br>
 </span><span class="">  343: 	$params = Object::Configure::configure($class, $params);
 </span><span class="">  344: 
 </span><span class="">  345: 	# Allow both hash and hashref invocation styles
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  346: 	my $self = bless {
+</span><span class="">  346: 	my $self = bless {
+</span><span class="">  347: 		# Store any constructor-time config for Object::Configure compatibility
+</span><span class="">  348: 		%{$params},
+</span><span class="">  349: 	}, ref($class) || $class;
+</span><span class="">  350: 
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  351: 	return $self;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_346_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_351_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -648,7 +653,7 @@ Approximate LCSAJ segments: 9<br>
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_346_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
+							</li><li><b>RETURN_UNDEF_351_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -657,12 +662,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  347: 		# Store any constructor-time config for Object::Configure compatibility
-</span><span class="">  348: 		%{$params},
-</span><span class="">  349: 	}, ref($class) || $class;
-</span><span class="">  350: 
-</span><span class="">  351: 	return $self;
-</span><span class="">  352: }
+<span class="">  352: }
 </span><span class="">  353: 
 </span><span class="">  354: # ---------------------------------------------------------------------------
 </span><span class="">  355: # Public method: name()
@@ -794,12 +794,13 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  481: 
 </span><span class="">  482: 	# Look up and return; undef when the combination is not tabulated
 </span><span class="">  483: 	my $result = $table-&gt;{$key};
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  484: 
+</span><span class="">  484: 
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  485: 	return $result;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_484_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_485_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -807,7 +808,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_484_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
+							</li><li><b>RETURN_UNDEF_485_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -816,8 +817,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  485: 	return $result;
-</span><span class="">  486: }
+<span class="">  486: }
 </span><span class="">  487: 
 </span><span class="">  488: # ---------------------------------------------------------------------------
 </span><span class="">  489: # Public method: supported_languages()
@@ -871,15 +871,12 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  537: sub supported_languages {
 </span><span class="">  538: 	# Return the sorted set of keys from the master dispatch table
 </span><span class="">  539: 	my @langs = sort keys %RELATIONSHIP_TABLES;
-</span><span class="">  540: 	return wantarray ? @langs : \@langs;
-</span><span class="">  541: }
-</span><span class="">  542: 
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  543: # ---------------------------------------------------------------------------
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  540: 	return wantarray ? @langs : \@langs;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_543_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_540_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -887,7 +884,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_543_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
+							</li><li><b>RETURN_UNDEF_540_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -896,7 +893,10 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  544: # Public method: known_sexes()
+<span class="">  541: }
+</span><span class="">  542: 
+</span><span class="">  543: # ---------------------------------------------------------------------------
+</span><span class="">  544: # Public method: known_sexes()
 </span><span class="">  545: # ---------------------------------------------------------------------------
 </span><span class="">  546: 
 </span><span class="">  547: =head2 known_sexes
@@ -950,15 +950,12 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  595: sub known_sexes {
 </span><span class="">  596: 	# Return the two valid sex codes in sorted order
 </span><span class="">  597: 	my @sexes = sort($SEX_FEMALE, $SEX_MALE);
-</span><span class="">  598: 	return wantarray ? @sexes : \@sexes;
-</span><span class="">  599: }
-</span><span class="">  600: 
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  601: 1;
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  598: 	return wantarray ? @sexes : \@sexes;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_601_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_598_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -966,7 +963,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_601_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
+							</li><li><b>RETURN_UNDEF_598_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -975,7 +972,10 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  602: 
+<span class="">  599: }
+</span><span class="">  600: 
+</span><span class="">  601: 1;
+</span><span class="">  602: 
 </span><span class="">  603: __END__
 </span><span class="">  604: 
 </span><span class="">  605: =head1 CONFIGURATION
