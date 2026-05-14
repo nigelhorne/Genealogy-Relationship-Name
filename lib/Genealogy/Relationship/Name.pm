@@ -336,7 +336,7 @@ sub new {
 	my $class = shift;
 
 	# Handle hash or hashref arguments
-	my $params = Params::Get::get_params(undef, @_);
+	my $params = Params::Get::get_params(undef, \@_);
 
 	# Load the configuration from a config file, if provided
 	$params = Object::Configure::configure($class, $params);

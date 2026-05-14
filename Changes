@@ -1,6 +1,6 @@
 Revision history for Genealogy::Relationship::Name
 
-0.01
+0.01	Thu May 14 14:02:44 EDT 2026
       - Initial release; extracted en/fr/de relationship tables from gedcom/ged2site
       - Added name(), supported_languages(), known_sexes() public methods
       - Full POD, Params::Get/Params::Validate::Strict, Readonly constants
