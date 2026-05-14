@@ -628,7 +628,7 @@ Approximate LCSAJ segments: 9<br>
 </span><span class="">  336: 	my $class = shift;
 </span><span class="">  337: 
 </span><span class="">  338: 	# Handle hash or hashref arguments
-</span><span class="">  339: 	my $params = Params::Get::get_params(undef, @_);
+</span><span class="">  339: 	my $params = Params::Get::get_params(undef, \@_);
 </span><span class="">  340: 
 </span><span class="">  341: 	# Load the configuration from a config file, if provided
 </span><span class="">  342: 	$params = Object::Configure::configure($class, $params);
@@ -639,7 +639,7 @@ Approximate LCSAJ segments: 9<br>
 </span><span class="">  347: 		%{$params},
 </span><span class="">  348: 	}, ref($class) || $class;
 </span><span class="">  349: 
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  350: 	return $self;
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  350: 	return $self;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -794,7 +794,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  481: 	# Look up and return; undef when the combination is not tabulated
 </span><span class="">  482: 	my $result = $table-&gt;{$key};
 </span><span class="">  483: 
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  484: 	return $result;
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  484: 	return $result;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -870,7 +870,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  536: sub supported_languages {
 </span><span class="">  537: 	# Return the sorted set of keys from the master dispatch table
 </span><span class="">  538: 	my @langs = sort keys %RELATIONSHIP_TABLES;
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  539: 	return wantarray ? @langs : \@langs;
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  539: 	return wantarray ? @langs : \@langs;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
