@@ -29,6 +29,7 @@ WriteMakefile(
 	}, PREREQ_PM => {
 		'autodie' => 0,
 		'Carp' => 0,
+		'IPC::System::Simple' => 0,
 		'Object::Configure' => 0,
 		'Params::Get' => 0,
 		'Params::Validate::Strict' => 0,

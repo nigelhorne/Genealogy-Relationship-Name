@@ -414,17 +414,16 @@ None.
 =head4 Input
 
     {
-        steps_to_ancestor   => { type => SCALAR, regex => qr/^\d+$/ },
-        steps_from_ancestor => { type => SCALAR, regex => qr/^\d+$/ },
-        sex                 => { type => SCALAR, regex => qr/^[MF]$/ },
-        language            => { type => SCALAR, optional => 1,
-                                 regex => qr/^(?:en|fr|de)$/ },
+	steps_to_ancestor   => { type => 'integer', minimum => 0 },
+	steps_from_ancestor => { type => 'integer', minimum => 0 },
+	sex                 => { type => 'string', memberof => ['M', 'F'] },
+	language            => { type => 'string', regex => qr/^(?:en|de|fr)/, optional => 1 },
     }
 
 =head4 Output
 
     {
-        type     => SCALAR,
+        type     => 'string',
         optional => 1,     # undef when the combination is not tabulated
     }
 
@@ -454,8 +453,7 @@ sub name {
 			steps_to_ancestor   => { type => 'integer', minimum => 0 },
 			steps_from_ancestor => { type => 'integer', minimum => 0 },
 			sex                 => { type => 'string', memberof => ['M', 'F'] },
-			language            => { type => 'string', regex => qr/^(?:en|de|fr)/,
-			                         optional => 1 },
+			language            => { type => 'string', regex => qr/^(?:en|de|fr)/, optional => 1 },
 		}
 	);
 
