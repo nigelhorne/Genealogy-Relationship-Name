@@ -3,6 +3,7 @@
 requires 'perl', '5.010';
 
 requires 'Carp';
+requires 'IPC::System::Simple';
 requires 'Object::Configure';
 requires 'Params::Get';
 requires 'Params::Validate::Strict';
