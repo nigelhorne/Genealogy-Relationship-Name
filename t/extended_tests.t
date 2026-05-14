@@ -11,13 +11,11 @@
 #  * wantarray branches in supported_languages() and known_sexes()
 #  * undef-return path for un-tabulated pairs
 #  * Exact string-equality assertions to kill value-substitution mutants
-#  * Call-count assertions via Test::Mockingbird
 
 use strict;
 use warnings;
 
 use Test::Most;
-use Test::Mockingbird;
 
 use lib 'lib', '../lib';
 

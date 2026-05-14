@@ -2,13 +2,11 @@
 
 # unit.t - black-box tests for public API of Genealogy::Relationship::Name
 # Tests are strictly driven by the POD API documentation.
-# Non-core dependencies outside this module are mocked via Test::Mockingbird.
 
 use strict;
 use warnings;
 
 use Test::Most;
-use Test::Mockingbird;
 
 use lib 'lib', '../lib';
 
