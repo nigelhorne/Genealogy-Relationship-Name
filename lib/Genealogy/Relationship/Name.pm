@@ -686,7 +686,7 @@ L<http://deps.cpantesters.org/?module=Genealogy::Relationship::Name>
 
 Copyright 2026 Nigel Horne.
 
-Usage is subject to GPL2 licence terms.
+Usage is subject to the GPL2 licence terms.
 If you use it,
 please let me know.
 

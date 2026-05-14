@@ -79,10 +79,6 @@ code, returns a localised relationship-name string.
 A string containing the relationship name, or `undef` if the combination
 is not found in the lookup table.
 
-### SIDE EFFECTS
-
-None.
-
 ### EXAMPLE
 
     my $namer = Genealogy::Relationship::Name->new();
@@ -100,17 +96,16 @@ None.
 #### Input
 
     {
-        steps_to_ancestor   => { type => SCALAR, regex => qr/^\d+$/ },
-        steps_from_ancestor => { type => SCALAR, regex => qr/^\d+$/ },
-        sex                 => { type => SCALAR, regex => qr/^[MF]$/ },
-        language            => { type => SCALAR, optional => 1,
-                                 regex => qr/^(?:en|fr|de)$/ },
+        steps_to_ancestor   => { type => 'integer', minimum => 0 },
+        steps_from_ancestor => { type => 'integer', minimum => 0 },
+        sex                 => { type => 'string', memberof => ['M', 'F'] },
+        language            => { type => 'string', regex => qr/^(?:en|de|fr)/, optional => 1 },
     }
 
 #### Output
 
     {
-        type     => SCALAR,
+        type     => 'string',
         optional => 1,     # undef when the combination is not tabulated
     }
 
@@ -145,10 +140,6 @@ None.
 
 A list (or array-ref in scalar context) of language code strings,
 currently `('de', 'en', 'fr')`.
-
-### SIDE EFFECTS
-
-None.
 
 ### EXAMPLE
 
@@ -257,8 +248,46 @@ deeper tables are welcome.
 
 Nigel Horne `<njh@nigelhorne.com>`
 
+# REPOSITORY
+
+[https://github.com/nigelhorne/Genealogy-Relationship-Name](https://github.com/nigelhorne/Genealogy-Relationship-Name)
+
+# SUPPORT
+
+This module is provided as-is without any warranty.
+
+Please report any bugs or feature requests to `bug-genalogy-relationship-name at rt.cpan.org`,
+or through the web interface at
+[http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name](http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name).
+I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Genealogy::Relationship::Name
+
+You can also look for information at:
+
+- MetaCPAN
+
+    [https://metacpan.org/dist/Genealogy-Relationship-Name](https://metacpan.org/dist/Genealogy-Relationship-Name)
+
+- RT: CPAN's request tracker
+
+    [https://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-Relationship-Name](https://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-Relationship-Name)
+
+- CPAN Testers' Matrix
+
+    [http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name](http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name)
+
+- CPAN Testers Dependencies
+
+    [http://deps.cpantesters.org/?module=Genealogy::Relationship::Name](http://deps.cpantesters.org/?module=Genealogy::Relationship::Name)
+
 # LICENCE AND COPYRIGHT
 
-Copyright (C) 2026 Nigel Horne.
+Copyright 2026 Nigel Horne.
 
-This program is released under the following licence: GPL v2
+Usage is subject to GPL2 licence terms.
+If you use it,
+please let me know.
