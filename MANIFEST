@@ -12,4 +12,5 @@ t/eol.t
 t/extended_tests.t
 t/function.t
 t/integration.t
+t/mutant_survivors.t
 t/unit.t

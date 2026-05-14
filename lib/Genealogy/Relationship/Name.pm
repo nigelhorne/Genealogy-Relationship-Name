@@ -11,6 +11,7 @@ use warnings;
 use autodie qw(:all);
 
 use Carp qw(croak carp);
+use Object::Configure;
 use Params::Get;
 use Params::Validate::Strict;
 use Readonly;
@@ -274,12 +275,10 @@ Readonly::Hash my %RELATIONSHIP_TABLES => (
 	'en' => {
 		$SEX_MALE   => \%EN_MALE_RELATIONSHIPS,
 		$SEX_FEMALE => \%EN_FEMALE_RELATIONSHIPS,
-	},
-	'fr' => {
+	}, 'fr' => {
 		$SEX_MALE   => \%FR_MALE_RELATIONSHIPS,
 		$SEX_FEMALE => \%FR_FEMALE_RELATIONSHIPS,
-	},
-	'de' => {
+	}, 'de' => {
 		$SEX_MALE   => \%DE_MALE_RELATIONSHIPS,
 		$SEX_FEMALE => \%DE_FEMALE_RELATIONSHIPS,
 	},
@@ -335,12 +334,18 @@ Supported languages: C<en> (English, default), C<fr> (French), C<de> (German).
 
 sub new {
 	# Create and return a blessed object
-	my($class, %args) = @_;
+	my $class = shift;
+
+	# Handle hash or hashref arguments
+	my $params = Params::Get::get_params(undef, @_);
+
+	# Load the configuration from a config file, if provided
+	$params = Object::Configure::configure($class, $params);
 
 	# Allow both hash and hashref invocation styles
 	my $self = bless {
 		# Store any constructor-time config for Object::Configure compatibility
-		%args,
+		%{$params},
 	}, ref($class) || $class;
 
 	return $self;
@@ -392,10 +397,6 @@ Supported values: C<en> (default), C<fr>, C<de>.
 
 A string containing the relationship name, or C<undef> if the combination
 is not found in the lookup table.
-
-=head3 SIDE EFFECTS
-
-None.
 
 =head3 EXAMPLE
 
@@ -505,10 +506,6 @@ None.
 
 A list (or array-ref in scalar context) of language code strings,
 currently C<('de', 'en', 'fr')>.
-
-=head3 SIDE EFFECTS
-
-None.
 
 =head3 EXAMPLE
 
@@ -645,10 +642,54 @@ L<Gedcom::Individual>, L<Genealogy::Relationship>
 
 Nigel Horne C<< <njh@nigelhorne.com> >>
 
+=head1 REPOSITORY
+
+L<https://github.com/nigelhorne/Genealogy-Relationship-Name>
+
+=head1 SUPPORT
+
+This module is provided as-is without any warranty.
+
+Please report any bugs or feature requests to C<bug-genalogy-relationship-name at rt.cpan.org>,
+or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name>.
+I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Genealogy::Relationship::Name
+
+You can also look for information at:
+
+=over 4
+
+=item * MetaCPAN
+
+L<https://metacpan.org/dist/Genealogy-Relationship-Name>
+
+=item * RT: CPAN's request tracker
+
+L<https://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-Relationship-Name>
+
+=item * CPAN Testers' Matrix
+
+L<http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name>
+
+=item * CPAN Testers Dependencies
+
+L<http://deps.cpantesters.org/?module=Genealogy::Relationship::Name>
+
+=back
+
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (C) 2026 Nigel Horne.
+Copyright 2026 Nigel Horne.
 
-This program is released under the following licence: GPL v2
+Usage is subject to GPL2 licence terms.
+If you use it,
+please let me know.
 
 =cut
+
+1;
