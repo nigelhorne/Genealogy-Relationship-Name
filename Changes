@@ -1,0 +1,7 @@
+Revision history for Genealogy::Relationship::Name
+
+0.01
+      - Initial release; extracted en/fr/de relationship tables from gedcom/ged2site
+      - Added name(), supported_languages(), known_sexes() public methods
+      - Full POD, Params::Get/Params::Validate::Strict, Readonly constants
+      - Test suite: function.t, unit.t, integration.t, edge_cases.t, extended_tests.t
