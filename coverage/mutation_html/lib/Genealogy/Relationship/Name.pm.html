@@ -640,7 +640,7 @@ Approximate LCSAJ segments: 9<br>
 </span><span class="">  348: 		%{$params},
 </span><span class="">  349: 	}, ref($class) || $class;
 </span><span class="">  350: 
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  351: 	return $self;
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  351: 	return $self;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -950,7 +950,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  595: sub known_sexes {
 </span><span class="">  596: 	# Return the two valid sex codes in sorted order
 </span><span class="">  597: 	my @sexes = sort($SEX_FEMALE, $SEX_MALE);
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  598: 	return wantarray ? @sexes : \@sexes;
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  598: 	return wantarray ? @sexes : \@sexes;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -1062,7 +1062,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class="">  686: 
 </span><span class="">  687: Copyright 2026 Nigel Horne.
 </span><span class="">  688: 
-</span><span class="">  689: Usage is subject to GPL2 licence terms.
+</span><span class="">  689: Usage is subject to the GPL2 licence terms.
 </span><span class="">  690: If you use it,
 </span><span class="">  691: please let me know.
 </span><span class="">  692: 
