@@ -232,7 +232,7 @@ reconfiguration.
 
 # DEPENDENCIES
 
-[Carp](https://metacpan.org/pod/Carp), [Params::Get](https://metacpan.org/pod/Params%3A%3AGet), [Params::Validate::Strict](https://metacpan.org/pod/Params%3A%3AValidate%3A%3AStrict), [Readonly](https://metacpan.org/pod/Readonly), [Return::Set](https://metacpan.org/pod/Return%3A%3ASet)
+[Carp](https://metacpan.org/pod/Carp), [Params::Get](https://metacpan.org/pod/Params%3A%3AGet), [Params::Validate::Strict](https://metacpan.org/pod/Params%3A%3AValidate%3A%3AStrict), [Readonly](https://metacpan.org/pod/Readonly)
 
 # BUGS AND LIMITATIONS
 
@@ -242,7 +242,9 @@ deeper tables are welcome.
 
 # SEE ALSO
 
-[Gedcom::Individual](https://metacpan.org/pod/Gedcom%3A%3AIndividual), [Genealogy::Relationship](https://metacpan.org/pod/Genealogy%3A%3ARelationship)
+- [Configure an Object at Runtime](https://metacpan.org/pod/Object%3A%3AConfigure)
+- [Test Dashboard](https://nigelhorne.github.io/Genealogy-Relationship-Name/coverage/)
+- [Gedcom::Individual](https://metacpan.org/pod/Gedcom%3A%3AIndividual), [Genealogy::Relationship](https://metacpan.org/pod/Genealogy%3A%3ARelationship)
 
 # AUTHOR
 
@@ -288,6 +290,6 @@ You can also look for information at:
 
 Copyright 2026 Nigel Horne.
 
-Usage is subject to GPL2 licence terms.
+Usage is subject to the GPL2 licence terms.
 If you use it,
 please let me know.

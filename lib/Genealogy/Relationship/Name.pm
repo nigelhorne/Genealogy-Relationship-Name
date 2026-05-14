@@ -15,7 +15,6 @@ use Object::Configure;
 use Params::Get;
 use Params::Validate::Strict;
 use Readonly;
-use Return::Set;
 
 our $VERSION = '0.01';
 
@@ -626,7 +625,7 @@ The module continues with English relationship names.
 
 =head1 DEPENDENCIES
 
-L<Carp>, L<Params::Get>, L<Params::Validate::Strict>, L<Readonly>, L<Return::Set>
+L<Carp>, L<Params::Get>, L<Params::Validate::Strict>, L<Readonly>
 
 =head1 BUGS AND LIMITATIONS
 
@@ -636,7 +635,15 @@ deeper tables are welcome.
 
 =head1 SEE ALSO
 
-L<Gedcom::Individual>, L<Genealogy::Relationship>
+=over 4
+
+=item * L<Configure an Object at Runtime|Object::Configure>
+
+=item * L<Test Dashboard|https://nigelhorne.github.io/Genealogy-Relationship-Name/coverage/>
+
+=item * L<Gedcom::Individual>, L<Genealogy::Relationship>
+
+=back
 
 =head1 AUTHOR
 
