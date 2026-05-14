@@ -307,340 +307,340 @@ Approximate LCSAJ segments: 9<br>
 </span><span class="">   15: use Params::Get;
 </span><span class="">   16: use Params::Validate::Strict;
 </span><span class="">   17: use Readonly;
-</span><span class="">   18: use Return::Set;
-</span><span class="">   19: 
-</span><span class="">   20: our $VERSION = &#39;0.01&#39;;
-</span><span class="">   21: 
-</span><span class="">   22: # ---------------------------------------------------------------------------
-</span><span class="">   23: # Constants &acirc;&#128;&#147; relationship table keys
-</span><span class="">   24: # ---------------------------------------------------------------------------
-</span><span class="">   25: 
-</span><span class="">   26: # Supported language codes
-</span><span class="">   27: Readonly::Array my @SUPPORTED_LANGUAGES =&gt; qw(en fr de);
-</span><span class="">   28: 
-</span><span class="">   29: # Default language when none supplied
-</span><span class="">   30: Readonly::Scalar my $DEFAULT_LANGUAGE =&gt; &#39;en&#39;;
-</span><span class="">   31: 
-</span><span class="">   32: # Sex constants
-</span><span class="">   33: Readonly::Scalar my $SEX_MALE   =&gt; &#39;M&#39;;
-</span><span class="">   34: Readonly::Scalar my $SEX_FEMALE =&gt; &#39;F&#39;;
-</span><span class="">   35: 
-</span><span class="">   36: # ---------------------------------------------------------------------------
-</span><span class="">   37: # English relationship tables
-</span><span class="">   38: # Key: &quot;$steps1,$steps2&quot;  where steps1 = steps from A to ancestor,
-</span><span class="">   39: #                                steps2 = steps from B to ancestor
-</span><span class="">   40: # ---------------------------------------------------------------------------
-</span><span class="">   41: 
-</span><span class="">   42: Readonly::Hash my %EN_MALE_RELATIONSHIPS =&gt; (
-</span><span class="">   43: 	&#39;0,0&#39; =&gt; &#39;self&#39;,
-</span><span class="">   44: 	&#39;0,1&#39; =&gt; &#39;son&#39;,
-</span><span class="">   45: 	&#39;0,2&#39; =&gt; &#39;grandson&#39;,
-</span><span class="">   46: 	&#39;0,3&#39; =&gt; &#39;great-grandson&#39;,
-</span><span class="">   47: 	&#39;0,4&#39; =&gt; &#39;great-great-grandson&#39;,
-</span><span class="">   48: 	&#39;1,0&#39; =&gt; &#39;father&#39;,
-</span><span class="">   49: 	&#39;1,1&#39; =&gt; &#39;brother&#39;,
-</span><span class="">   50: 	&#39;1,2&#39; =&gt; &#39;nephew&#39;,
-</span><span class="">   51: 	&#39;1,3&#39; =&gt; &#39;great-nephew&#39;,
-</span><span class="">   52: 	&#39;1,4&#39; =&gt; &#39;great-great-nephew&#39;,
-</span><span class="">   53: 	&#39;2,0&#39; =&gt; &#39;grandfather&#39;,
-</span><span class="">   54: 	&#39;2,1&#39; =&gt; &#39;uncle&#39;,
-</span><span class="">   55: 	&#39;2,2&#39; =&gt; &#39;first cousin&#39;,
-</span><span class="">   56: 	&#39;2,3&#39; =&gt; &#39;first cousin once-removed&#39;,
-</span><span class="">   57: 	&#39;2,4&#39; =&gt; &#39;first cousin twice-removed&#39;,
-</span><span class="">   58: 	&#39;2,5&#39; =&gt; &#39;first cousin three-times-removed&#39;,
-</span><span class="">   59: 	&#39;3,0&#39; =&gt; &#39;great-grandfather&#39;,
-</span><span class="">   60: 	&#39;3,1&#39; =&gt; &#39;great-uncle&#39;,
-</span><span class="">   61: 	&#39;3,2&#39; =&gt; &#39;first cousin once-removed&#39;,
-</span><span class="">   62: 	&#39;3,3&#39; =&gt; &#39;second cousin&#39;,
-</span><span class="">   63: 	&#39;3,4&#39; =&gt; &#39;second cousin once-removed&#39;,
-</span><span class="">   64: 	&#39;3,5&#39; =&gt; &#39;second cousin twice-removed&#39;,
-</span><span class="">   65: 	&#39;3,6&#39; =&gt; &#39;second cousin three-times-removed&#39;,
-</span><span class="">   66: 	&#39;4,0&#39; =&gt; &#39;great-great-grandfather&#39;,
-</span><span class="">   67: 	&#39;4,1&#39; =&gt; &#39;great-great-uncle&#39;,
-</span><span class="">   68: 	&#39;4,2&#39; =&gt; &#39;first cousin twice-removed&#39;,
-</span><span class="">   69: 	&#39;4,3&#39; =&gt; &#39;second cousin once-removed&#39;,
-</span><span class="">   70: 	&#39;4,4&#39; =&gt; &#39;third cousin&#39;,
-</span><span class="">   71: 	&#39;4,5&#39; =&gt; &#39;third cousin once-removed&#39;,
-</span><span class="">   72: 	&#39;4,6&#39; =&gt; &#39;third cousin twice-removed&#39;,
-</span><span class="">   73: 	&#39;5,0&#39; =&gt; &#39;great-great-great-grandfather&#39;,
-</span><span class="">   74: 	&#39;5,1&#39; =&gt; &#39;great-great-great-uncle&#39;,
-</span><span class="">   75: 	&#39;5,2&#39; =&gt; &#39;first cousin three-times-removed&#39;,
-</span><span class="">   76: 	&#39;5,3&#39; =&gt; &#39;second cousin twice-removed&#39;,
-</span><span class="">   77: 	&#39;5,4&#39; =&gt; &#39;third cousin once-removed&#39;,
-</span><span class="">   78: 	&#39;5,5&#39; =&gt; &#39;fourth cousin&#39;,
-</span><span class="">   79: 	&#39;5,6&#39; =&gt; &#39;fourth cousin once-removed&#39;,
-</span><span class="">   80: 	&#39;6,0&#39; =&gt; &#39;great-great-great-great-grandfather&#39;,
-</span><span class="">   81: 	&#39;6,2&#39; =&gt; &#39;first cousin four-times-removed&#39;,
-</span><span class="">   82: 	&#39;6,3&#39; =&gt; &#39;second cousin three-times-removed&#39;,
-</span><span class="">   83: 	&#39;6,4&#39; =&gt; &#39;third cousin twice-removed&#39;,
-</span><span class="">   84: 	&#39;6,5&#39; =&gt; &#39;fourth cousin once-removed&#39;,
-</span><span class="">   85: 	&#39;6,6&#39; =&gt; &#39;fifth cousin&#39;,
-</span><span class="">   86: );
-</span><span class="">   87: 
-</span><span class="">   88: Readonly::Hash my %EN_FEMALE_RELATIONSHIPS =&gt; (
-</span><span class="">   89: 	&#39;0,0&#39; =&gt; &#39;self&#39;,
-</span><span class="">   90: 	&#39;0,1&#39; =&gt; &#39;daughter&#39;,
-</span><span class="">   91: 	&#39;0,2&#39; =&gt; &#39;granddaughter&#39;,
-</span><span class="">   92: 	&#39;0,3&#39; =&gt; &#39;great-granddaughter&#39;,
-</span><span class="">   93: 	&#39;0,4&#39; =&gt; &#39;great-great-granddaughter&#39;,
-</span><span class="">   94: 	&#39;1,0&#39; =&gt; &#39;mother&#39;,
-</span><span class="">   95: 	&#39;1,1&#39; =&gt; &#39;sister&#39;,
-</span><span class="">   96: 	&#39;1,2&#39; =&gt; &#39;niece&#39;,
-</span><span class="">   97: 	&#39;1,3&#39; =&gt; &#39;great-niece&#39;,
-</span><span class="">   98: 	&#39;1,4&#39; =&gt; &#39;great-great-niece&#39;,
-</span><span class="">   99: 	&#39;2,0&#39; =&gt; &#39;grandmother&#39;,
-</span><span class="">  100: 	&#39;2,1&#39; =&gt; &#39;aunt&#39;,
-</span><span class="">  101: 	&#39;2,2&#39; =&gt; &#39;first cousin&#39;,
-</span><span class="">  102: 	&#39;2,3&#39; =&gt; &#39;first cousin once-removed&#39;,
-</span><span class="">  103: 	&#39;2,4&#39; =&gt; &#39;first cousin twice-removed&#39;,
-</span><span class="">  104: 	&#39;2,5&#39; =&gt; &#39;first cousin three-times-removed&#39;,
-</span><span class="">  105: 	&#39;3,0&#39; =&gt; &#39;great-grandmother&#39;,
-</span><span class="">  106: 	&#39;3,1&#39; =&gt; &#39;great-aunt&#39;,
-</span><span class="">  107: 	&#39;3,2&#39; =&gt; &#39;first cousin once-removed&#39;,
-</span><span class="">  108: 	&#39;3,3&#39; =&gt; &#39;second cousin&#39;,
-</span><span class="">  109: 	&#39;3,4&#39; =&gt; &#39;second cousin once-removed&#39;,
-</span><span class="">  110: 	&#39;3,5&#39; =&gt; &#39;second cousin twice-removed&#39;,
-</span><span class="">  111: 	&#39;3,6&#39; =&gt; &#39;second cousin three-times-removed&#39;,
-</span><span class="">  112: 	&#39;4,0&#39; =&gt; &#39;great-great-grandmother&#39;,
-</span><span class="">  113: 	&#39;4,1&#39; =&gt; &#39;great-great-aunt&#39;,
-</span><span class="">  114: 	&#39;4,2&#39; =&gt; &#39;first cousin twice-removed&#39;,
-</span><span class="">  115: 	&#39;4,3&#39; =&gt; &#39;second cousin once-removed&#39;,
-</span><span class="">  116: 	&#39;4,4&#39; =&gt; &#39;third cousin&#39;,
-</span><span class="">  117: 	&#39;4,5&#39; =&gt; &#39;third cousin once-removed&#39;,
-</span><span class="">  118: 	&#39;4,6&#39; =&gt; &#39;third cousin twice-removed&#39;,
-</span><span class="">  119: 	&#39;5,0&#39; =&gt; &#39;great-great-great-grandmother&#39;,
-</span><span class="">  120: 	&#39;5,1&#39; =&gt; &#39;great-great-great-aunt&#39;,
-</span><span class="">  121: 	&#39;5,2&#39; =&gt; &#39;first cousin three-times-removed&#39;,
-</span><span class="">  122: 	&#39;5,3&#39; =&gt; &#39;second cousin twice-removed&#39;,
-</span><span class="">  123: 	&#39;5,4&#39; =&gt; &#39;third cousin once-removed&#39;,
-</span><span class="">  124: 	&#39;5,5&#39; =&gt; &#39;fourth cousin&#39;,
-</span><span class="">  125: 	&#39;5,6&#39; =&gt; &#39;fourth cousin once-removed&#39;,
-</span><span class="">  126: 	&#39;6,0&#39; =&gt; &#39;great-great-great-great-grandmother&#39;,
-</span><span class="">  127: 	&#39;6,2&#39; =&gt; &#39;first cousin four-times-removed&#39;,
-</span><span class="">  128: 	&#39;6,3&#39; =&gt; &#39;second cousin three-times-removed&#39;,
-</span><span class="">  129: 	&#39;6,4&#39; =&gt; &#39;third cousin twice-removed&#39;,
-</span><span class="">  130: 	&#39;6,5&#39; =&gt; &#39;fourth cousin once-removed&#39;,
-</span><span class="">  131: 	&#39;6,6&#39; =&gt; &#39;fifth cousin&#39;,
-</span><span class="">  132: );
-</span><span class="">  133: 
-</span><span class="">  134: # ---------------------------------------------------------------------------
-</span><span class="">  135: # French relationship tables
-</span><span class="">  136: # ---------------------------------------------------------------------------
-</span><span class="">  137: 
-</span><span class="">  138: Readonly::Hash my %FR_MALE_RELATIONSHIPS =&gt; (
-</span><span class="">  139: 	&#39;0,0&#39; =&gt; &#39;soi-meme&#39;,
-</span><span class="">  140: 	&#39;0,1&#39; =&gt; &#39;fils&#39;,
-</span><span class="">  141: 	&#39;0,2&#39; =&gt; &#39;petit-fils&#39;,
-</span><span class="">  142: 	&#39;0,3&#39; =&gt; &#39;arriere-petit-fils&#39;,
-</span><span class="">  143: 	&#39;0,4&#39; =&gt; &#39;arriere-arriere-petit-fils&#39;,
-</span><span class="">  144: 	&#39;1,0&#39; =&gt; &#39;pere&#39;,
-</span><span class="">  145: 	&#39;1,1&#39; =&gt; &#39;frere&#39;,
-</span><span class="">  146: 	&#39;1,2&#39; =&gt; &#39;neveu&#39;,
-</span><span class="">  147: 	&#39;1,3&#39; =&gt; &#39;grand-neveu&#39;,
-</span><span class="">  148: 	&#39;1,4&#39; =&gt; &#39;arriere-grand-neveu&#39;,
-</span><span class="">  149: 	&#39;2,0&#39; =&gt; &#39;grand-pere&#39;,
-</span><span class="">  150: 	&#39;2,1&#39; =&gt; &#39;oncle&#39;,
-</span><span class="">  151: 	&#39;2,2&#39; =&gt; &#39;cousin germain&#39;,
-</span><span class="">  152: 	&#39;2,3&#39; =&gt; &#39;cousin issu de germain&#39;,
-</span><span class="">  153: 	&#39;2,4&#39; =&gt; &#39;cousin au troisieme degre&#39;,
-</span><span class="">  154: 	&#39;3,0&#39; =&gt; &#39;arriere-grand-pere&#39;,
-</span><span class="">  155: 	&#39;3,1&#39; =&gt; &#39;grand-oncle&#39;,
-</span><span class="">  156: 	&#39;3,2&#39; =&gt; &#39;cousin issu de germain&#39;,
-</span><span class="">  157: 	&#39;3,3&#39; =&gt; &#39;cousin au troisieme degre&#39;,
-</span><span class="">  158: 	&#39;3,4&#39; =&gt; &#39;cousin au quatrieme degre&#39;,
-</span><span class="">  159: 	&#39;4,0&#39; =&gt; &#39;arriere-arriere-grand-pere&#39;,
-</span><span class="">  160: 	&#39;4,1&#39; =&gt; &#39;arriere-grand-oncle&#39;,
-</span><span class="">  161: 	&#39;4,2&#39; =&gt; &#39;cousin au troisieme degre&#39;,
-</span><span class="">  162: 	&#39;4,3&#39; =&gt; &#39;cousin au quatrieme degre&#39;,
-</span><span class="">  163: 	&#39;4,4&#39; =&gt; &#39;cousin au cinquieme degre&#39;,
-</span><span class="">  164: 	&#39;5,0&#39; =&gt; &#39;trisaieul&#39;,
-</span><span class="">  165: 	&#39;5,5&#39; =&gt; &#39;cousin au sixieme degre&#39;,
-</span><span class="">  166: 	&#39;6,0&#39; =&gt; &#39;quadrisaieul&#39;,
-</span><span class="">  167: 	&#39;6,6&#39; =&gt; &#39;cousin au septieme degre&#39;,
-</span><span class="">  168: );
-</span><span class="">  169: 
-</span><span class="">  170: Readonly::Hash my %FR_FEMALE_RELATIONSHIPS =&gt; (
-</span><span class="">  171: 	&#39;0,0&#39; =&gt; &#39;soi-meme&#39;,
-</span><span class="">  172: 	&#39;0,1&#39; =&gt; &#39;fille&#39;,
-</span><span class="">  173: 	&#39;0,2&#39; =&gt; &#39;petite-fille&#39;,
-</span><span class="">  174: 	&#39;0,3&#39; =&gt; &#39;arriere-petite-fille&#39;,
-</span><span class="">  175: 	&#39;0,4&#39; =&gt; &#39;arriere-arriere-petite-fille&#39;,
-</span><span class="">  176: 	&#39;1,0&#39; =&gt; &#39;mere&#39;,
-</span><span class="">  177: 	&#39;1,1&#39; =&gt; &#39;soeur&#39;,
-</span><span class="">  178: 	&#39;1,2&#39; =&gt; &#39;niece&#39;,
-</span><span class="">  179: 	&#39;1,3&#39; =&gt; &#39;grand-niece&#39;,
-</span><span class="">  180: 	&#39;1,4&#39; =&gt; &#39;arriere-grand-niece&#39;,
-</span><span class="">  181: 	&#39;2,0&#39; =&gt; &#39;grand-mere&#39;,
-</span><span class="">  182: 	&#39;2,1&#39; =&gt; &#39;tante&#39;,
-</span><span class="">  183: 	&#39;2,2&#39; =&gt; &#39;cousine germaine&#39;,
-</span><span class="">  184: 	&#39;2,3&#39; =&gt; &#39;cousine issue de germaine&#39;,
-</span><span class="">  185: 	&#39;2,4&#39; =&gt; &#39;cousine au troisieme degre&#39;,
-</span><span class="">  186: 	&#39;3,0&#39; =&gt; &#39;arriere-grand-mere&#39;,
-</span><span class="">  187: 	&#39;3,1&#39; =&gt; &#39;grand-tante&#39;,
-</span><span class="">  188: 	&#39;3,2&#39; =&gt; &#39;cousine issue de germaine&#39;,
-</span><span class="">  189: 	&#39;3,3&#39; =&gt; &#39;cousine au troisieme degre&#39;,
-</span><span class="">  190: 	&#39;3,4&#39; =&gt; &#39;cousine au quatrieme degre&#39;,
-</span><span class="">  191: 	&#39;4,0&#39; =&gt; &#39;arriere-arriere-grand-mere&#39;,
-</span><span class="">  192: 	&#39;4,1&#39; =&gt; &#39;arriere-grand-tante&#39;,
-</span><span class="">  193: 	&#39;4,2&#39; =&gt; &#39;cousine au troisieme degre&#39;,
-</span><span class="">  194: 	&#39;4,3&#39; =&gt; &#39;cousine au quatrieme degre&#39;,
-</span><span class="">  195: 	&#39;4,4&#39; =&gt; &#39;cousine au cinquieme degre&#39;,
-</span><span class="">  196: 	&#39;5,0&#39; =&gt; &#39;trisaieule&#39;,
-</span><span class="">  197: 	&#39;5,5&#39; =&gt; &#39;cousine au sixieme degre&#39;,
-</span><span class="">  198: 	&#39;6,0&#39; =&gt; &#39;quadrisaieule&#39;,
-</span><span class="">  199: 	&#39;6,6&#39; =&gt; &#39;cousine au septieme degre&#39;,
-</span><span class="">  200: );
-</span><span class="">  201: 
-</span><span class="">  202: # ---------------------------------------------------------------------------
-</span><span class="">  203: # German relationship tables
-</span><span class="">  204: # ---------------------------------------------------------------------------
-</span><span class="">  205: 
-</span><span class="">  206: Readonly::Hash my %DE_MALE_RELATIONSHIPS =&gt; (
-</span><span class="">  207: 	&#39;0,0&#39; =&gt; &#39;sich selbst&#39;,
-</span><span class="">  208: 	&#39;0,1&#39; =&gt; &#39;Sohn&#39;,
-</span><span class="">  209: 	&#39;0,2&#39; =&gt; &#39;Enkel&#39;,
-</span><span class="">  210: 	&#39;0,3&#39; =&gt; &#39;Urenkel&#39;,
-</span><span class="">  211: 	&#39;0,4&#39; =&gt; &#39;Ururenkel&#39;,
-</span><span class="">  212: 	&#39;1,0&#39; =&gt; &#39;Vater&#39;,
-</span><span class="">  213: 	&#39;1,1&#39; =&gt; &#39;Bruder&#39;,
-</span><span class="">  214: 	&#39;1,2&#39; =&gt; &#39;Neffe&#39;,
-</span><span class="">  215: 	&#39;1,3&#39; =&gt; &#39;Grossneffe&#39;,
-</span><span class="">  216: 	&#39;1,4&#39; =&gt; &#39;Urgrossneffe&#39;,
-</span><span class="">  217: 	&#39;2,0&#39; =&gt; &#39;Grossvater&#39;,
-</span><span class="">  218: 	&#39;2,1&#39; =&gt; &#39;Onkel&#39;,
-</span><span class="">  219: 	&#39;2,2&#39; =&gt; &#39;Cousin&#39;,
-</span><span class="">  220: 	&#39;2,3&#39; =&gt; &#39;Cousin ersten Grades einmal entfernt&#39;,
-</span><span class="">  221: 	&#39;2,4&#39; =&gt; &#39;Cousin ersten Grades zweimal entfernt&#39;,
-</span><span class="">  222: 	&#39;3,0&#39; =&gt; &#39;Urgrossvater&#39;,
-</span><span class="">  223: 	&#39;3,1&#39; =&gt; &#39;Grossonkel&#39;,
-</span><span class="">  224: 	&#39;3,2&#39; =&gt; &#39;Cousin ersten Grades einmal entfernt&#39;,
-</span><span class="">  225: 	&#39;3,3&#39; =&gt; &#39;Cousin zweiten Grades&#39;,
-</span><span class="">  226: 	&#39;3,4&#39; =&gt; &#39;Cousin zweiten Grades einmal entfernt&#39;,
-</span><span class="">  227: 	&#39;4,0&#39; =&gt; &#39;Urururgrossvater&#39;,
-</span><span class="">  228: 	&#39;4,1&#39; =&gt; &#39;Urgrossonkel&#39;,
-</span><span class="">  229: 	&#39;4,2&#39; =&gt; &#39;Cousin ersten Grades zweimal entfernt&#39;,
-</span><span class="">  230: 	&#39;4,3&#39; =&gt; &#39;Cousin zweiten Grades einmal entfernt&#39;,
-</span><span class="">  231: 	&#39;4,4&#39; =&gt; &#39;Cousin dritten Grades&#39;,
-</span><span class="">  232: 	&#39;5,0&#39; =&gt; &#39;Urururgrossvater&#39;,
-</span><span class="">  233: 	&#39;5,5&#39; =&gt; &#39;Cousin vierten Grades&#39;,
-</span><span class="">  234: 	&#39;6,0&#39; =&gt; &#39;Ururururgrossvater&#39;,
-</span><span class="">  235: 	&#39;6,6&#39; =&gt; &#39;Cousin fuenften Grades&#39;,
-</span><span class="">  236: );
-</span><span class="">  237: 
-</span><span class="">  238: Readonly::Hash my %DE_FEMALE_RELATIONSHIPS =&gt; (
-</span><span class="">  239: 	&#39;0,0&#39; =&gt; &#39;sich selbst&#39;,
-</span><span class="">  240: 	&#39;0,1&#39; =&gt; &#39;Tochter&#39;,
-</span><span class="">  241: 	&#39;0,2&#39; =&gt; &#39;Enkelin&#39;,
-</span><span class="">  242: 	&#39;0,3&#39; =&gt; &#39;Urenkelin&#39;,
-</span><span class="">  243: 	&#39;0,4&#39; =&gt; &#39;Ururenkelin&#39;,
-</span><span class="">  244: 	&#39;1,0&#39; =&gt; &#39;Mutter&#39;,
-</span><span class="">  245: 	&#39;1,1&#39; =&gt; &#39;Schwester&#39;,
-</span><span class="">  246: 	&#39;1,2&#39; =&gt; &#39;Nichte&#39;,
-</span><span class="">  247: 	&#39;1,3&#39; =&gt; &#39;Grossnichte&#39;,
-</span><span class="">  248: 	&#39;1,4&#39; =&gt; &#39;Urgrossnichte&#39;,
-</span><span class="">  249: 	&#39;2,0&#39; =&gt; &#39;Grossmutter&#39;,
-</span><span class="">  250: 	&#39;2,1&#39; =&gt; &#39;Tante&#39;,
-</span><span class="">  251: 	&#39;2,2&#39; =&gt; &#39;Cousine&#39;,
-</span><span class="">  252: 	&#39;2,3&#39; =&gt; &#39;Cousine ersten Grades einmal entfernt&#39;,
-</span><span class="">  253: 	&#39;2,4&#39; =&gt; &#39;Cousine ersten Grades zweimal entfernt&#39;,
-</span><span class="">  254: 	&#39;3,0&#39; =&gt; &#39;Urgrossmutter&#39;,
-</span><span class="">  255: 	&#39;3,1&#39; =&gt; &#39;Grosstante&#39;,
-</span><span class="">  256: 	&#39;3,2&#39; =&gt; &#39;Cousine ersten Grades einmal entfernt&#39;,
-</span><span class="">  257: 	&#39;3,3&#39; =&gt; &#39;Cousine zweiten Grades&#39;,
-</span><span class="">  258: 	&#39;3,4&#39; =&gt; &#39;Cousine zweiten Grades einmal entfernt&#39;,
-</span><span class="">  259: 	&#39;4,0&#39; =&gt; &#39;Urururgrossmutter&#39;,
-</span><span class="">  260: 	&#39;4,1&#39; =&gt; &#39;Urgrosstante&#39;,
-</span><span class="">  261: 	&#39;4,2&#39; =&gt; &#39;Cousine ersten Grades zweimal entfernt&#39;,
-</span><span class="">  262: 	&#39;4,3&#39; =&gt; &#39;Cousine zweiten Grades einmal entfernt&#39;,
-</span><span class="">  263: 	&#39;4,4&#39; =&gt; &#39;Cousine dritten Grades&#39;,
-</span><span class="">  264: 	&#39;5,0&#39; =&gt; &#39;Urururgrossmutter&#39;,
-</span><span class="">  265: 	&#39;5,5&#39; =&gt; &#39;Cousine vierten Grades&#39;,
-</span><span class="">  266: 	&#39;6,0&#39; =&gt; &#39;Ururururgrossmutter&#39;,
-</span><span class="">  267: 	&#39;6,6&#39; =&gt; &#39;Cousine fuenften Grades&#39;,
-</span><span class="">  268: );
-</span><span class="">  269: 
-</span><span class="">  270: # ---------------------------------------------------------------------------
-</span><span class="">  271: # Master dispatch table: lang -&gt; sex -&gt; hashref
-</span><span class="">  272: # ---------------------------------------------------------------------------
-</span><span class="">  273: 
-</span><span class="">  274: Readonly::Hash my %RELATIONSHIP_TABLES =&gt; (
-</span><span class="">  275: 	&#39;en&#39; =&gt; {
-</span><span class="">  276: 		$SEX_MALE   =&gt; \%EN_MALE_RELATIONSHIPS,
-</span><span class="">  277: 		$SEX_FEMALE =&gt; \%EN_FEMALE_RELATIONSHIPS,
-</span><span class="">  278: 	}, &#39;fr&#39; =&gt; {
-</span><span class="">  279: 		$SEX_MALE   =&gt; \%FR_MALE_RELATIONSHIPS,
-</span><span class="">  280: 		$SEX_FEMALE =&gt; \%FR_FEMALE_RELATIONSHIPS,
-</span><span class="">  281: 	}, &#39;de&#39; =&gt; {
-</span><span class="">  282: 		$SEX_MALE   =&gt; \%DE_MALE_RELATIONSHIPS,
-</span><span class="">  283: 		$SEX_FEMALE =&gt; \%DE_FEMALE_RELATIONSHIPS,
-</span><span class="">  284: 	},
-</span><span class="">  285: );
-</span><span class="">  286: 
-</span><span class="">  287: # ---------------------------------------------------------------------------
-</span><span class="">  288: # Constructor
-</span><span class="">  289: # ---------------------------------------------------------------------------
-</span><span class="">  290: 
-</span><span class="">  291: =head1 NAME
-</span><span class="">  292: 
-</span><span class="">  293: Genealogy::Relationship::Name - Return a genealogical relationship name from step counts
-</span><span class="">  294: 
-</span><span class="">  295: =head1 VERSION
-</span><span class="">  296: 
-</span><span class="">  297: Version 0.01
-</span><span class="">  298: 
-</span><span class="">  299: =head1 SYNOPSIS
-</span><span class="">  300: 
-</span><span class="">  301:     use Genealogy::Relationship::Name;
-</span><span class="">  302: 
-</span><span class="">  303:     my $namer = Genealogy::Relationship::Name-&gt;new();
-</span><span class="">  304: 
-</span><span class="">  305:     my $name = $namer-&gt;name(
-</span><span class="">  306:         steps_to_ancestor   =&gt; 2,
-</span><span class="">  307:         steps_from_ancestor =&gt; 3,
-</span><span class="">  308:         sex                 =&gt; &#39;F&#39;,
-</span><span class="">  309:     );
-</span><span class="">  310:     # Returns &#39;first cousin once-removed&#39;
-</span><span class="">  311: 
-</span><span class="">  312:     # With language
-</span><span class="">  313:     my $name_fr = $namer-&gt;name(
-</span><span class="">  314:         steps_to_ancestor   =&gt; 2,
-</span><span class="">  315:         steps_from_ancestor =&gt; 2,
-</span><span class="">  316:         sex                 =&gt; &#39;M&#39;,
-</span><span class="">  317:         language            =&gt; &#39;fr&#39;,
-</span><span class="">  318:     );
-</span><span class="">  319:     # Returns &#39;cousin germain&#39;
-</span><span class="">  320: 
-</span><span class="">  321: =head1 DESCRIPTION
-</span><span class="">  322: 
-</span><span class="">  323: C&lt;Genealogy::Relationship::Name&gt; maps a pair of step-counts (person A to common
-</span><span class="">  324: ancestor, common ancestor to person B) plus the sex of person B and an optional
-</span><span class="">  325: language code to a human-readable relationship name string.
-</span><span class="">  326: 
-</span><span class="">  327: The relationship tables were originally embedded in the C&lt;gedcom&gt; and C&lt;ged2site&gt;
-</span><span class="">  328: distributions inside C&lt;Gedcom::Individual::relationship_up()&gt;; this module
-</span><span class="">  329: extracts them into a reusable, installable CPAN distribution.
-</span><span class="">  330: 
-</span><span class="">  331: Supported languages: C&lt;en&gt; (English, default), C&lt;fr&gt; (French), C&lt;de&gt; (German).
-</span><span class="">  332: 
-</span><span class="">  333: =cut
-</span><span class="">  334: 
-</span><span class="">  335: sub new {
-</span><span class="">  336: 	# Create and return a blessed object
-</span><span class="">  337: 	my $class = shift;
-</span><span class="">  338: 
-</span><span class="">  339: 	# Handle hash or hashref arguments
-</span><span class="">  340: 	my $params = Params::Get::get_params(undef, @_);
-</span><span class="">  341: 
-</span><span class="">  342: 	# Load the configuration from a config file, if provided
-</span><span class="">  343: 	$params = Object::Configure::configure($class, $params);
-</span><span class="">  344: 
-</span><span class="">  345: 	# Allow both hash and hashref invocation styles
-</span><span class="">  346: 	my $self = bless {
-</span><span class="">  347: 		# Store any constructor-time config for Object::Configure compatibility
-</span><span class="">  348: 		%{$params},
-</span><span class="">  349: 	}, ref($class) || $class;
-</span><span class="">  350: 
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  351: 	return $self;
+</span><span class="">   18: 
+</span><span class="">   19: our $VERSION = &#39;0.01&#39;;
+</span><span class="">   20: 
+</span><span class="">   21: # ---------------------------------------------------------------------------
+</span><span class="">   22: # Constants &acirc;&#128;&#147; relationship table keys
+</span><span class="">   23: # ---------------------------------------------------------------------------
+</span><span class="">   24: 
+</span><span class="">   25: # Supported language codes
+</span><span class="">   26: Readonly::Array my @SUPPORTED_LANGUAGES =&gt; qw(en fr de);
+</span><span class="">   27: 
+</span><span class="">   28: # Default language when none supplied
+</span><span class="">   29: Readonly::Scalar my $DEFAULT_LANGUAGE =&gt; &#39;en&#39;;
+</span><span class="">   30: 
+</span><span class="">   31: # Sex constants
+</span><span class="">   32: Readonly::Scalar my $SEX_MALE   =&gt; &#39;M&#39;;
+</span><span class="">   33: Readonly::Scalar my $SEX_FEMALE =&gt; &#39;F&#39;;
+</span><span class="">   34: 
+</span><span class="">   35: # ---------------------------------------------------------------------------
+</span><span class="">   36: # English relationship tables
+</span><span class="">   37: # Key: &quot;$steps1,$steps2&quot;  where steps1 = steps from A to ancestor,
+</span><span class="">   38: #                                steps2 = steps from B to ancestor
+</span><span class="">   39: # ---------------------------------------------------------------------------
+</span><span class="">   40: 
+</span><span class="">   41: Readonly::Hash my %EN_MALE_RELATIONSHIPS =&gt; (
+</span><span class="">   42: 	&#39;0,0&#39; =&gt; &#39;self&#39;,
+</span><span class="">   43: 	&#39;0,1&#39; =&gt; &#39;son&#39;,
+</span><span class="">   44: 	&#39;0,2&#39; =&gt; &#39;grandson&#39;,
+</span><span class="">   45: 	&#39;0,3&#39; =&gt; &#39;great-grandson&#39;,
+</span><span class="">   46: 	&#39;0,4&#39; =&gt; &#39;great-great-grandson&#39;,
+</span><span class="">   47: 	&#39;1,0&#39; =&gt; &#39;father&#39;,
+</span><span class="">   48: 	&#39;1,1&#39; =&gt; &#39;brother&#39;,
+</span><span class="">   49: 	&#39;1,2&#39; =&gt; &#39;nephew&#39;,
+</span><span class="">   50: 	&#39;1,3&#39; =&gt; &#39;great-nephew&#39;,
+</span><span class="">   51: 	&#39;1,4&#39; =&gt; &#39;great-great-nephew&#39;,
+</span><span class="">   52: 	&#39;2,0&#39; =&gt; &#39;grandfather&#39;,
+</span><span class="">   53: 	&#39;2,1&#39; =&gt; &#39;uncle&#39;,
+</span><span class="">   54: 	&#39;2,2&#39; =&gt; &#39;first cousin&#39;,
+</span><span class="">   55: 	&#39;2,3&#39; =&gt; &#39;first cousin once-removed&#39;,
+</span><span class="">   56: 	&#39;2,4&#39; =&gt; &#39;first cousin twice-removed&#39;,
+</span><span class="">   57: 	&#39;2,5&#39; =&gt; &#39;first cousin three-times-removed&#39;,
+</span><span class="">   58: 	&#39;3,0&#39; =&gt; &#39;great-grandfather&#39;,
+</span><span class="">   59: 	&#39;3,1&#39; =&gt; &#39;great-uncle&#39;,
+</span><span class="">   60: 	&#39;3,2&#39; =&gt; &#39;first cousin once-removed&#39;,
+</span><span class="">   61: 	&#39;3,3&#39; =&gt; &#39;second cousin&#39;,
+</span><span class="">   62: 	&#39;3,4&#39; =&gt; &#39;second cousin once-removed&#39;,
+</span><span class="">   63: 	&#39;3,5&#39; =&gt; &#39;second cousin twice-removed&#39;,
+</span><span class="">   64: 	&#39;3,6&#39; =&gt; &#39;second cousin three-times-removed&#39;,
+</span><span class="">   65: 	&#39;4,0&#39; =&gt; &#39;great-great-grandfather&#39;,
+</span><span class="">   66: 	&#39;4,1&#39; =&gt; &#39;great-great-uncle&#39;,
+</span><span class="">   67: 	&#39;4,2&#39; =&gt; &#39;first cousin twice-removed&#39;,
+</span><span class="">   68: 	&#39;4,3&#39; =&gt; &#39;second cousin once-removed&#39;,
+</span><span class="">   69: 	&#39;4,4&#39; =&gt; &#39;third cousin&#39;,
+</span><span class="">   70: 	&#39;4,5&#39; =&gt; &#39;third cousin once-removed&#39;,
+</span><span class="">   71: 	&#39;4,6&#39; =&gt; &#39;third cousin twice-removed&#39;,
+</span><span class="">   72: 	&#39;5,0&#39; =&gt; &#39;great-great-great-grandfather&#39;,
+</span><span class="">   73: 	&#39;5,1&#39; =&gt; &#39;great-great-great-uncle&#39;,
+</span><span class="">   74: 	&#39;5,2&#39; =&gt; &#39;first cousin three-times-removed&#39;,
+</span><span class="">   75: 	&#39;5,3&#39; =&gt; &#39;second cousin twice-removed&#39;,
+</span><span class="">   76: 	&#39;5,4&#39; =&gt; &#39;third cousin once-removed&#39;,
+</span><span class="">   77: 	&#39;5,5&#39; =&gt; &#39;fourth cousin&#39;,
+</span><span class="">   78: 	&#39;5,6&#39; =&gt; &#39;fourth cousin once-removed&#39;,
+</span><span class="">   79: 	&#39;6,0&#39; =&gt; &#39;great-great-great-great-grandfather&#39;,
+</span><span class="">   80: 	&#39;6,2&#39; =&gt; &#39;first cousin four-times-removed&#39;,
+</span><span class="">   81: 	&#39;6,3&#39; =&gt; &#39;second cousin three-times-removed&#39;,
+</span><span class="">   82: 	&#39;6,4&#39; =&gt; &#39;third cousin twice-removed&#39;,
+</span><span class="">   83: 	&#39;6,5&#39; =&gt; &#39;fourth cousin once-removed&#39;,
+</span><span class="">   84: 	&#39;6,6&#39; =&gt; &#39;fifth cousin&#39;,
+</span><span class="">   85: );
+</span><span class="">   86: 
+</span><span class="">   87: Readonly::Hash my %EN_FEMALE_RELATIONSHIPS =&gt; (
+</span><span class="">   88: 	&#39;0,0&#39; =&gt; &#39;self&#39;,
+</span><span class="">   89: 	&#39;0,1&#39; =&gt; &#39;daughter&#39;,
+</span><span class="">   90: 	&#39;0,2&#39; =&gt; &#39;granddaughter&#39;,
+</span><span class="">   91: 	&#39;0,3&#39; =&gt; &#39;great-granddaughter&#39;,
+</span><span class="">   92: 	&#39;0,4&#39; =&gt; &#39;great-great-granddaughter&#39;,
+</span><span class="">   93: 	&#39;1,0&#39; =&gt; &#39;mother&#39;,
+</span><span class="">   94: 	&#39;1,1&#39; =&gt; &#39;sister&#39;,
+</span><span class="">   95: 	&#39;1,2&#39; =&gt; &#39;niece&#39;,
+</span><span class="">   96: 	&#39;1,3&#39; =&gt; &#39;great-niece&#39;,
+</span><span class="">   97: 	&#39;1,4&#39; =&gt; &#39;great-great-niece&#39;,
+</span><span class="">   98: 	&#39;2,0&#39; =&gt; &#39;grandmother&#39;,
+</span><span class="">   99: 	&#39;2,1&#39; =&gt; &#39;aunt&#39;,
+</span><span class="">  100: 	&#39;2,2&#39; =&gt; &#39;first cousin&#39;,
+</span><span class="">  101: 	&#39;2,3&#39; =&gt; &#39;first cousin once-removed&#39;,
+</span><span class="">  102: 	&#39;2,4&#39; =&gt; &#39;first cousin twice-removed&#39;,
+</span><span class="">  103: 	&#39;2,5&#39; =&gt; &#39;first cousin three-times-removed&#39;,
+</span><span class="">  104: 	&#39;3,0&#39; =&gt; &#39;great-grandmother&#39;,
+</span><span class="">  105: 	&#39;3,1&#39; =&gt; &#39;great-aunt&#39;,
+</span><span class="">  106: 	&#39;3,2&#39; =&gt; &#39;first cousin once-removed&#39;,
+</span><span class="">  107: 	&#39;3,3&#39; =&gt; &#39;second cousin&#39;,
+</span><span class="">  108: 	&#39;3,4&#39; =&gt; &#39;second cousin once-removed&#39;,
+</span><span class="">  109: 	&#39;3,5&#39; =&gt; &#39;second cousin twice-removed&#39;,
+</span><span class="">  110: 	&#39;3,6&#39; =&gt; &#39;second cousin three-times-removed&#39;,
+</span><span class="">  111: 	&#39;4,0&#39; =&gt; &#39;great-great-grandmother&#39;,
+</span><span class="">  112: 	&#39;4,1&#39; =&gt; &#39;great-great-aunt&#39;,
+</span><span class="">  113: 	&#39;4,2&#39; =&gt; &#39;first cousin twice-removed&#39;,
+</span><span class="">  114: 	&#39;4,3&#39; =&gt; &#39;second cousin once-removed&#39;,
+</span><span class="">  115: 	&#39;4,4&#39; =&gt; &#39;third cousin&#39;,
+</span><span class="">  116: 	&#39;4,5&#39; =&gt; &#39;third cousin once-removed&#39;,
+</span><span class="">  117: 	&#39;4,6&#39; =&gt; &#39;third cousin twice-removed&#39;,
+</span><span class="">  118: 	&#39;5,0&#39; =&gt; &#39;great-great-great-grandmother&#39;,
+</span><span class="">  119: 	&#39;5,1&#39; =&gt; &#39;great-great-great-aunt&#39;,
+</span><span class="">  120: 	&#39;5,2&#39; =&gt; &#39;first cousin three-times-removed&#39;,
+</span><span class="">  121: 	&#39;5,3&#39; =&gt; &#39;second cousin twice-removed&#39;,
+</span><span class="">  122: 	&#39;5,4&#39; =&gt; &#39;third cousin once-removed&#39;,
+</span><span class="">  123: 	&#39;5,5&#39; =&gt; &#39;fourth cousin&#39;,
+</span><span class="">  124: 	&#39;5,6&#39; =&gt; &#39;fourth cousin once-removed&#39;,
+</span><span class="">  125: 	&#39;6,0&#39; =&gt; &#39;great-great-great-great-grandmother&#39;,
+</span><span class="">  126: 	&#39;6,2&#39; =&gt; &#39;first cousin four-times-removed&#39;,
+</span><span class="">  127: 	&#39;6,3&#39; =&gt; &#39;second cousin three-times-removed&#39;,
+</span><span class="">  128: 	&#39;6,4&#39; =&gt; &#39;third cousin twice-removed&#39;,
+</span><span class="">  129: 	&#39;6,5&#39; =&gt; &#39;fourth cousin once-removed&#39;,
+</span><span class="">  130: 	&#39;6,6&#39; =&gt; &#39;fifth cousin&#39;,
+</span><span class="">  131: );
+</span><span class="">  132: 
+</span><span class="">  133: # ---------------------------------------------------------------------------
+</span><span class="">  134: # French relationship tables
+</span><span class="">  135: # ---------------------------------------------------------------------------
+</span><span class="">  136: 
+</span><span class="">  137: Readonly::Hash my %FR_MALE_RELATIONSHIPS =&gt; (
+</span><span class="">  138: 	&#39;0,0&#39; =&gt; &#39;soi-meme&#39;,
+</span><span class="">  139: 	&#39;0,1&#39; =&gt; &#39;fils&#39;,
+</span><span class="">  140: 	&#39;0,2&#39; =&gt; &#39;petit-fils&#39;,
+</span><span class="">  141: 	&#39;0,3&#39; =&gt; &#39;arriere-petit-fils&#39;,
+</span><span class="">  142: 	&#39;0,4&#39; =&gt; &#39;arriere-arriere-petit-fils&#39;,
+</span><span class="">  143: 	&#39;1,0&#39; =&gt; &#39;pere&#39;,
+</span><span class="">  144: 	&#39;1,1&#39; =&gt; &#39;frere&#39;,
+</span><span class="">  145: 	&#39;1,2&#39; =&gt; &#39;neveu&#39;,
+</span><span class="">  146: 	&#39;1,3&#39; =&gt; &#39;grand-neveu&#39;,
+</span><span class="">  147: 	&#39;1,4&#39; =&gt; &#39;arriere-grand-neveu&#39;,
+</span><span class="">  148: 	&#39;2,0&#39; =&gt; &#39;grand-pere&#39;,
+</span><span class="">  149: 	&#39;2,1&#39; =&gt; &#39;oncle&#39;,
+</span><span class="">  150: 	&#39;2,2&#39; =&gt; &#39;cousin germain&#39;,
+</span><span class="">  151: 	&#39;2,3&#39; =&gt; &#39;cousin issu de germain&#39;,
+</span><span class="">  152: 	&#39;2,4&#39; =&gt; &#39;cousin au troisieme degre&#39;,
+</span><span class="">  153: 	&#39;3,0&#39; =&gt; &#39;arriere-grand-pere&#39;,
+</span><span class="">  154: 	&#39;3,1&#39; =&gt; &#39;grand-oncle&#39;,
+</span><span class="">  155: 	&#39;3,2&#39; =&gt; &#39;cousin issu de germain&#39;,
+</span><span class="">  156: 	&#39;3,3&#39; =&gt; &#39;cousin au troisieme degre&#39;,
+</span><span class="">  157: 	&#39;3,4&#39; =&gt; &#39;cousin au quatrieme degre&#39;,
+</span><span class="">  158: 	&#39;4,0&#39; =&gt; &#39;arriere-arriere-grand-pere&#39;,
+</span><span class="">  159: 	&#39;4,1&#39; =&gt; &#39;arriere-grand-oncle&#39;,
+</span><span class="">  160: 	&#39;4,2&#39; =&gt; &#39;cousin au troisieme degre&#39;,
+</span><span class="">  161: 	&#39;4,3&#39; =&gt; &#39;cousin au quatrieme degre&#39;,
+</span><span class="">  162: 	&#39;4,4&#39; =&gt; &#39;cousin au cinquieme degre&#39;,
+</span><span class="">  163: 	&#39;5,0&#39; =&gt; &#39;trisaieul&#39;,
+</span><span class="">  164: 	&#39;5,5&#39; =&gt; &#39;cousin au sixieme degre&#39;,
+</span><span class="">  165: 	&#39;6,0&#39; =&gt; &#39;quadrisaieul&#39;,
+</span><span class="">  166: 	&#39;6,6&#39; =&gt; &#39;cousin au septieme degre&#39;,
+</span><span class="">  167: );
+</span><span class="">  168: 
+</span><span class="">  169: Readonly::Hash my %FR_FEMALE_RELATIONSHIPS =&gt; (
+</span><span class="">  170: 	&#39;0,0&#39; =&gt; &#39;soi-meme&#39;,
+</span><span class="">  171: 	&#39;0,1&#39; =&gt; &#39;fille&#39;,
+</span><span class="">  172: 	&#39;0,2&#39; =&gt; &#39;petite-fille&#39;,
+</span><span class="">  173: 	&#39;0,3&#39; =&gt; &#39;arriere-petite-fille&#39;,
+</span><span class="">  174: 	&#39;0,4&#39; =&gt; &#39;arriere-arriere-petite-fille&#39;,
+</span><span class="">  175: 	&#39;1,0&#39; =&gt; &#39;mere&#39;,
+</span><span class="">  176: 	&#39;1,1&#39; =&gt; &#39;soeur&#39;,
+</span><span class="">  177: 	&#39;1,2&#39; =&gt; &#39;niece&#39;,
+</span><span class="">  178: 	&#39;1,3&#39; =&gt; &#39;grand-niece&#39;,
+</span><span class="">  179: 	&#39;1,4&#39; =&gt; &#39;arriere-grand-niece&#39;,
+</span><span class="">  180: 	&#39;2,0&#39; =&gt; &#39;grand-mere&#39;,
+</span><span class="">  181: 	&#39;2,1&#39; =&gt; &#39;tante&#39;,
+</span><span class="">  182: 	&#39;2,2&#39; =&gt; &#39;cousine germaine&#39;,
+</span><span class="">  183: 	&#39;2,3&#39; =&gt; &#39;cousine issue de germaine&#39;,
+</span><span class="">  184: 	&#39;2,4&#39; =&gt; &#39;cousine au troisieme degre&#39;,
+</span><span class="">  185: 	&#39;3,0&#39; =&gt; &#39;arriere-grand-mere&#39;,
+</span><span class="">  186: 	&#39;3,1&#39; =&gt; &#39;grand-tante&#39;,
+</span><span class="">  187: 	&#39;3,2&#39; =&gt; &#39;cousine issue de germaine&#39;,
+</span><span class="">  188: 	&#39;3,3&#39; =&gt; &#39;cousine au troisieme degre&#39;,
+</span><span class="">  189: 	&#39;3,4&#39; =&gt; &#39;cousine au quatrieme degre&#39;,
+</span><span class="">  190: 	&#39;4,0&#39; =&gt; &#39;arriere-arriere-grand-mere&#39;,
+</span><span class="">  191: 	&#39;4,1&#39; =&gt; &#39;arriere-grand-tante&#39;,
+</span><span class="">  192: 	&#39;4,2&#39; =&gt; &#39;cousine au troisieme degre&#39;,
+</span><span class="">  193: 	&#39;4,3&#39; =&gt; &#39;cousine au quatrieme degre&#39;,
+</span><span class="">  194: 	&#39;4,4&#39; =&gt; &#39;cousine au cinquieme degre&#39;,
+</span><span class="">  195: 	&#39;5,0&#39; =&gt; &#39;trisaieule&#39;,
+</span><span class="">  196: 	&#39;5,5&#39; =&gt; &#39;cousine au sixieme degre&#39;,
+</span><span class="">  197: 	&#39;6,0&#39; =&gt; &#39;quadrisaieule&#39;,
+</span><span class="">  198: 	&#39;6,6&#39; =&gt; &#39;cousine au septieme degre&#39;,
+</span><span class="">  199: );
+</span><span class="">  200: 
+</span><span class="">  201: # ---------------------------------------------------------------------------
+</span><span class="">  202: # German relationship tables
+</span><span class="">  203: # ---------------------------------------------------------------------------
+</span><span class="">  204: 
+</span><span class="">  205: Readonly::Hash my %DE_MALE_RELATIONSHIPS =&gt; (
+</span><span class="">  206: 	&#39;0,0&#39; =&gt; &#39;sich selbst&#39;,
+</span><span class="">  207: 	&#39;0,1&#39; =&gt; &#39;Sohn&#39;,
+</span><span class="">  208: 	&#39;0,2&#39; =&gt; &#39;Enkel&#39;,
+</span><span class="">  209: 	&#39;0,3&#39; =&gt; &#39;Urenkel&#39;,
+</span><span class="">  210: 	&#39;0,4&#39; =&gt; &#39;Ururenkel&#39;,
+</span><span class="">  211: 	&#39;1,0&#39; =&gt; &#39;Vater&#39;,
+</span><span class="">  212: 	&#39;1,1&#39; =&gt; &#39;Bruder&#39;,
+</span><span class="">  213: 	&#39;1,2&#39; =&gt; &#39;Neffe&#39;,
+</span><span class="">  214: 	&#39;1,3&#39; =&gt; &#39;Grossneffe&#39;,
+</span><span class="">  215: 	&#39;1,4&#39; =&gt; &#39;Urgrossneffe&#39;,
+</span><span class="">  216: 	&#39;2,0&#39; =&gt; &#39;Grossvater&#39;,
+</span><span class="">  217: 	&#39;2,1&#39; =&gt; &#39;Onkel&#39;,
+</span><span class="">  218: 	&#39;2,2&#39; =&gt; &#39;Cousin&#39;,
+</span><span class="">  219: 	&#39;2,3&#39; =&gt; &#39;Cousin ersten Grades einmal entfernt&#39;,
+</span><span class="">  220: 	&#39;2,4&#39; =&gt; &#39;Cousin ersten Grades zweimal entfernt&#39;,
+</span><span class="">  221: 	&#39;3,0&#39; =&gt; &#39;Urgrossvater&#39;,
+</span><span class="">  222: 	&#39;3,1&#39; =&gt; &#39;Grossonkel&#39;,
+</span><span class="">  223: 	&#39;3,2&#39; =&gt; &#39;Cousin ersten Grades einmal entfernt&#39;,
+</span><span class="">  224: 	&#39;3,3&#39; =&gt; &#39;Cousin zweiten Grades&#39;,
+</span><span class="">  225: 	&#39;3,4&#39; =&gt; &#39;Cousin zweiten Grades einmal entfernt&#39;,
+</span><span class="">  226: 	&#39;4,0&#39; =&gt; &#39;Urururgrossvater&#39;,
+</span><span class="">  227: 	&#39;4,1&#39; =&gt; &#39;Urgrossonkel&#39;,
+</span><span class="">  228: 	&#39;4,2&#39; =&gt; &#39;Cousin ersten Grades zweimal entfernt&#39;,
+</span><span class="">  229: 	&#39;4,3&#39; =&gt; &#39;Cousin zweiten Grades einmal entfernt&#39;,
+</span><span class="">  230: 	&#39;4,4&#39; =&gt; &#39;Cousin dritten Grades&#39;,
+</span><span class="">  231: 	&#39;5,0&#39; =&gt; &#39;Urururgrossvater&#39;,
+</span><span class="">  232: 	&#39;5,5&#39; =&gt; &#39;Cousin vierten Grades&#39;,
+</span><span class="">  233: 	&#39;6,0&#39; =&gt; &#39;Ururururgrossvater&#39;,
+</span><span class="">  234: 	&#39;6,6&#39; =&gt; &#39;Cousin fuenften Grades&#39;,
+</span><span class="">  235: );
+</span><span class="">  236: 
+</span><span class="">  237: Readonly::Hash my %DE_FEMALE_RELATIONSHIPS =&gt; (
+</span><span class="">  238: 	&#39;0,0&#39; =&gt; &#39;sich selbst&#39;,
+</span><span class="">  239: 	&#39;0,1&#39; =&gt; &#39;Tochter&#39;,
+</span><span class="">  240: 	&#39;0,2&#39; =&gt; &#39;Enkelin&#39;,
+</span><span class="">  241: 	&#39;0,3&#39; =&gt; &#39;Urenkelin&#39;,
+</span><span class="">  242: 	&#39;0,4&#39; =&gt; &#39;Ururenkelin&#39;,
+</span><span class="">  243: 	&#39;1,0&#39; =&gt; &#39;Mutter&#39;,
+</span><span class="">  244: 	&#39;1,1&#39; =&gt; &#39;Schwester&#39;,
+</span><span class="">  245: 	&#39;1,2&#39; =&gt; &#39;Nichte&#39;,
+</span><span class="">  246: 	&#39;1,3&#39; =&gt; &#39;Grossnichte&#39;,
+</span><span class="">  247: 	&#39;1,4&#39; =&gt; &#39;Urgrossnichte&#39;,
+</span><span class="">  248: 	&#39;2,0&#39; =&gt; &#39;Grossmutter&#39;,
+</span><span class="">  249: 	&#39;2,1&#39; =&gt; &#39;Tante&#39;,
+</span><span class="">  250: 	&#39;2,2&#39; =&gt; &#39;Cousine&#39;,
+</span><span class="">  251: 	&#39;2,3&#39; =&gt; &#39;Cousine ersten Grades einmal entfernt&#39;,
+</span><span class="">  252: 	&#39;2,4&#39; =&gt; &#39;Cousine ersten Grades zweimal entfernt&#39;,
+</span><span class="">  253: 	&#39;3,0&#39; =&gt; &#39;Urgrossmutter&#39;,
+</span><span class="">  254: 	&#39;3,1&#39; =&gt; &#39;Grosstante&#39;,
+</span><span class="">  255: 	&#39;3,2&#39; =&gt; &#39;Cousine ersten Grades einmal entfernt&#39;,
+</span><span class="">  256: 	&#39;3,3&#39; =&gt; &#39;Cousine zweiten Grades&#39;,
+</span><span class="">  257: 	&#39;3,4&#39; =&gt; &#39;Cousine zweiten Grades einmal entfernt&#39;,
+</span><span class="">  258: 	&#39;4,0&#39; =&gt; &#39;Urururgrossmutter&#39;,
+</span><span class="">  259: 	&#39;4,1&#39; =&gt; &#39;Urgrosstante&#39;,
+</span><span class="">  260: 	&#39;4,2&#39; =&gt; &#39;Cousine ersten Grades zweimal entfernt&#39;,
+</span><span class="">  261: 	&#39;4,3&#39; =&gt; &#39;Cousine zweiten Grades einmal entfernt&#39;,
+</span><span class="">  262: 	&#39;4,4&#39; =&gt; &#39;Cousine dritten Grades&#39;,
+</span><span class="">  263: 	&#39;5,0&#39; =&gt; &#39;Urururgrossmutter&#39;,
+</span><span class="">  264: 	&#39;5,5&#39; =&gt; &#39;Cousine vierten Grades&#39;,
+</span><span class="">  265: 	&#39;6,0&#39; =&gt; &#39;Ururururgrossmutter&#39;,
+</span><span class="">  266: 	&#39;6,6&#39; =&gt; &#39;Cousine fuenften Grades&#39;,
+</span><span class="">  267: );
+</span><span class="">  268: 
+</span><span class="">  269: # ---------------------------------------------------------------------------
+</span><span class="">  270: # Master dispatch table: lang -&gt; sex -&gt; hashref
+</span><span class="">  271: # ---------------------------------------------------------------------------
+</span><span class="">  272: 
+</span><span class="">  273: Readonly::Hash my %RELATIONSHIP_TABLES =&gt; (
+</span><span class="">  274: 	&#39;en&#39; =&gt; {
+</span><span class="">  275: 		$SEX_MALE   =&gt; \%EN_MALE_RELATIONSHIPS,
+</span><span class="">  276: 		$SEX_FEMALE =&gt; \%EN_FEMALE_RELATIONSHIPS,
+</span><span class="">  277: 	}, &#39;fr&#39; =&gt; {
+</span><span class="">  278: 		$SEX_MALE   =&gt; \%FR_MALE_RELATIONSHIPS,
+</span><span class="">  279: 		$SEX_FEMALE =&gt; \%FR_FEMALE_RELATIONSHIPS,
+</span><span class="">  280: 	}, &#39;de&#39; =&gt; {
+</span><span class="">  281: 		$SEX_MALE   =&gt; \%DE_MALE_RELATIONSHIPS,
+</span><span class="">  282: 		$SEX_FEMALE =&gt; \%DE_FEMALE_RELATIONSHIPS,
+</span><span class="">  283: 	},
+</span><span class="">  284: );
+</span><span class="">  285: 
+</span><span class="">  286: # ---------------------------------------------------------------------------
+</span><span class="">  287: # Constructor
+</span><span class="">  288: # ---------------------------------------------------------------------------
+</span><span class="">  289: 
+</span><span class="">  290: =head1 NAME
+</span><span class="">  291: 
+</span><span class="">  292: Genealogy::Relationship::Name - Return a genealogical relationship name from step counts
+</span><span class="">  293: 
+</span><span class="">  294: =head1 VERSION
+</span><span class="">  295: 
+</span><span class="">  296: Version 0.01
+</span><span class="">  297: 
+</span><span class="">  298: =head1 SYNOPSIS
+</span><span class="">  299: 
+</span><span class="">  300:     use Genealogy::Relationship::Name;
+</span><span class="">  301: 
+</span><span class="">  302:     my $namer = Genealogy::Relationship::Name-&gt;new();
+</span><span class="">  303: 
+</span><span class="">  304:     my $name = $namer-&gt;name(
+</span><span class="">  305:         steps_to_ancestor   =&gt; 2,
+</span><span class="">  306:         steps_from_ancestor =&gt; 3,
+</span><span class="">  307:         sex                 =&gt; &#39;F&#39;,
+</span><span class="">  308:     );
+</span><span class="">  309:     # Returns &#39;first cousin once-removed&#39;
+</span><span class="">  310: 
+</span><span class="">  311:     # With language
+</span><span class="">  312:     my $name_fr = $namer-&gt;name(
+</span><span class="">  313:         steps_to_ancestor   =&gt; 2,
+</span><span class="">  314:         steps_from_ancestor =&gt; 2,
+</span><span class="">  315:         sex                 =&gt; &#39;M&#39;,
+</span><span class="">  316:         language            =&gt; &#39;fr&#39;,
+</span><span class="">  317:     );
+</span><span class="">  318:     # Returns &#39;cousin germain&#39;
+</span><span class="">  319: 
+</span><span class="">  320: =head1 DESCRIPTION
+</span><span class="">  321: 
+</span><span class="">  322: C&lt;Genealogy::Relationship::Name&gt; maps a pair of step-counts (person A to common
+</span><span class="">  323: ancestor, common ancestor to person B) plus the sex of person B and an optional
+</span><span class="">  324: language code to a human-readable relationship name string.
+</span><span class="">  325: 
+</span><span class="">  326: The relationship tables were originally embedded in the C&lt;gedcom&gt; and C&lt;ged2site&gt;
+</span><span class="">  327: distributions inside C&lt;Gedcom::Individual::relationship_up()&gt;; this module
+</span><span class="">  328: extracts them into a reusable, installable CPAN distribution.
+</span><span class="">  329: 
+</span><span class="">  330: Supported languages: C&lt;en&gt; (English, default), C&lt;fr&gt; (French), C&lt;de&gt; (German).
+</span><span class="">  331: 
+</span><span class="">  332: =cut
+</span><span class="">  333: 
+</span><span class="">  334: sub new {
+</span><span class="">  335: 	# Create and return a blessed object
+</span><span class="">  336: 	my $class = shift;
+</span><span class="">  337: 
+</span><span class="">  338: 	# Handle hash or hashref arguments
+</span><span class="">  339: 	my $params = Params::Get::get_params(undef, @_);
+</span><span class="">  340: 
+</span><span class="">  341: 	# Load the configuration from a config file, if provided
+</span><span class="">  342: 	$params = Object::Configure::configure($class, $params);
+</span><span class="">  343: 
+</span><span class="">  344: 	# Allow both hash and hashref invocation styles
+</span><span class="">  345: 	my $self = bless {
+</span><span class="">  346: 		# Store any constructor-time config for Object::Configure compatibility
+</span><span class="">  347: 		%{$params},
+</span><span class="">  348: 	}, ref($class) || $class;
+</span><span class="">  349: 
+</span><span class="">  350: 	return $self;
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  351: }
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -662,140 +662,140 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  352: }
-</span><span class="">  353: 
-</span><span class="">  354: # ---------------------------------------------------------------------------
-</span><span class="">  355: # Public method: name()
-</span><span class="">  356: # ---------------------------------------------------------------------------
-</span><span class="">  357: 
-</span><span class="">  358: =head1 METHODS
-</span><span class="">  359: 
-</span><span class="">  360: =head2 name
-</span><span class="">  361: 
-</span><span class="">  362: Returns the name of the relationship between person A and person B.
-</span><span class="">  363: 
-</span><span class="">  364: =head3 PURPOSE
-</span><span class="">  365: 
-</span><span class="">  366: Given the number of steps from person A up to the nearest common ancestor
-</span><span class="">  367: (C&lt;steps_to_ancestor&gt;) and the number of steps from that ancestor down to
-</span><span class="">  368: person B (C&lt;steps_from_ancestor&gt;), plus the sex of person B and a language
-</span><span class="">  369: code, returns a localised relationship-name string.
-</span><span class="">  370: 
-</span><span class="">  371: =head3 ARGUMENTS
-</span><span class="">  372: 
-</span><span class="">  373: =over 4
-</span><span class="">  374: 
-</span><span class="">  375: =item C&lt;steps_to_ancestor&gt; (integer, required)
-</span><span class="">  376: 
-</span><span class="">  377: Number of generational steps from person A up to the common ancestor.
-</span><span class="">  378: Must be a non-negative integer.  Zero means person A I&lt;is&gt; the ancestor.
-</span><span class="">  379: 
-</span><span class="">  380: =item C&lt;steps_from_ancestor&gt; (integer, required)
-</span><span class="">  381: 
-</span><span class="">  382: Number of generational steps from the common ancestor down to person B.
-</span><span class="">  383: Must be a non-negative integer.
-</span><span class="">  384: 
-</span><span class="">  385: =item C&lt;sex&gt; (string, required)
-</span><span class="">  386: 
-</span><span class="">  387: Sex of person B.  Must be C&lt;&#39;M&#39;&gt; (male) or C&lt;&#39;F&#39;&gt; (female).
-</span><span class="">  388: 
-</span><span class="">  389: =item C&lt;language&gt; (string, optional)
-</span><span class="">  390: 
-</span><span class="">  391: BCP-47-style language tag (only the primary subtag is used).
-</span><span class="">  392: Supported values: C&lt;en&gt; (default), C&lt;fr&gt;, C&lt;de&gt;.
-</span><span class="">  393: 
-</span><span class="">  394: =back
-</span><span class="">  395: 
-</span><span class="">  396: =head3 RETURNS
-</span><span class="">  397: 
-</span><span class="">  398: A string containing the relationship name, or C&lt;undef&gt; if the combination
-</span><span class="">  399: is not found in the lookup table.
-</span><span class="">  400: 
-</span><span class="">  401: =head3 EXAMPLE
-</span><span class="">  402: 
-</span><span class="">  403:     my $namer = Genealogy::Relationship::Name-&gt;new();
-</span><span class="">  404: 
-</span><span class="">  405:     # Person A is the grandparent (2 steps up) of the common ancestor,
-</span><span class="">  406:     # and person B is 3 steps below the ancestor; B is female =&gt; first cousin once-removed
-</span><span class="">  407:     my $rel = $namer-&gt;name(
-</span><span class="">  408:         steps_to_ancestor   =&gt; 2,
-</span><span class="">  409:         steps_from_ancestor =&gt; 3,
-</span><span class="">  410:         sex                 =&gt; &#39;F&#39;,
-</span><span class="">  411:     );
-</span><span class="">  412: 
-</span><span class="">  413: =head3 API SPECIFICATION
-</span><span class="">  414: 
-</span><span class="">  415: =head4 Input
-</span><span class="">  416: 
-</span><span class="">  417:     {
-</span><span class="">  418: 	steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  419: 	steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  420: 	sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
-</span><span class="">  421: 	language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/, optional =&gt; 1 },
-</span><span class="">  422:     }
-</span><span class="">  423: 
-</span><span class="">  424: =head4 Output
-</span><span class="">  425: 
-</span><span class="">  426:     {
-</span><span class="">  427:         type     =&gt; &#39;string&#39;,
-</span><span class="">  428:         optional =&gt; 1,     # undef when the combination is not tabulated
-</span><span class="">  429:     }
-</span><span class="">  430: 
-</span><span class="">  431: =head3 FORMAL SPECIFICATION
-</span><span class="">  432: 
-</span><span class="">  433:     name ______________________________________________________
-</span><span class="">  434:     [In]  steps_to_ancestor   : N0
-</span><span class="">  435:           steps_from_ancestor : N0
-</span><span class="">  436:           sex                 : {M, F}
-</span><span class="">  437:           language            : {en, fr, de}?  (default en)
-</span><span class="">  438:     [Out] result              : String | undef
-</span><span class="">  439: 
-</span><span class="">  440:     Let key == steps_to_ancestor ++ &quot;,&quot; ++ steps_from_ancestor
-</span><span class="">  441:     Let table == RELATIONSHIP_TABLES(language)(sex)
-</span><span class="">  442:     result == table(key)  if key in dom table
-</span><span class="">  443:            == undef       otherwise
-</span><span class="">  444: 
-</span><span class="">  445: =cut
-</span><span class="">  446: 
-</span><span class="">  447: sub name {
-</span><span class="">  448: 	my $self = shift;
-</span><span class="">  449: 
-</span><span class="">  450: 	# Validate and extract parameters; capture the return value
-</span><span class="">  451: 	my $args = Params::Validate::Strict::validate_strict(
-</span><span class="">  452: 		args   =&gt; Params::Get::get_params(undef, \@_) || {},
-</span><span class="">  453: 		schema =&gt; {
-</span><span class="">  454: 			steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  455: 			steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  456: 			sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
-</span><span class="">  457: 			language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/, optional =&gt; 1 },
-</span><span class="">  458: 		}
-</span><span class="">  459: 	);
-</span><span class="">  460: 
-</span><span class="">  461: 	# Extract individual parameters for clarity
-</span><span class="">  462: 	my $steps1 = $args-&gt;{steps_to_ancestor};
-</span><span class="">  463: 	my $steps2 = $args-&gt;{steps_from_ancestor};
-</span><span class="">  464: 	my $sex    = $args-&gt;{sex};
-</span><span class="">  465: 
-</span><span class="">  466: 	# Guard against undef step values that validate_strict may not croak on
-</span><span class="">  467: 	croak &#39;steps_to_ancestor must be a defined non-negative integer&#39; unless defined $steps1;
-</span><span class="">  468: 	croak &#39;steps_from_ancestor must be a defined non-negative integer&#39; unless defined $steps2;
-</span><span class="">  469: 
-</span><span class="">  470: 	# Fall back to constructor default or hard default if no per-call language given
-</span><span class="">  471: 	my $lang = lc($args-&gt;{language} // $self-&gt;{language} // $DEFAULT_LANGUAGE);
-</span><span class="">  472: 
-</span><span class="">  473: 	# Strip any region subtag (e.g. &#39;en-GB&#39; -&gt; &#39;en&#39;) after lowercasing
-</span><span class="">  474: 	($lang) = split /-/, $lang;
-</span><span class="">  475: 
-</span><span class="">  476: 	# Build lookup key from the two step counts
-</span><span class="">  477: 	my $key = &quot;${steps1},${steps2}&quot;;
-</span><span class="">  478: 
-</span><span class="">  479: 	# Retrieve the correct gender-specific table for the chosen language
-</span><span class="">  480: 	my $table = $RELATIONSHIP_TABLES{$lang}{$sex};
-</span><span class="">  481: 
-</span><span class="">  482: 	# Look up and return; undef when the combination is not tabulated
-</span><span class="">  483: 	my $result = $table-&gt;{$key};
-</span><span class="">  484: 
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  485: 	return $result;
+<span class="">  352: 
+</span><span class="">  353: # ---------------------------------------------------------------------------
+</span><span class="">  354: # Public method: name()
+</span><span class="">  355: # ---------------------------------------------------------------------------
+</span><span class="">  356: 
+</span><span class="">  357: =head1 METHODS
+</span><span class="">  358: 
+</span><span class="">  359: =head2 name
+</span><span class="">  360: 
+</span><span class="">  361: Returns the name of the relationship between person A and person B.
+</span><span class="">  362: 
+</span><span class="">  363: =head3 PURPOSE
+</span><span class="">  364: 
+</span><span class="">  365: Given the number of steps from person A up to the nearest common ancestor
+</span><span class="">  366: (C&lt;steps_to_ancestor&gt;) and the number of steps from that ancestor down to
+</span><span class="">  367: person B (C&lt;steps_from_ancestor&gt;), plus the sex of person B and a language
+</span><span class="">  368: code, returns a localised relationship-name string.
+</span><span class="">  369: 
+</span><span class="">  370: =head3 ARGUMENTS
+</span><span class="">  371: 
+</span><span class="">  372: =over 4
+</span><span class="">  373: 
+</span><span class="">  374: =item C&lt;steps_to_ancestor&gt; (integer, required)
+</span><span class="">  375: 
+</span><span class="">  376: Number of generational steps from person A up to the common ancestor.
+</span><span class="">  377: Must be a non-negative integer.  Zero means person A I&lt;is&gt; the ancestor.
+</span><span class="">  378: 
+</span><span class="">  379: =item C&lt;steps_from_ancestor&gt; (integer, required)
+</span><span class="">  380: 
+</span><span class="">  381: Number of generational steps from the common ancestor down to person B.
+</span><span class="">  382: Must be a non-negative integer.
+</span><span class="">  383: 
+</span><span class="">  384: =item C&lt;sex&gt; (string, required)
+</span><span class="">  385: 
+</span><span class="">  386: Sex of person B.  Must be C&lt;&#39;M&#39;&gt; (male) or C&lt;&#39;F&#39;&gt; (female).
+</span><span class="">  387: 
+</span><span class="">  388: =item C&lt;language&gt; (string, optional)
+</span><span class="">  389: 
+</span><span class="">  390: BCP-47-style language tag (only the primary subtag is used).
+</span><span class="">  391: Supported values: C&lt;en&gt; (default), C&lt;fr&gt;, C&lt;de&gt;.
+</span><span class="">  392: 
+</span><span class="">  393: =back
+</span><span class="">  394: 
+</span><span class="">  395: =head3 RETURNS
+</span><span class="">  396: 
+</span><span class="">  397: A string containing the relationship name, or C&lt;undef&gt; if the combination
+</span><span class="">  398: is not found in the lookup table.
+</span><span class="">  399: 
+</span><span class="">  400: =head3 EXAMPLE
+</span><span class="">  401: 
+</span><span class="">  402:     my $namer = Genealogy::Relationship::Name-&gt;new();
+</span><span class="">  403: 
+</span><span class="">  404:     # Person A is the grandparent (2 steps up) of the common ancestor,
+</span><span class="">  405:     # and person B is 3 steps below the ancestor; B is female =&gt; first cousin once-removed
+</span><span class="">  406:     my $rel = $namer-&gt;name(
+</span><span class="">  407:         steps_to_ancestor   =&gt; 2,
+</span><span class="">  408:         steps_from_ancestor =&gt; 3,
+</span><span class="">  409:         sex                 =&gt; &#39;F&#39;,
+</span><span class="">  410:     );
+</span><span class="">  411: 
+</span><span class="">  412: =head3 API SPECIFICATION
+</span><span class="">  413: 
+</span><span class="">  414: =head4 Input
+</span><span class="">  415: 
+</span><span class="">  416:     {
+</span><span class="">  417: 	steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class="">  418: 	steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class="">  419: 	sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
+</span><span class="">  420: 	language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/, optional =&gt; 1 },
+</span><span class="">  421:     }
+</span><span class="">  422: 
+</span><span class="">  423: =head4 Output
+</span><span class="">  424: 
+</span><span class="">  425:     {
+</span><span class="">  426:         type     =&gt; &#39;string&#39;,
+</span><span class="">  427:         optional =&gt; 1,     # undef when the combination is not tabulated
+</span><span class="">  428:     }
+</span><span class="">  429: 
+</span><span class="">  430: =head3 FORMAL SPECIFICATION
+</span><span class="">  431: 
+</span><span class="">  432:     name ______________________________________________________
+</span><span class="">  433:     [In]  steps_to_ancestor   : N0
+</span><span class="">  434:           steps_from_ancestor : N0
+</span><span class="">  435:           sex                 : {M, F}
+</span><span class="">  436:           language            : {en, fr, de}?  (default en)
+</span><span class="">  437:     [Out] result              : String | undef
+</span><span class="">  438: 
+</span><span class="">  439:     Let key == steps_to_ancestor ++ &quot;,&quot; ++ steps_from_ancestor
+</span><span class="">  440:     Let table == RELATIONSHIP_TABLES(language)(sex)
+</span><span class="">  441:     result == table(key)  if key in dom table
+</span><span class="">  442:            == undef       otherwise
+</span><span class="">  443: 
+</span><span class="">  444: =cut
+</span><span class="">  445: 
+</span><span class="">  446: sub name {
+</span><span class="">  447: 	my $self = shift;
+</span><span class="">  448: 
+</span><span class="">  449: 	# Validate and extract parameters; capture the return value
+</span><span class="">  450: 	my $args = Params::Validate::Strict::validate_strict(
+</span><span class="">  451: 		args   =&gt; Params::Get::get_params(undef, \@_) || {},
+</span><span class="">  452: 		schema =&gt; {
+</span><span class="">  453: 			steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class="">  454: 			steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class="">  455: 			sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
+</span><span class="">  456: 			language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/, optional =&gt; 1 },
+</span><span class="">  457: 		}
+</span><span class="">  458: 	);
+</span><span class="">  459: 
+</span><span class="">  460: 	# Extract individual parameters for clarity
+</span><span class="">  461: 	my $steps1 = $args-&gt;{steps_to_ancestor};
+</span><span class="">  462: 	my $steps2 = $args-&gt;{steps_from_ancestor};
+</span><span class="">  463: 	my $sex    = $args-&gt;{sex};
+</span><span class="">  464: 
+</span><span class="">  465: 	# Guard against undef step values that validate_strict may not croak on
+</span><span class="">  466: 	croak &#39;steps_to_ancestor must be a defined non-negative integer&#39; unless defined $steps1;
+</span><span class="">  467: 	croak &#39;steps_from_ancestor must be a defined non-negative integer&#39; unless defined $steps2;
+</span><span class="">  468: 
+</span><span class="">  469: 	# Fall back to constructor default or hard default if no per-call language given
+</span><span class="">  470: 	my $lang = lc($args-&gt;{language} // $self-&gt;{language} // $DEFAULT_LANGUAGE);
+</span><span class="">  471: 
+</span><span class="">  472: 	# Strip any region subtag (e.g. &#39;en-GB&#39; -&gt; &#39;en&#39;) after lowercasing
+</span><span class="">  473: 	($lang) = split /-/, $lang;
+</span><span class="">  474: 
+</span><span class="">  475: 	# Build lookup key from the two step counts
+</span><span class="">  476: 	my $key = &quot;${steps1},${steps2}&quot;;
+</span><span class="">  477: 
+</span><span class="">  478: 	# Retrieve the correct gender-specific table for the chosen language
+</span><span class="">  479: 	my $table = $RELATIONSHIP_TABLES{$lang}{$sex};
+</span><span class="">  480: 
+</span><span class="">  481: 	# Look up and return; undef when the combination is not tabulated
+</span><span class="">  482: 	my $result = $table-&gt;{$key};
+</span><span class="">  483: 
+</span><span class="">  484: 	return $result;
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  485: }
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -817,61 +817,61 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  486: }
-</span><span class="">  487: 
-</span><span class="">  488: # ---------------------------------------------------------------------------
-</span><span class="">  489: # Public method: supported_languages()
-</span><span class="">  490: # ---------------------------------------------------------------------------
-</span><span class="">  491: 
-</span><span class="">  492: =head2 supported_languages
-</span><span class="">  493: 
-</span><span class="">  494: Returns a sorted list of the language codes that the module supports.
-</span><span class="">  495: 
-</span><span class="">  496: =head3 PURPOSE
-</span><span class="">  497: 
-</span><span class="">  498: Allows calling code to enumerate the languages available for C&lt;name()&gt;
-</span><span class="">  499: without hard-coding them.
-</span><span class="">  500: 
-</span><span class="">  501: =head3 ARGUMENTS
-</span><span class="">  502: 
-</span><span class="">  503: None.
-</span><span class="">  504: 
-</span><span class="">  505: =head3 RETURNS
-</span><span class="">  506: 
-</span><span class="">  507: A list (or array-ref in scalar context) of language code strings,
-</span><span class="">  508: currently C&lt;(&#39;de&#39;, &#39;en&#39;, &#39;fr&#39;)&gt;.
-</span><span class="">  509: 
-</span><span class="">  510: =head3 EXAMPLE
-</span><span class="">  511: 
-</span><span class="">  512:     my @langs = $namer-&gt;supported_languages();
-</span><span class="">  513:     # ( &#39;de&#39;, &#39;en&#39;, &#39;fr&#39; )
-</span><span class="">  514: 
-</span><span class="">  515: =head3 API SPECIFICATION
-</span><span class="">  516: 
-</span><span class="">  517: =head4 Input
-</span><span class="">  518: 
-</span><span class="">  519:     {}   # no arguments
-</span><span class="">  520: 
-</span><span class="">  521: =head4 Output
-</span><span class="">  522: 
-</span><span class="">  523:     {
-</span><span class="">  524:         type =&gt; ARRAYREF,   # sorted list of language codes
-</span><span class="">  525:     }
-</span><span class="">  526: 
-</span><span class="">  527: =head3 FORMAL SPECIFICATION
-</span><span class="">  528: 
-</span><span class="">  529:     supported_languages ______________________________________
-</span><span class="">  530:     [In]  (none)
-</span><span class="">  531:     [Out] result : seq String
-</span><span class="">  532: 
-</span><span class="">  533:     result == sort(dom RELATIONSHIP_TABLES)
-</span><span class="">  534: 
-</span><span class="">  535: =cut
-</span><span class="">  536: 
-</span><span class="">  537: sub supported_languages {
-</span><span class="">  538: 	# Return the sorted set of keys from the master dispatch table
-</span><span class="">  539: 	my @langs = sort keys %RELATIONSHIP_TABLES;
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  540: 	return wantarray ? @langs : \@langs;
+<span class="">  486: 
+</span><span class="">  487: # ---------------------------------------------------------------------------
+</span><span class="">  488: # Public method: supported_languages()
+</span><span class="">  489: # ---------------------------------------------------------------------------
+</span><span class="">  490: 
+</span><span class="">  491: =head2 supported_languages
+</span><span class="">  492: 
+</span><span class="">  493: Returns a sorted list of the language codes that the module supports.
+</span><span class="">  494: 
+</span><span class="">  495: =head3 PURPOSE
+</span><span class="">  496: 
+</span><span class="">  497: Allows calling code to enumerate the languages available for C&lt;name()&gt;
+</span><span class="">  498: without hard-coding them.
+</span><span class="">  499: 
+</span><span class="">  500: =head3 ARGUMENTS
+</span><span class="">  501: 
+</span><span class="">  502: None.
+</span><span class="">  503: 
+</span><span class="">  504: =head3 RETURNS
+</span><span class="">  505: 
+</span><span class="">  506: A list (or array-ref in scalar context) of language code strings,
+</span><span class="">  507: currently C&lt;(&#39;de&#39;, &#39;en&#39;, &#39;fr&#39;)&gt;.
+</span><span class="">  508: 
+</span><span class="">  509: =head3 EXAMPLE
+</span><span class="">  510: 
+</span><span class="">  511:     my @langs = $namer-&gt;supported_languages();
+</span><span class="">  512:     # ( &#39;de&#39;, &#39;en&#39;, &#39;fr&#39; )
+</span><span class="">  513: 
+</span><span class="">  514: =head3 API SPECIFICATION
+</span><span class="">  515: 
+</span><span class="">  516: =head4 Input
+</span><span class="">  517: 
+</span><span class="">  518:     {}   # no arguments
+</span><span class="">  519: 
+</span><span class="">  520: =head4 Output
+</span><span class="">  521: 
+</span><span class="">  522:     {
+</span><span class="">  523:         type =&gt; ARRAYREF,   # sorted list of language codes
+</span><span class="">  524:     }
+</span><span class="">  525: 
+</span><span class="">  526: =head3 FORMAL SPECIFICATION
+</span><span class="">  527: 
+</span><span class="">  528:     supported_languages ______________________________________
+</span><span class="">  529:     [In]  (none)
+</span><span class="">  530:     [Out] result : seq String
+</span><span class="">  531: 
+</span><span class="">  532:     result == sort(dom RELATIONSHIP_TABLES)
+</span><span class="">  533: 
+</span><span class="">  534: =cut
+</span><span class="">  535: 
+</span><span class="">  536: sub supported_languages {
+</span><span class="">  537: 	# Return the sorted set of keys from the master dispatch table
+</span><span class="">  538: 	my @langs = sort keys %RELATIONSHIP_TABLES;
+</span><span class="">  539: 	return wantarray ? @langs : \@langs;
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  540: }
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -893,64 +893,64 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  541: }
-</span><span class="">  542: 
-</span><span class="">  543: # ---------------------------------------------------------------------------
-</span><span class="">  544: # Public method: known_sexes()
-</span><span class="">  545: # ---------------------------------------------------------------------------
-</span><span class="">  546: 
-</span><span class="">  547: =head2 known_sexes
-</span><span class="">  548: 
-</span><span class="">  549: Returns the list of sex codes accepted by C&lt;name()&gt;.
-</span><span class="">  550: 
-</span><span class="">  551: =head3 PURPOSE
-</span><span class="">  552: 
-</span><span class="">  553: Documents and exposes the set of valid C&lt;sex&gt; values so that callers can
-</span><span class="">  554: validate their own input without duplicating knowledge.
-</span><span class="">  555: 
-</span><span class="">  556: =head3 ARGUMENTS
-</span><span class="">  557: 
-</span><span class="">  558: None.
-</span><span class="">  559: 
-</span><span class="">  560: =head3 RETURNS
-</span><span class="">  561: 
-</span><span class="">  562: A list (or array-ref in scalar context) of valid sex code strings: C&lt;(&#39;F&#39;, &#39;M&#39;)&gt;.
-</span><span class="">  563: 
-</span><span class="">  564: =head3 SIDE EFFECTS
-</span><span class="">  565: 
-</span><span class="">  566: None.
-</span><span class="">  567: 
-</span><span class="">  568: =head3 EXAMPLE
-</span><span class="">  569: 
-</span><span class="">  570:     my @sexes = $namer-&gt;known_sexes();
-</span><span class="">  571:     # ( &#39;F&#39;, &#39;M&#39; )
-</span><span class="">  572: 
-</span><span class="">  573: =head3 API SPECIFICATION
-</span><span class="">  574: 
-</span><span class="">  575: =head4 Input
-</span><span class="">  576: 
-</span><span class="">  577:     {}   # no arguments
-</span><span class="">  578: 
-</span><span class="">  579: =head4 Output
-</span><span class="">  580: 
-</span><span class="">  581:     {
-</span><span class="">  582:         type =&gt; ARRAYREF,
-</span><span class="">  583:     }
-</span><span class="">  584: 
-</span><span class="">  585: =head3 FORMAL SPECIFICATION
-</span><span class="">  586: 
-</span><span class="">  587:     known_sexes ______________________________________________
-</span><span class="">  588:     [In]  (none)
-</span><span class="">  589:     [Out] result : seq String
-</span><span class="">  590: 
-</span><span class="">  591:     result == sort { $SEX_FEMALE, $SEX_MALE }
-</span><span class="">  592: 
-</span><span class="">  593: =cut
-</span><span class="">  594: 
-</span><span class="">  595: sub known_sexes {
-</span><span class="">  596: 	# Return the two valid sex codes in sorted order
-</span><span class="">  597: 	my @sexes = sort($SEX_FEMALE, $SEX_MALE);
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  598: 	return wantarray ? @sexes : \@sexes;
+<span class="">  541: 
+</span><span class="">  542: # ---------------------------------------------------------------------------
+</span><span class="">  543: # Public method: known_sexes()
+</span><span class="">  544: # ---------------------------------------------------------------------------
+</span><span class="">  545: 
+</span><span class="">  546: =head2 known_sexes
+</span><span class="">  547: 
+</span><span class="">  548: Returns the list of sex codes accepted by C&lt;name()&gt;.
+</span><span class="">  549: 
+</span><span class="">  550: =head3 PURPOSE
+</span><span class="">  551: 
+</span><span class="">  552: Documents and exposes the set of valid C&lt;sex&gt; values so that callers can
+</span><span class="">  553: validate their own input without duplicating knowledge.
+</span><span class="">  554: 
+</span><span class="">  555: =head3 ARGUMENTS
+</span><span class="">  556: 
+</span><span class="">  557: None.
+</span><span class="">  558: 
+</span><span class="">  559: =head3 RETURNS
+</span><span class="">  560: 
+</span><span class="">  561: A list (or array-ref in scalar context) of valid sex code strings: C&lt;(&#39;F&#39;, &#39;M&#39;)&gt;.
+</span><span class="">  562: 
+</span><span class="">  563: =head3 SIDE EFFECTS
+</span><span class="">  564: 
+</span><span class="">  565: None.
+</span><span class="">  566: 
+</span><span class="">  567: =head3 EXAMPLE
+</span><span class="">  568: 
+</span><span class="">  569:     my @sexes = $namer-&gt;known_sexes();
+</span><span class="">  570:     # ( &#39;F&#39;, &#39;M&#39; )
+</span><span class="">  571: 
+</span><span class="">  572: =head3 API SPECIFICATION
+</span><span class="">  573: 
+</span><span class="">  574: =head4 Input
+</span><span class="">  575: 
+</span><span class="">  576:     {}   # no arguments
+</span><span class="">  577: 
+</span><span class="">  578: =head4 Output
+</span><span class="">  579: 
+</span><span class="">  580:     {
+</span><span class="">  581:         type =&gt; ARRAYREF,
+</span><span class="">  582:     }
+</span><span class="">  583: 
+</span><span class="">  584: =head3 FORMAL SPECIFICATION
+</span><span class="">  585: 
+</span><span class="">  586:     known_sexes ______________________________________________
+</span><span class="">  587:     [In]  (none)
+</span><span class="">  588:     [Out] result : seq String
+</span><span class="">  589: 
+</span><span class="">  590:     result == sort { $SEX_FEMALE, $SEX_MALE }
+</span><span class="">  591: 
+</span><span class="">  592: =cut
+</span><span class="">  593: 
+</span><span class="">  594: sub known_sexes {
+</span><span class="">  595: 	# Return the two valid sex codes in sorted order
+</span><span class="">  596: 	my @sexes = sort($SEX_FEMALE, $SEX_MALE);
+</span><span class="">  597: 	return wantarray ? @sexes : \@sexes;
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  598: }
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
@@ -972,103 +972,110 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  599: }
-</span><span class="">  600: 
-</span><span class="">  601: 1;
-</span><span class="">  602: 
-</span><span class="">  603: __END__
-</span><span class="">  604: 
-</span><span class="">  605: =head1 CONFIGURATION
-</span><span class="">  606: 
-</span><span class="">  607: The constructor accepts an optional C&lt;language&gt; key which sets the default
-</span><span class="">  608: language for all subsequent calls to C&lt;name()&gt;:
-</span><span class="">  609: 
-</span><span class="">  610:     my $namer = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;fr&#39;);
-</span><span class="">  611: 
-</span><span class="">  612: This default can be overridden per-call by passing C&lt;language&gt; to C&lt;name()&gt;.
-</span><span class="">  613: The object is also compatible with C&lt;Object::Configure&gt; for runtime
-</span><span class="">  614: reconfiguration.
-</span><span class="">  615: 
-</span><span class="">  616: =head1 DIAGNOSTICS
-</span><span class="">  617: 
-</span><span class="">  618: =over 4
-</span><span class="">  619: 
-</span><span class="">  620: =item Unsupported language &#39;%s&#39;; falling back to &#39;en&#39;
-</span><span class="">  621: 
-</span><span class="">  622: The C&lt;language&gt; argument contained a value not in the supported set.
-</span><span class="">  623: The module continues with English relationship names.
-</span><span class="">  624: 
-</span><span class="">  625: =back
-</span><span class="">  626: 
-</span><span class="">  627: =head1 DEPENDENCIES
-</span><span class="">  628: 
-</span><span class="">  629: L&lt;Carp&gt;, L&lt;Params::Get&gt;, L&lt;Params::Validate::Strict&gt;, L&lt;Readonly&gt;, L&lt;Return::Set&gt;
-</span><span class="">  630: 
-</span><span class="">  631: =head1 BUGS AND LIMITATIONS
-</span><span class="">  632: 
-</span><span class="">  633: The lookup tables currently cover steps 0-6 in both directions.  Relationships
-</span><span class="">  634: further removed (seventh cousin, etc.) return C&lt;undef&gt;.  Pull requests adding
-</span><span class="">  635: deeper tables are welcome.
-</span><span class="">  636: 
-</span><span class="">  637: =head1 SEE ALSO
-</span><span class="">  638: 
-</span><span class="">  639: L&lt;Gedcom::Individual&gt;, L&lt;Genealogy::Relationship&gt;
-</span><span class="">  640: 
-</span><span class="">  641: =head1 AUTHOR
-</span><span class="">  642: 
-</span><span class="">  643: Nigel Horne C&lt;&lt; &lt;njh@nigelhorne.com&gt; &gt;&gt;
-</span><span class="">  644: 
-</span><span class="">  645: =head1 REPOSITORY
-</span><span class="">  646: 
-</span><span class="">  647: L&lt;https://github.com/nigelhorne/Genealogy-Relationship-Name&gt;
-</span><span class="">  648: 
-</span><span class="">  649: =head1 SUPPORT
-</span><span class="">  650: 
-</span><span class="">  651: This module is provided as-is without any warranty.
-</span><span class="">  652: 
-</span><span class="">  653: Please report any bugs or feature requests to C&lt;bug-genalogy-relationship-name at rt.cpan.org&gt;,
-</span><span class="">  654: or through the web interface at
-</span><span class="">  655: L&lt;http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name&gt;.
-</span><span class="">  656: I will be notified, and then you&#39;ll
-</span><span class="">  657: automatically be notified of progress on your bug as I make changes.
-</span><span class="">  658: 
-</span><span class="">  659: You can find documentation for this module with the perldoc command.
-</span><span class="">  660: 
-</span><span class="">  661:     perldoc Genealogy::Relationship::Name
-</span><span class="">  662: 
-</span><span class="">  663: You can also look for information at:
-</span><span class="">  664: 
-</span><span class="">  665: =over 4
-</span><span class="">  666: 
-</span><span class="">  667: =item * MetaCPAN
-</span><span class="">  668: 
-</span><span class="">  669: L&lt;https://metacpan.org/dist/Genealogy-Relationship-Name&gt;
-</span><span class="">  670: 
-</span><span class="">  671: =item * RT: CPAN&#39;s request tracker
-</span><span class="">  672: 
-</span><span class="">  673: L&lt;https://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-Relationship-Name&gt;
-</span><span class="">  674: 
-</span><span class="">  675: =item * CPAN Testers&#39; Matrix
-</span><span class="">  676: 
-</span><span class="">  677: L&lt;http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name&gt;
-</span><span class="">  678: 
-</span><span class="">  679: =item * CPAN Testers Dependencies
-</span><span class="">  680: 
-</span><span class="">  681: L&lt;http://deps.cpantesters.org/?module=Genealogy::Relationship::Name&gt;
-</span><span class="">  682: 
-</span><span class="">  683: =back
-</span><span class="">  684: 
-</span><span class="">  685: =head1 LICENCE AND COPYRIGHT
-</span><span class="">  686: 
-</span><span class="">  687: Copyright 2026 Nigel Horne.
-</span><span class="">  688: 
-</span><span class="">  689: Usage is subject to the GPL2 licence terms.
-</span><span class="">  690: If you use it,
-</span><span class="">  691: please let me know.
-</span><span class="">  692: 
-</span><span class="">  693: =cut
-</span><span class="">  694: 
-</span><span class="">  695: 1;
+<span class="">  599: 
+</span><span class="">  600: 1;
+</span><span class="">  601: 
+</span><span class="">  602: __END__
+</span><span class="">  603: 
+</span><span class="">  604: =head1 CONFIGURATION
+</span><span class="">  605: 
+</span><span class="">  606: The constructor accepts an optional C&lt;language&gt; key which sets the default
+</span><span class="">  607: language for all subsequent calls to C&lt;name()&gt;:
+</span><span class="">  608: 
+</span><span class="">  609:     my $namer = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;fr&#39;);
+</span><span class="">  610: 
+</span><span class="">  611: This default can be overridden per-call by passing C&lt;language&gt; to C&lt;name()&gt;.
+</span><span class="">  612: The object is also compatible with C&lt;Object::Configure&gt; for runtime
+</span><span class="">  613: reconfiguration.
+</span><span class="">  614: 
+</span><span class="">  615: =head1 DIAGNOSTICS
+</span><span class="">  616: 
+</span><span class="">  617: =over 4
+</span><span class="">  618: 
+</span><span class="">  619: =item Unsupported language &#39;%s&#39;; falling back to &#39;en&#39;
+</span><span class="">  620: 
+</span><span class="">  621: The C&lt;language&gt; argument contained a value not in the supported set.
+</span><span class="">  622: The module continues with English relationship names.
+</span><span class="">  623: 
+</span><span class="">  624: =back
+</span><span class="">  625: 
+</span><span class="">  626: =head1 DEPENDENCIES
+</span><span class="">  627: 
+</span><span class="">  628: L&lt;Carp&gt;, L&lt;Params::Get&gt;, L&lt;Params::Validate::Strict&gt;, L&lt;Readonly&gt;
+</span><span class="">  629: 
+</span><span class="">  630: =head1 BUGS AND LIMITATIONS
+</span><span class="">  631: 
+</span><span class="">  632: The lookup tables currently cover steps 0-6 in both directions.  Relationships
+</span><span class="">  633: further removed (seventh cousin, etc.) return C&lt;undef&gt;.  Pull requests adding
+</span><span class="">  634: deeper tables are welcome.
+</span><span class="">  635: 
+</span><span class="">  636: =head1 SEE ALSO
+</span><span class="">  637: 
+</span><span class="">  638: =over 4
+</span><span class="">  639: 
+</span><span class="">  640: =item * L&lt;Configure an Object at Runtime|Object::Configure&gt;
+</span><span class="">  641: 
+</span><span class="">  642: =item * L&lt;Test Dashboard|https://nigelhorne.github.io/Genealogy-Relationship-Name/coverage/&gt;
+</span><span class="">  643: 
+</span><span class="">  644: =item * L&lt;Gedcom::Individual&gt;, L&lt;Genealogy::Relationship&gt;
+</span><span class="">  645: 
+</span><span class="">  646: =back
+</span><span class="">  647: 
+</span><span class="">  648: =head1 AUTHOR
+</span><span class="">  649: 
+</span><span class="">  650: Nigel Horne C&lt;&lt; &lt;njh@nigelhorne.com&gt; &gt;&gt;
+</span><span class="">  651: 
+</span><span class="">  652: =head1 REPOSITORY
+</span><span class="">  653: 
+</span><span class="">  654: L&lt;https://github.com/nigelhorne/Genealogy-Relationship-Name&gt;
+</span><span class="">  655: 
+</span><span class="">  656: =head1 SUPPORT
+</span><span class="">  657: 
+</span><span class="">  658: This module is provided as-is without any warranty.
+</span><span class="">  659: 
+</span><span class="">  660: Please report any bugs or feature requests to C&lt;bug-genalogy-relationship-name at rt.cpan.org&gt;,
+</span><span class="">  661: or through the web interface at
+</span><span class="">  662: L&lt;http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name&gt;.
+</span><span class="">  663: I will be notified, and then you&#39;ll
+</span><span class="">  664: automatically be notified of progress on your bug as I make changes.
+</span><span class="">  665: 
+</span><span class="">  666: You can find documentation for this module with the perldoc command.
+</span><span class="">  667: 
+</span><span class="">  668:     perldoc Genealogy::Relationship::Name
+</span><span class="">  669: 
+</span><span class="">  670: You can also look for information at:
+</span><span class="">  671: 
+</span><span class="">  672: =over 4
+</span><span class="">  673: 
+</span><span class="">  674: =item * MetaCPAN
+</span><span class="">  675: 
+</span><span class="">  676: L&lt;https://metacpan.org/dist/Genealogy-Relationship-Name&gt;
+</span><span class="">  677: 
+</span><span class="">  678: =item * RT: CPAN&#39;s request tracker
+</span><span class="">  679: 
+</span><span class="">  680: L&lt;https://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-Relationship-Name&gt;
+</span><span class="">  681: 
+</span><span class="">  682: =item * CPAN Testers&#39; Matrix
+</span><span class="">  683: 
+</span><span class="">  684: L&lt;http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name&gt;
+</span><span class="">  685: 
+</span><span class="">  686: =item * CPAN Testers Dependencies
+</span><span class="">  687: 
+</span><span class="">  688: L&lt;http://deps.cpantesters.org/?module=Genealogy::Relationship::Name&gt;
+</span><span class="">  689: 
+</span><span class="">  690: =back
+</span><span class="">  691: 
+</span><span class="">  692: =head1 LICENCE AND COPYRIGHT
+</span><span class="">  693: 
+</span><span class="">  694: Copyright 2026 Nigel Horne.
+</span><span class="">  695: 
+</span><span class="">  696: Usage is subject to the GPL2 licence terms.
+</span><span class="">  697: If you use it,
+</span><span class="">  698: please let me know.
+</span><span class="">  699: 
+</span><span class="">  700: =cut
+</span><span class="">  701: 
+</span><span class="">  702: 1;
 </span></pre>
 
 <script>
