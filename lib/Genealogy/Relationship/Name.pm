@@ -338,16 +338,90 @@ sub new {
 	# Handle hash or hashref arguments
 	my $params = Params::Get::get_params(undef, \@_);
 
+	# Stash keys that are coderefs or objects before passing to Object::Configure,
+	# which cannot handle them (it treats unknown scalar values as config file paths)
+	my %stash;
+	for my $key (qw(logger on_error ctx)) {
+		next unless exists $params->{$key};
+		$stash{$key} = delete $params->{$key};
+	}
+
 	# Load the configuration from a config file, if provided
 	$params = Object::Configure::configure($class, $params);
 
-	# Allow both hash and hashref invocation styles
+	# Restore the stashed coderefs and objects after configure()
+	@{$params}{keys %stash} = values %stash;
+
+	# Validate on_error if supplied -- must be a coderef
+	if(defined $params->{on_error}) {
+		croak 'on_error must be a CODE reference'
+			unless ref($params->{on_error}) eq 'CODE';
+	}
+
+	# Bless and return the object; logger/ctx/level keys from params
+	# are stored directly and accessed by _error() via $self->{logger} etc.
 	my $self = bless {
 		# Store any constructor-time config for Object::Configure compatibility
 		%{$params},
 	}, ref($class) || $class;
 
 	return $self;
+}
+
+# ---------------------------------------------------------------------------
+# _error - internal error dispatcher
+# Purpose: dispatch an error via the logger coderef (with ctx), then the
+#   on_error coderef, then croak as a last resort.
+#
+#   Priority order:
+#     1. logger coderef (Log::Abstraction >= 0.28): called with a hashref
+#        containing class, file, line, level, message, and ctx (the person
+#        object stored at construction time).  Covers the gedcom/ged2site
+#        use-case where one namer is built per individual.
+#     2. on_error coderef: called with a flat hash matching complain() style:
+#        warning => $msg, person => $person.  person may come from the
+#        per-call arg or fall back to ctx stored on the object.
+#     3. croak: default when neither handler is set.
+#
+#   If either handler returns without dying, _error returns undef so the
+#   caller can propagate that cleanly.
+#
+# Entry: $self   - blessed object
+#        %params - warning (required), person (optional per-call override)
+# Exit:  returns undef if a handler returns; otherwise does not return (croaks)
+# Side effects: invokes logger or on_error if configured; may die
+sub _error {
+	my ($self, %params) = @_;
+
+	# Resolve the person: per-call arg takes priority over constructor ctx
+	my $person = $params{person} // $self->{ctx};
+
+	# 1. Log::Abstraction logger coderef (>= 0.28 ctx support)
+	if(my $logger = $self->{logger}) {
+		if(ref($logger) eq 'CODE') {
+			# Build the args hashref in the same shape _log() uses
+			my $args = {
+				class   => ref($self) || $self,
+				file    => (caller(1))[1],
+				line    => (caller(1))[2],
+				level   => 'error',
+				message => [ $params{warning} ],
+			};
+			# Attach ctx (person) when available, matching Log::Abstraction 0.28
+			$args->{ctx} = $person if defined $person;
+			$logger->($args);
+			return undef;
+		}
+	}
+
+	# 2. on_error coderef: complain()-compatible flat hash interface
+	if(defined $self->{on_error}) {
+		$self->{on_error}->(warning => $params{warning}, person => $person);
+		return undef;
+	}
+
+	# 3. Default: croak with the warning text
+	croak $params{warning};
 }
 
 # ---------------------------------------------------------------------------
@@ -390,6 +464,14 @@ Sex of person B.  Must be C<'M'> (male) or C<'F'> (female).
 BCP-47-style language tag (only the primary subtag is used).
 Supported values: C<en> (default), C<fr>, C<de>.
 
+=item C<person> (object, optional)
+
+An optional person object (e.g. a C<Gedcom::Individual> instance) passed
+through to the error handler when an error occurs.  Takes priority over the
+C<ctx> set at construction time.  The handler receives it as C<ctx> (logger
+path) or C<person> (on_error path), matching the C<complain()> interface
+in C<gedcom>/C<ged2site>.
+
 =back
 
 =head3 RETURNS
@@ -418,6 +500,7 @@ is not found in the lookup table.
 	steps_from_ancestor => { type => 'integer', minimum => 0 },
 	sex                 => { type => 'string', memberof => ['M', 'F'] },
 	language            => { type => 'string', regex => qr/^(?:en|de|fr)/, optional => 1 },
+	person              => { optional => 1 },
     }
 
 =head4 Output
@@ -434,6 +517,7 @@ is not found in the lookup table.
           steps_from_ancestor : N0
           sex                 : {M, F}
           language            : {en, fr, de}?  (default en)
+          person              : Object?
     [Out] result              : String | undef
 
     Let key == steps_to_ancestor ++ "," ++ steps_from_ancestor
@@ -453,7 +537,9 @@ sub name {
 			steps_to_ancestor   => { type => 'integer', minimum => 0 },
 			steps_from_ancestor => { type => 'integer', minimum => 0 },
 			sex                 => { type => 'string', memberof => ['M', 'F'] },
-			language            => { type => 'string', regex => qr/^(?:en|de|fr)/, optional => 1 },
+			language            => { type => 'string', regex => qr/^(?:en|de|fr)/,
+			                         optional => 1 },
+			person              => { optional => 1 },
 		}
 	);
 
@@ -461,10 +547,22 @@ sub name {
 	my $steps1 = $args->{steps_to_ancestor};
 	my $steps2 = $args->{steps_from_ancestor};
 	my $sex    = $args->{sex};
+	my $person = $args->{person};
 
-	# Guard against undef step values that validate_strict may not croak on
-	croak 'steps_to_ancestor must be a defined non-negative integer' unless defined $steps1;
-	croak 'steps_from_ancestor must be a defined non-negative integer' unless defined $steps2;
+	# Guard against undef step values that validate_strict does not reject;
+	# pass person through to the error handler for context in error messages
+	unless(defined $steps1) {
+		return $self->_error(
+			warning => 'steps_to_ancestor must be a defined non-negative integer',
+			person  => $person
+		);
+	}
+	unless(defined $steps2) {
+		return $self->_error(
+			warning => 'steps_from_ancestor must be a defined non-negative integer',
+			person  => $person
+		);
+	}
 
 	# Fall back to constructor default or hard default if no per-call language given
 	my $lang = lc($args->{language} // $self->{language} // $DEFAULT_LANGUAGE);
@@ -612,20 +710,89 @@ This default can be overridden per-call by passing C<language> to C<name()>.
 The object is also compatible with C<Object::Configure> for runtime
 reconfiguration.
 
+=head2 Error handling
+
+Errors are dispatched through the following priority chain:
+
+=over 4
+
+=item 1. C<logger> coderef (L<Log::Abstraction> E<gt>= 0.28)
+
+The preferred integration path for C<gedcom>/C<ged2site>.  Pass a C<logger>
+coderef and a C<ctx> value (typically a C<Gedcom::Individual> object) to
+C<new()>.  On error, C<_error()> calls the logger with a hashref containing
+C<class>, C<file>, C<line>, C<level> (C<"error">), C<message>, and C<ctx>.
+This matches the shape that L<Log::Abstraction> 0.28 uses for all coderef
+logger callbacks, so the same handler works for both normal logging and errors.
+
+    my $namer = Genealogy::Relationship::Name->new(
+        logger => sub {
+            my $args = shift;
+            complain(
+                warning => join('', @{$args->{message}}),
+                person  => $args->{ctx},
+            );
+        },
+        ctx => $individual,   # Gedcom::Individual for this lookup
+    );
+
+=item 2. C<on_error> coderef
+
+A simpler fallback for callers not using L<Log::Abstraction>.  The coderef
+is called with a flat hash matching the C<complain()> interface in
+C<gedcom>/C<ged2site>: C<warning =E<gt> $msg, person =E<gt> $person>.
+C<person> is resolved from the per-call C<name()> argument first, then from
+the constructor C<ctx>, so a single handler works in both cases.
+
+    my $namer = Genealogy::Relationship::Name->new(
+        on_error => sub {
+            my %args = @_;
+            complain(warning => $args{warning}, person => $args{person});
+        },
+    );
+
+=item 3. C<croak> (default)
+
+When neither C<logger> nor C<on_error> is set, errors croak normally.
+
+=back
+
+If any handler returns without dying (e.g. a warning-only handler),
+C<name()> returns C<undef>.
+
+=head2 ctx
+
+The C<ctx> constructor argument is stored on the object and passed to the
+C<logger> coderef (as C<$args-E<gt>{ctx}>) and to the C<on_error> coderef
+(as C<person =E<gt> $ctx>) on every error.  A per-call C<person> argument
+to C<name()> takes priority over C<ctx> when both are present.
+
 =head1 DIAGNOSTICS
 
 =over 4
 
-=item Unsupported language '%s'; falling back to 'en'
+=item on_error must be a CODE reference
 
-The C<language> argument contained a value not in the supported set.
-The module continues with English relationship names.
+C<on_error> was passed to C<new()> but is not a code reference.
+
+=item steps_to_ancestor must be a defined non-negative integer
+
+C<steps_to_ancestor> was C<undef>; this is not caught by C<validate_strict>
+for C<type =E<gt> 'integer'> and is caught explicitly.
+
+=item steps_from_ancestor must be a defined non-negative integer
+
+As above, for C<steps_from_ancestor>.
 
 =back
 
 =head1 DEPENDENCIES
 
-L<Carp>, L<Params::Get>, L<Params::Validate::Strict>, L<Readonly>
+L<Carp>, L<Object::Configure>
+
+Optionally L<Log::Abstraction> (E<gt>= 0.28) for the C<logger>/C<ctx> error
+dispatch path.
+L<Params::Get>, L<Params::Validate::Strict>, L<Readonly>
 
 =head1 BUGS AND LIMITATIONS
 
@@ -657,7 +824,7 @@ L<https://github.com/nigelhorne/Genealogy-Relationship-Name>
 
 This module is provided as-is without any warranty.
 
-Please report any bugs or feature requests to C<bug-genalogy-relationship-name at rt.cpan.org>,
+Please report any bugs or feature requests to C<bug-genealogy-relationship-name at rt.cpan.org>,
 or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name>.
 I will be notified, and then you'll
@@ -698,5 +865,3 @@ If you use it,
 please let me know.
 
 =cut
-
-1;

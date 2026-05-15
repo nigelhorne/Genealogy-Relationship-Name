@@ -2,11 +2,13 @@
 
 # function.t - white-box unit tests for Genealogy::Relationship::Name
 # Tests each function individually, mocking non-core dependencies.
+# Uses Test::Mockingbird for mocking.
 
 use strict;
 use warnings;
 
 use Test::Most;
+use Test::Mockingbird;
 
 # Add lib path so we can load from the distribution tree
 use lib 'lib', '../lib';
@@ -302,5 +304,200 @@ subtest 'name() multi-great relationships' => sub {
 };
 
 
+
+
+# -------------------------------------------------------------------------
+# 16. on_error coderef is called instead of croak
+# -------------------------------------------------------------------------
+
+subtest 'on_error coderef called with warning and person' => sub {
+	plan tests => 5;
+
+	my @errors;
+
+	# Construct with a non-fatal on_error handler that captures args
+	my $namer = Genealogy::Relationship::Name->new(
+		on_error => sub { push @errors, {@_} },
+	);
+	isa_ok($namer, 'Genealogy::Relationship::Name');
+
+	# Trigger the undef-steps error path
+	my $result = $namer->name(
+		steps_to_ancestor   => undef,
+		steps_from_ancestor => 1,
+		sex                 => 'M',
+	);
+
+	# Handler was called, not croak
+	is(scalar @errors, 1, 'on_error called once');
+	like($errors[0]{warning}, qr/steps_to_ancestor/, 'warning mentions steps_to_ancestor');
+
+	# name() returns undef when handler returns without dying
+	is($result, undef, 'name() returns undef when on_error handler returns');
+
+	# person key is passed through (undef when not supplied)
+	ok(exists $errors[0]{person}, 'person key present in error hash');
+};
+
+# -------------------------------------------------------------------------
+# 17. person arg is passed through to on_error
+# -------------------------------------------------------------------------
+
+subtest 'person arg forwarded to on_error handler' => sub {
+	plan tests => 3;
+
+	my @errors;
+	my $fake_person = bless { name => 'John Smith' }, 'FakePerson';
+
+	my $namer = Genealogy::Relationship::Name->new(
+		on_error => sub { push @errors, {@_} },
+	);
+
+	# Trigger error with a person object
+	$namer->name(
+		steps_to_ancestor   => undef,
+		steps_from_ancestor => 1,
+		sex                 => 'M',
+		person              => $fake_person,
+	);
+
+	is(scalar @errors, 1, 'on_error called once');
+	is(ref $errors[0]{person}, 'FakePerson', 'person object forwarded correctly');
+	is($errors[0]{person}{name}, 'John Smith', 'correct person object forwarded');
+};
+
+# -------------------------------------------------------------------------
+# 18. on_error not a coderef: new() croaks
+# -------------------------------------------------------------------------
+
+subtest 'new() croaks when on_error is not a coderef' => sub {
+	plan tests => 2;
+
+	throws_ok {
+		Genealogy::Relationship::Name->new(on_error => 'not a coderef')
+	} qr/on_error must be a CODE reference/, 'String on_error croaks';
+
+	throws_ok {
+		Genealogy::Relationship::Name->new(on_error => 42)
+	} qr/on_error must be a CODE reference/, 'Numeric on_error croaks';
+};
+
+# -------------------------------------------------------------------------
+# 19. Default croak still fires when no on_error supplied
+# -------------------------------------------------------------------------
+
+subtest 'Default croak fires without on_error' => sub {
+	plan tests => 1;
+
+	my $namer = Genealogy::Relationship::Name->new();
+
+	throws_ok {
+		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
+	} qr/steps_to_ancestor must be a defined/, 'croak fires without on_error';
+};
+
+# -------------------------------------------------------------------------
+# 20. logger coderef receives ctx (Log::Abstraction >= 0.28 interface)
+# -------------------------------------------------------------------------
+
+subtest 'logger coderef called with ctx on error' => sub {
+	plan tests => 7;
+
+	my @log_calls;
+	my $fake_person = bless { name => 'Ada Lovelace' }, 'FakePerson';
+
+	# Construct with logger coderef and ctx — the Log::Abstraction 0.28 pattern
+	my $namer = Genealogy::Relationship::Name->new(
+		logger => sub { push @log_calls, shift },
+		ctx    => $fake_person,
+	);
+	isa_ok($namer, 'Genealogy::Relationship::Name');
+
+	# Trigger error — no per-call person, ctx should appear in log
+	my $result = $namer->name(
+		steps_to_ancestor   => undef,
+		steps_from_ancestor => 1,
+		sex                 => 'M',
+	);
+
+	is(scalar @log_calls, 1, 'logger called once');
+	is($log_calls[0]{level},   'error', 'level is error');
+	like($log_calls[0]{message}[0], qr/steps_to_ancestor/, 'message contains field name');
+	is(ref $log_calls[0]{ctx}, 'FakePerson', 'ctx forwarded to logger');
+	is($log_calls[0]{ctx}{name}, 'Ada Lovelace', 'correct ctx object');
+	is($result, undef, 'name() returns undef when logger returns');
+};
+
+# -------------------------------------------------------------------------
+# 21. per-call person overrides ctx in logger args
+# -------------------------------------------------------------------------
+
+subtest 'per-call person overrides ctx in logger' => sub {
+	plan tests => 3;
+
+	my @log_calls;
+	my $ctx_person  = bless { name => 'ctx person'  }, 'FakePerson';
+	my $call_person = bless { name => 'call person' }, 'FakePerson';
+
+	my $namer = Genealogy::Relationship::Name->new(
+		logger => sub { push @log_calls, shift },
+		ctx    => $ctx_person,
+	);
+
+	# Per-call person should win over ctx
+	$namer->name(
+		steps_to_ancestor   => undef,
+		steps_from_ancestor => 1,
+		sex                 => 'M',
+		person              => $call_person,
+	);
+
+	is(scalar @log_calls, 1, 'logger called once');
+	is($log_calls[0]{ctx}{name}, 'call person', 'per-call person used as ctx');
+	isnt($log_calls[0]{ctx}{name}, 'ctx person', 'constructor ctx not used');
+};
+
+# -------------------------------------------------------------------------
+# 22. logger takes priority over on_error
+# -------------------------------------------------------------------------
+
+subtest 'logger takes priority over on_error' => sub {
+	plan tests => 3;
+
+	my @logger_calls;
+	my @error_calls;
+
+	my $namer = Genealogy::Relationship::Name->new(
+		logger   => sub { push @logger_calls, shift },
+		on_error => sub { push @error_calls, {@_} },
+	);
+
+	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
+
+	is(scalar @logger_calls, 1, 'logger was called');
+	is(scalar @error_calls,  0, 'on_error was NOT called');
+	is($logger_calls[0]{level}, 'error', 'logger received error level');
+};
+
+# -------------------------------------------------------------------------
+# 23. logger args contain required Log::Abstraction 0.28 keys
+# -------------------------------------------------------------------------
+
+subtest 'logger args contain all required Log::Abstraction 0.28 keys' => sub {
+	plan tests => 5;
+
+	my $captured;
+	my $namer = Genealogy::Relationship::Name->new(
+		logger => sub { $captured = shift },
+	);
+
+	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
+
+	ok(exists $captured->{class},   'class key present');
+	ok(exists $captured->{file},    'file key present');
+	ok(exists $captured->{line},    'line key present');
+	ok(exists $captured->{level},   'level key present');
+	ok(exists $captured->{message}, 'message key present');
+};
 
 done_testing();

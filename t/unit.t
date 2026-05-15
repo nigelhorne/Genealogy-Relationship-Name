@@ -2,11 +2,13 @@
 
 # unit.t - black-box tests for public API of Genealogy::Relationship::Name
 # Tests are strictly driven by the POD API documentation.
+# Non-core dependencies outside this module are mocked via Test::Mockingbird.
 
 use strict;
 use warnings;
 
 use Test::Most;
+use Test::Mockingbird;
 
 use lib 'lib', '../lib';
 
@@ -265,6 +267,134 @@ subtest 'known_sexes() scalar context' => sub {
 
 	isa_ok($ref, 'ARRAY');
 	is(scalar @{$ref}, 2, 'Arrayref contains 2 entries');
+};
+
+
+# =========================================================================
+# on_error coderef: black-box contract tests
+# =========================================================================
+
+subtest 'new() accepts valid on_error coderef' => sub {
+	plan tests => 2;
+
+	my $namer = Genealogy::Relationship::Name->new(on_error => sub {});
+	ok(defined $namer, 'new() with on_error coderef returns defined object');
+	isa_ok($namer, 'Genealogy::Relationship::Name');
+};
+
+subtest 'new() rejects non-coderef on_error' => sub {
+	plan tests => 3;
+
+	for my $bad ('string', 42, []) {
+		throws_ok {
+			Genealogy::Relationship::Name->new(on_error => $bad)
+		} qr/on_error must be a CODE reference/, "on_error => ${\ref(\$bad)||$bad} croaks";
+	}
+};
+
+subtest 'on_error handler called with warning and person keys' => sub {
+	plan tests => 4;
+
+	my %captured;
+	my $namer = Genealogy::Relationship::Name->new(
+		on_error => sub { %captured = @_ },
+	);
+
+	my $fake = bless {}, 'SomePerson';
+	my $result = $namer->name(
+		steps_to_ancestor   => undef,
+		steps_from_ancestor => 1,
+		sex                 => 'M',
+		person              => $fake,
+	);
+
+	# Handler was called, name() returns undef
+	ok(exists $captured{warning}, 'warning key present');
+	ok(length $captured{warning}, 'warning is non-empty');
+	is(ref $captured{person}, 'SomePerson', 'person forwarded to handler');
+	is($result, undef, 'name() returns undef when handler returns');
+};
+
+subtest 'person arg accepted by name() without on_error' => sub {
+	plan tests => 1;
+
+	# person is optional and silently ignored when no on_error is set
+	# and no error occurs
+	my $namer = Genealogy::Relationship::Name->new();
+	my $fake  = bless {}, 'SomePerson';
+	my $result = $namer->name(
+		steps_to_ancestor   => 1,
+		steps_from_ancestor => 1,
+		sex                 => 'M',
+		person              => $fake,
+	);
+	is($result, 'brother', 'person arg ignored on success, correct result returned');
+};
+
+
+# =========================================================================
+# logger + ctx: black-box contract tests (Log::Abstraction >= 0.28)
+# =========================================================================
+
+subtest 'new() accepts logger coderef and ctx' => sub {
+	plan tests => 2;
+
+	my $namer = Genealogy::Relationship::Name->new(
+		logger => sub {},
+		ctx    => bless({}, 'SomePerson'),
+	);
+	ok(defined $namer, 'new() with logger+ctx returns defined');
+	isa_ok($namer, 'Genealogy::Relationship::Name');
+};
+
+subtest 'logger called on error with ctx, not on_error' => sub {
+	plan tests => 4;
+
+	my (@logger_calls, @error_calls);
+	my $person = bless { name => 'Test Person' }, 'SomePerson';
+
+	my $namer = Genealogy::Relationship::Name->new(
+		logger   => sub { push @logger_calls, shift },
+		on_error => sub { push @error_calls, {@_} },
+		ctx      => $person,
+	);
+
+	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
+
+	is(scalar @logger_calls, 1, 'logger called once');
+	is(scalar @error_calls,  0, 'on_error not called when logger set');
+	is($logger_calls[0]{level}, 'error', 'error level passed to logger');
+	is(ref $logger_calls[0]{ctx}, 'SomePerson', 'ctx forwarded to logger');
+};
+
+subtest 'ctx falls back to constructor when no per-call person' => sub {
+	plan tests => 2;
+
+	my $captured;
+	my $ctx_person = bless { id => 'ctx-001' }, 'SomePerson';
+
+	my $namer = Genealogy::Relationship::Name->new(
+		logger => sub { $captured = shift },
+		ctx    => $ctx_person,
+	);
+
+	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
+
+	is(ref $captured->{ctx}, 'SomePerson', 'ctx is a SomePerson object');
+	is($captured->{ctx}{id}, 'ctx-001', 'constructor ctx used when no per-call person');
+};
+
+subtest 'no ctx key in logger args when neither ctx nor person set' => sub {
+	plan tests => 1;
+
+	my $captured;
+	my $namer = Genealogy::Relationship::Name->new(
+		logger => sub { $captured = shift },
+	);
+
+	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
+
+	ok(!exists $captured->{ctx}, 'ctx key absent when no ctx or person set');
 };
 
 done_testing();

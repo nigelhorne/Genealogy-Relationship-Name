@@ -74,6 +74,14 @@ code, returns a localised relationship-name string.
     BCP-47-style language tag (only the primary subtag is used).
     Supported values: `en` (default), `fr`, `de`.
 
+- `person` (object, optional)
+
+    An optional person object (e.g. a `Gedcom::Individual` instance) passed
+    through to the error handler when an error occurs.  Takes priority over the
+    `ctx` set at construction time.  The handler receives it as `ctx` (logger
+    path) or `person` (on\_error path), matching the `complain()` interface
+    in `gedcom`/`ged2site`.
+
 ### RETURNS
 
 A string containing the relationship name, or `undef` if the combination
@@ -100,6 +108,7 @@ is not found in the lookup table.
         steps_from_ancestor => { type => 'integer', minimum => 0 },
         sex                 => { type => 'string', memberof => ['M', 'F'] },
         language            => { type => 'string', regex => qr/^(?:en|de|fr)/, optional => 1 },
+        person              => { optional => 1 },
     }
 
 #### Output
@@ -116,6 +125,7 @@ is not found in the lookup table.
           steps_from_ancestor : N0
           sex                 : {M, F}
           language            : {en, fr, de}?  (default en)
+          person              : Object?
     [Out] result              : String | undef
 
     Let key == steps_to_ancestor ++ "," ++ steps_from_ancestor
@@ -223,16 +233,81 @@ This default can be overridden per-call by passing `language` to `name()`.
 The object is also compatible with `Object::Configure` for runtime
 reconfiguration.
 
+## Error handling
+
+Errors are dispatched through the following priority chain:
+
+- 1. `logger` coderef ([Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction) >= 0.28)
+
+    The preferred integration path for `gedcom`/`ged2site`.  Pass a `logger`
+    coderef and a `ctx` value (typically a `Gedcom::Individual` object) to
+    `new()`.  On error, `_error()` calls the logger with a hashref containing
+    `class`, `file`, `line`, `level` (`"error"`), `message`, and `ctx`.
+    This matches the shape that [Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction) 0.28 uses for all coderef
+    logger callbacks, so the same handler works for both normal logging and errors.
+
+        my $namer = Genealogy::Relationship::Name->new(
+            logger => sub {
+                my $args = shift;
+                complain(
+                    warning => join('', @{$args->{message}}),
+                    person  => $args->{ctx},
+                );
+            },
+            ctx => $individual,   # Gedcom::Individual for this lookup
+        );
+
+- 2. `on_error` coderef
+
+    A simpler fallback for callers not using [Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction).  The coderef
+    is called with a flat hash matching the `complain()` interface in
+    `gedcom`/`ged2site`: `warning => $msg, person => $person`.
+    `person` is resolved from the per-call `name()` argument first, then from
+    the constructor `ctx`, so a single handler works in both cases.
+
+        my $namer = Genealogy::Relationship::Name->new(
+            on_error => sub {
+                my %args = @_;
+                complain(warning => $args{warning}, person => $args{person});
+            },
+        );
+
+- 3. `croak` (default)
+
+    When neither `logger` nor `on_error` is set, errors croak normally.
+
+If any handler returns without dying (e.g. a warning-only handler),
+`name()` returns `undef`.
+
+## ctx
+
+The `ctx` constructor argument is stored on the object and passed to the
+`logger` coderef (as `$args->{ctx}`) and to the `on_error` coderef
+(as `person => $ctx`) on every error.  A per-call `person` argument
+to `name()` takes priority over `ctx` when both are present.
+
 # DIAGNOSTICS
 
-- Unsupported language '%s'; falling back to 'en'
+- on\_error must be a CODE reference
 
-    The `language` argument contained a value not in the supported set.
-    The module continues with English relationship names.
+    `on_error` was passed to `new()` but is not a code reference.
+
+- steps\_to\_ancestor must be a defined non-negative integer
+
+    `steps_to_ancestor` was `undef`; this is not caught by `validate_strict`
+    for `type => 'integer'` and is caught explicitly.
+
+- steps\_from\_ancestor must be a defined non-negative integer
+
+    As above, for `steps_from_ancestor`.
 
 # DEPENDENCIES
 
-[Carp](https://metacpan.org/pod/Carp), [Params::Get](https://metacpan.org/pod/Params%3A%3AGet), [Params::Validate::Strict](https://metacpan.org/pod/Params%3A%3AValidate%3A%3AStrict), [Readonly](https://metacpan.org/pod/Readonly)
+[Carp](https://metacpan.org/pod/Carp), [Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure)
+
+Optionally [Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction) (>= 0.28) for the `logger`/`ctx` error
+dispatch path.
+[Params::Get](https://metacpan.org/pod/Params%3A%3AGet), [Params::Validate::Strict](https://metacpan.org/pod/Params%3A%3AValidate%3A%3AStrict), [Readonly](https://metacpan.org/pod/Readonly)
 
 # BUGS AND LIMITATIONS
 
@@ -258,7 +333,7 @@ Nigel Horne `<njh@nigelhorne.com>`
 
 This module is provided as-is without any warranty.
 
-Please report any bugs or feature requests to `bug-genalogy-relationship-name at rt.cpan.org`,
+Please report any bugs or feature requests to `bug-genealogy-relationship-name at rt.cpan.org`,
 or through the web interface at
 [http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name](http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name).
 I will be notified, and then you'll

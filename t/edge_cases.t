@@ -325,4 +325,92 @@ subtest 'Pathological: new() works as class method (not object)' => sub {
 	isa_ok($obj, 'Genealogy::Relationship::Name');
 };
 
+
+# =========================================================================
+# Pathological: on_error edge cases
+# =========================================================================
+
+subtest 'Pathological: on_error that itself croaks propagates' => sub {
+	plan tests => 1;
+
+	my $namer = Genealogy::Relationship::Name->new(
+		on_error => sub { die "handler died: $_[1]\n" },
+	);
+
+	throws_ok {
+		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
+	} qr/handler died/, 'Exception from on_error propagates out of name()';
+};
+
+subtest 'Pathological: on_error called multiple times stays consistent' => sub {
+	plan tests => 3;
+
+	my @calls;
+	my $namer = Genealogy::Relationship::Name->new(
+		on_error => sub { push @calls, {@_} },
+	);
+
+	# Trigger the same error three times
+	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M') for 1..3;
+
+	is(scalar @calls, 3, 'on_error called once per invocation');
+	is($calls[0]{warning}, $calls[1]{warning}, 'Same warning each time');
+	is($calls[1]{warning}, $calls[2]{warning}, 'Consistent across all calls');
+};
+
+subtest 'Pathological: on_error undef explicitly is rejected' => sub {
+	plan tests => 1;
+
+	# Explicitly passing undef is fine — treated as not set, croaks normally
+	my $namer = Genealogy::Relationship::Name->new(on_error => undef);
+	throws_ok {
+		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
+	} qr/steps_to_ancestor/, 'undef on_error falls back to croak';
+};
+
+
+# =========================================================================
+# Pathological: logger edge cases
+# =========================================================================
+
+subtest 'Pathological: logger that dies propagates exception' => sub {
+	plan tests => 1;
+
+	my $namer = Genealogy::Relationship::Name->new(
+		logger => sub { die "logger exploded\n" },
+	);
+	throws_ok {
+		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
+	} qr/logger exploded/, 'Exception from logger propagates out';
+};
+
+subtest 'Pathological: ctx set but logger is array ref — falls through to on_error' => sub {
+	plan tests => 2;
+
+	# Log::Abstraction supports array-ref loggers too; these skip the coderef
+	# path so on_error should fire instead
+	my @error_calls;
+	my $namer = Genealogy::Relationship::Name->new(
+		logger   => [],        # array-ref logger: not a CODE ref
+		on_error => sub { push @error_calls, {@_} },
+		ctx      => bless({}, 'SomePerson'),
+	);
+
+	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
+
+	is(scalar @error_calls, 1, 'on_error fired when logger is not a coderef');
+	like($error_calls[0]{warning}, qr/steps_to_ancestor/, 'warning passed to on_error');
+};
+
+subtest 'Pathological: neither logger coderef nor on_error — croaks as before' => sub {
+	plan tests => 1;
+
+	my $namer = Genealogy::Relationship::Name->new(
+		ctx => bless({}, 'SomePerson'),    # ctx set but no handlers
+	);
+	throws_ok {
+		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
+	} qr/steps_to_ancestor/, 'Falls through to croak when no handlers set';
+};
+
 done_testing();
