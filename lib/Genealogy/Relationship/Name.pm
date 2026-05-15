@@ -16,7 +16,7 @@ use Params::Get;
 use Params::Validate::Strict;
 use Readonly;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 # ---------------------------------------------------------------------------
 # Constants – relationship table keys
@@ -293,7 +293,7 @@ Genealogy::Relationship::Name - Return a genealogical relationship name from ste
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
@@ -366,62 +366,6 @@ sub new {
 	}, ref($class) || $class;
 
 	return $self;
-}
-
-# ---------------------------------------------------------------------------
-# _error - internal error dispatcher
-# Purpose: dispatch an error via the logger coderef (with ctx), then the
-#   on_error coderef, then croak as a last resort.
-#
-#   Priority order:
-#     1. logger coderef (Log::Abstraction >= 0.28): called with a hashref
-#        containing class, file, line, level, message, and ctx (the person
-#        object stored at construction time).  Covers the gedcom/ged2site
-#        use-case where one namer is built per individual.
-#     2. on_error coderef: called with a flat hash matching complain() style:
-#        warning => $msg, person => $person.  person may come from the
-#        per-call arg or fall back to ctx stored on the object.
-#     3. croak: default when neither handler is set.
-#
-#   If either handler returns without dying, _error returns undef so the
-#   caller can propagate that cleanly.
-#
-# Entry: $self   - blessed object
-#        %params - warning (required), person (optional per-call override)
-# Exit:  returns undef if a handler returns; otherwise does not return (croaks)
-# Side effects: invokes logger or on_error if configured; may die
-sub _error {
-	my ($self, %params) = @_;
-
-	# Resolve the person: per-call arg takes priority over constructor ctx
-	my $person = $params{person} // $self->{ctx};
-
-	# 1. Log::Abstraction logger coderef (>= 0.28 ctx support)
-	if(my $logger = $self->{logger}) {
-		if(ref($logger) eq 'CODE') {
-			# Build the args hashref in the same shape _log() uses
-			my $args = {
-				class   => ref($self) || $self,
-				file    => (caller(1))[1],
-				line    => (caller(1))[2],
-				level   => 'error',
-				message => [ $params{warning} ],
-			};
-			# Attach ctx (person) when available, matching Log::Abstraction 0.28
-			$args->{ctx} = $person if defined $person;
-			$logger->($args);
-			return undef;
-		}
-	}
-
-	# 2. on_error coderef: complain()-compatible flat hash interface
-	if(defined $self->{on_error}) {
-		$self->{on_error}->(warning => $params{warning}, person => $person);
-		return undef;
-	}
-
-	# 3. Default: croak with the warning text
-	croak $params{warning};
 }
 
 # ---------------------------------------------------------------------------
@@ -500,7 +444,7 @@ is not found in the lookup table.
 	steps_from_ancestor => { type => 'integer', minimum => 0 },
 	sex                 => { type => 'string', memberof => ['M', 'F'] },
 	language            => { type => 'string', regex => qr/^(?:en|de|fr)/, optional => 1 },
-	person              => { optional => 1 },
+	# person is extracted before validate_strict to avoid PVS inferring constraints
     }
 
 =head4 Output
@@ -530,7 +474,7 @@ is not found in the lookup table.
 sub name {
 	my $self = shift;
 
-	# Validate and extract parameters; capture the return value
+	# Validate and extract the remaining parameters; capture the return value
 	my $args = Params::Validate::Strict::validate_strict(
 		args   => Params::Get::get_params(undef, \@_) || {},
 		schema => {
@@ -539,30 +483,15 @@ sub name {
 			sex                 => { type => 'string', memberof => ['M', 'F'] },
 			language            => { type => 'string', regex => qr/^(?:en|de|fr)/,
 			                         optional => 1 },
-			person              => { optional => 1 },
+			person              => { type => 'object', optional => 1 },
 		}
 	);
 
-	# Extract individual parameters for clarity
-	my $steps1 = $args->{steps_to_ancestor};
-	my $steps2 = $args->{steps_from_ancestor};
-	my $sex    = $args->{sex};
+	# Extract individual parameters; undef means arg was not given, so croak
+	my $steps1 = $args->{steps_to_ancestor} // croak('steps_to_ancestor not given');
+	my $steps2 = $args->{steps_from_ancestor} // croak('steps_from_ancestor not given');
+	my $sex    = $args->{sex} // croak('sex not given');
 	my $person = $args->{person};
-
-	# Guard against undef step values that validate_strict does not reject;
-	# pass person through to the error handler for context in error messages
-	unless(defined $steps1) {
-		return $self->_error(
-			warning => 'steps_to_ancestor must be a defined non-negative integer',
-			person  => $person
-		);
-	}
-	unless(defined $steps2) {
-		return $self->_error(
-			warning => 'steps_from_ancestor must be a defined non-negative integer',
-			person  => $person
-		);
-	}
 
 	# Fall back to constructor default or hard default if no per-call language given
 	my $lang = lc($args->{language} // $self->{language} // $DEFAULT_LANGUAGE);
@@ -716,33 +645,35 @@ Errors are dispatched through the following priority chain:
 
 =over 4
 
-=item 1. C<logger> coderef (L<Log::Abstraction> E<gt>= 0.28)
+=item 1. L<Log::Abstraction> object (preferred)
 
-The preferred integration path for C<gedcom>/C<ged2site>.  Pass a C<logger>
-coderef and a C<ctx> value (typically a C<Gedcom::Individual> object) to
-C<new()>.  On error, C<_error()> calls the logger with a hashref containing
-C<class>, C<file>, C<line>, C<level> (C<"error">), C<message>, and C<ctx>.
-This matches the shape that L<Log::Abstraction> 0.28 uses for all coderef
-logger callbacks, so the same handler works for both normal logging and errors.
+Construct a C<Log::Abstraction> object with the desired logger coderef and
+C<ctx> (typically a C<Gedcom::Individual>), then pass it as C<logger> to
+C<new()>.  On error, this module simply calls C<< $logger->error($msg) >>
+and Log::Abstraction handles ctx forwarding, formatting, and dispatch.
 
-    my $namer = Genealogy::Relationship::Name->new(
+    use Log::Abstraction;
+
+    my $logger = Log::Abstraction->new(
         logger => sub {
             my $args = shift;
-            complain(
-                warning => join('', @{$args->{message}}),
-                person  => $args->{ctx},
-            );
+            my $msg = $args->{ctx}
+                ? $args->{ctx}->as_string() . ': ' . join('', @{$args->{message}})
+                : join('', @{$args->{message}});
+            complain({ message => $msg, person => $args->{ctx} });
         },
-        ctx => $individual,   # Gedcom::Individual for this lookup
+        ctx => $individual,
     );
+
+    my $namer = Genealogy::Relationship::Name->new(logger => $logger);
 
 =item 2. C<on_error> coderef
 
 A simpler fallback for callers not using L<Log::Abstraction>.  The coderef
 is called with a flat hash matching the C<complain()> interface in
 C<gedcom>/C<ged2site>: C<warning =E<gt> $msg, person =E<gt> $person>.
-C<person> is resolved from the per-call C<name()> argument first, then from
-the constructor C<ctx>, so a single handler works in both cases.
+C<person> is resolved from the per-call C<name()> C<person> argument first,
+then from the constructor C<ctx>.
 
     my $namer = Genealogy::Relationship::Name->new(
         on_error => sub {
@@ -757,15 +688,8 @@ When neither C<logger> nor C<on_error> is set, errors croak normally.
 
 =back
 
-If any handler returns without dying (e.g. a warning-only handler),
-C<name()> returns C<undef>.
-
-=head2 ctx
-
-The C<ctx> constructor argument is stored on the object and passed to the
-C<logger> coderef (as C<$args-E<gt>{ctx}>) and to the C<on_error> coderef
-(as C<person =E<gt> $ctx>) on every error.  A per-call C<person> argument
-to C<name()> takes priority over C<ctx> when both are present.
+If any handler returns without dying (e.g. a warning-only handler in
+L<Log::Abstraction>), C<name()> returns C<undef>.
 
 =head1 DIAGNOSTICS
 
@@ -775,14 +699,18 @@ to C<name()> takes priority over C<ctx> when both are present.
 
 C<on_error> was passed to C<new()> but is not a code reference.
 
-=item steps_to_ancestor must be a defined non-negative integer
+=item steps_to_ancestor not given
 
-C<steps_to_ancestor> was C<undef>; this is not caught by C<validate_strict>
-for C<type =E<gt> 'integer'> and is caught explicitly.
+C<steps_to_ancestor> was passed as C<undef>. Passing C<undef> explicitly is
+distinct from omitting the argument; use a defined non-negative integer.
 
-=item steps_from_ancestor must be a defined non-negative integer
+=item steps_from_ancestor not given
 
 As above, for C<steps_from_ancestor>.
+
+=item sex not given
+
+C<sex> was passed as C<undef>. Supply C<'M'> or C<'F'>.
 
 =back
 

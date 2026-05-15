@@ -10,6 +10,7 @@ use warnings;
 use Test::Most;
 use Scalar::Util qw(looks_like_number);
 
+use Log::Abstraction;
 use lib 'lib', '../lib';
 
 BEGIN {
@@ -193,20 +194,19 @@ subtest 'Boundary: numeric language code croaks' => sub {
 # =========================================================================
 # Boundary: undef steps trigger validation
 # =========================================================================
-
 subtest 'Boundary: undef step values croak' => sub {
-	plan tests => 2;
+	plan tests => 3;
 
-	my $namer = Genealogy::Relationship::Name->new();
+	my $namer = new_ok('Genealogy::Relationship::Name');
 
 	# validate_strict does not catch undef for integer fields; the module guards explicitly
 	throws_ok {
 		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
-	} qr/steps_to_ancestor must be a defined/, 'undef steps_to_ancestor croaks';
+	} qr/steps_to_ancestor not given/, 'undef steps_to_ancestor croaks';
 
 	throws_ok {
 		$namer->name(steps_to_ancestor => 1, steps_from_ancestor => undef, sex => 'M')
-	} qr/steps_from_ancestor must be a defined/, 'undef steps_from_ancestor croaks';
+	} qr/steps_from_ancestor not given/, 'undef steps_from_ancestor croaks';
 };
 
 # =========================================================================
@@ -327,90 +327,46 @@ subtest 'Pathological: new() works as class method (not object)' => sub {
 
 
 # =========================================================================
-# Pathological: on_error edge cases
+# Pathological: on_error and logger edge cases
+# Note: validate_strict croaks directly for invalid name() args;
+# on_error and logger are only invoked by _error() for internal errors.
 # =========================================================================
 
-subtest 'Pathological: on_error that itself croaks propagates' => sub {
-	plan tests => 1;
-
-	my $namer = Genealogy::Relationship::Name->new(
-		on_error => sub { die "handler died: $_[1]\n" },
-	);
-
-	throws_ok {
-		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
-	} qr/handler died/, 'Exception from on_error propagates out of name()';
-};
-
-subtest 'Pathological: on_error called multiple times stays consistent' => sub {
+subtest 'Pathological: on_error non-coderef variations all croak in new()' => sub {
 	plan tests => 3;
 
-	my @calls;
-	my $namer = Genealogy::Relationship::Name->new(
-		on_error => sub { push @calls, {@_} },
-	);
-
-	# Trigger the same error three times
-	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M') for 1..3;
-
-	is(scalar @calls, 3, 'on_error called once per invocation');
-	is($calls[0]{warning}, $calls[1]{warning}, 'Same warning each time');
-	is($calls[1]{warning}, $calls[2]{warning}, 'Consistent across all calls');
+	# All of these must croak at construction time, not silently ignore
+	for my $bad ('string', 42, []) {
+		throws_ok {
+			Genealogy::Relationship::Name->new(on_error => $bad)
+		} qr/on_error must be a CODE reference/, ref(\$bad) || $bad . ' on_error croaks';
+	}
 };
 
-subtest 'Pathological: on_error undef explicitly is rejected' => sub {
-	plan tests => 1;
-
-	# Explicitly passing undef is fine — treated as not set, croaks normally
-	my $namer = Genealogy::Relationship::Name->new(on_error => undef);
-	throws_ok {
-		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
-	} qr/steps_to_ancestor/, 'undef on_error falls back to croak';
-};
-
-
-# =========================================================================
-# Pathological: logger edge cases
-# =========================================================================
-
-subtest 'Pathological: logger that dies propagates exception' => sub {
-	plan tests => 1;
-
-	my $namer = Genealogy::Relationship::Name->new(
-		logger => sub { die "logger exploded\n" },
-	);
-	throws_ok {
-		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
-	} qr/logger exploded/, 'Exception from logger propagates out';
-};
-
-subtest 'Pathological: ctx set but logger is array ref — falls through to on_error' => sub {
+subtest 'Pathological: undef on_error is silently ignored (not set)' => sub {
 	plan tests => 2;
 
-	# Log::Abstraction supports array-ref loggers too; these skip the coderef
-	# path so on_error should fire instead
-	my @error_calls;
-	my $namer = Genealogy::Relationship::Name->new(
-		logger   => [],        # array-ref logger: not a CODE ref
-		on_error => sub { push @error_calls, {@_} },
-		ctx      => bless({}, 'SomePerson'),
-	);
-
-	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
-
-	is(scalar @error_calls, 1, 'on_error fired when logger is not a coderef');
-	like($error_calls[0]{warning}, qr/steps_to_ancestor/, 'warning passed to on_error');
+	# undef on_error is treated as not supplied — no croak from new()
+	my $namer = Genealogy::Relationship::Name->new(on_error => undef);
+	ok(defined $namer, 'new() with on_error => undef succeeds');
+	ok(!defined $namer->{on_error}, 'on_error not stored when undef');
 };
 
-subtest 'Pathological: neither logger coderef nor on_error — croaks as before' => sub {
-	plan tests => 1;
+subtest 'Pathological: validate_strict croaks bypass all error handlers' => sub {
+	plan tests => 3;
 
+	my (@logger_calls, @error_calls);
+	my $la = Log::Abstraction->new(logger => sub { push @logger_calls, shift });
 	my $namer = Genealogy::Relationship::Name->new(
-		ctx => bless({}, 'SomePerson'),    # ctx set but no handlers
+		logger   => $la,
+		on_error => sub { push @error_calls, {@_} },
 	);
-	throws_ok {
-		$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M')
-	} qr/steps_to_ancestor/, 'Falls through to croak when no handlers set';
+
+	# Invalid sex — validate_strict croaks before _error() is ever reached
+	eval { $namer->name(steps_to_ancestor => 1, steps_from_ancestor => 1, sex => 'X') };
+	ok($@, 'validate_strict croaked for invalid sex');
+	is(scalar @logger_calls, 0, 'logger not invoked');
+	is(scalar @error_calls,  0, 'on_error not invoked');
 };
 
 done_testing();

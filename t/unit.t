@@ -10,6 +10,7 @@ use warnings;
 use Test::Most;
 use Test::Mockingbird;
 
+use Log::Abstraction;
 use lib 'lib', '../lib';
 
 BEGIN {
@@ -292,27 +293,23 @@ subtest 'new() rejects non-coderef on_error' => sub {
 	}
 };
 
-subtest 'on_error handler called with warning and person keys' => sub {
-	plan tests => 4;
+subtest 'croak on missing arg' => sub {
+	plan tests => 2;
 
-	my %captured;
-	my $namer = Genealogy::Relationship::Name->new(
-		on_error => sub { %captured = @_ },
-	);
-
+	my $namer = new_ok('Genealogy::Relationship::Name');
 	my $fake = bless {}, 'SomePerson';
-	my $result = $namer->name(
-		steps_to_ancestor   => undef,
-		steps_from_ancestor => 1,
-		sex                 => 'M',
-		person              => $fake,
-	);
 
-	# Handler was called, name() returns undef
-	ok(exists $captured{warning}, 'warning key present');
-	ok(length $captured{warning}, 'warning is non-empty');
-	is(ref $captured{person}, 'SomePerson', 'person forwarded to handler');
-	is($result, undef, 'name() returns undef when handler returns');
+	# Passing undef is distinct from not passing the arg at all;
+	# validate_strict accepts it (type=integer allows undef=not given),
+	# but the // croak guard fires on extraction
+	throws_ok {
+		$namer->name(
+			steps_to_ancestor   => undef,
+			steps_from_ancestor => 1,
+			sex                 => 'M',
+			person              => $fake,
+		)
+	} qr/steps_to_ancestor not given/, 'undef steps_to_ancestor is caught by // croak';
 };
 
 subtest 'person arg accepted by name() without on_error' => sub {
@@ -333,68 +330,43 @@ subtest 'person arg accepted by name() without on_error' => sub {
 
 
 # =========================================================================
-# logger + ctx: black-box contract tests (Log::Abstraction >= 0.28)
+# logger: Log::Abstraction object black-box contract tests
 # =========================================================================
 
-subtest 'new() accepts logger coderef and ctx' => sub {
+subtest 'new() accepts a Log::Abstraction logger object' => sub {
 	plan tests => 2;
 
-	my $namer = Genealogy::Relationship::Name->new(
-		logger => sub {},
-		ctx    => bless({}, 'SomePerson'),
-	);
-	ok(defined $namer, 'new() with logger+ctx returns defined');
+	my $la    = Log::Abstraction->new(logger => sub {});
+	my $namer = Genealogy::Relationship::Name->new(logger => $la);
+	ok(defined $namer, 'new() with Log::Abstraction logger returns defined');
 	isa_ok($namer, 'Genealogy::Relationship::Name');
 };
 
-subtest 'logger called on error with ctx, not on_error' => sub {
-	plan tests => 4;
+subtest 'validate_strict croaks; neither logger nor on_error is invoked' => sub {
+	plan tests => 3;
 
 	my (@logger_calls, @error_calls);
-	my $person = bless { name => 'Test Person' }, 'SomePerson';
-
+	my $la = Log::Abstraction->new(logger => sub { push @logger_calls, shift });
 	my $namer = Genealogy::Relationship::Name->new(
-		logger   => sub { push @logger_calls, shift },
+		logger   => $la,
 		on_error => sub { push @error_calls, {@_} },
-		ctx      => $person,
 	);
 
-	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
-
-	is(scalar @logger_calls, 1, 'logger called once');
-	is(scalar @error_calls,  0, 'on_error not called when logger set');
-	is($logger_calls[0]{level}, 'error', 'error level passed to logger');
-	is(ref $logger_calls[0]{ctx}, 'SomePerson', 'ctx forwarded to logger');
+	# validate_strict croaks directly; _error() is never reached
+	eval { $namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M') };
+	ok($@, 'validate_strict croaked');
+	is(scalar @logger_calls, 0, 'logger not invoked — validate_strict croaked first');
+	is(scalar @error_calls,  0, 'on_error not invoked — validate_strict croaked first');
 };
 
-subtest 'ctx falls back to constructor when no per-call person' => sub {
+subtest 'Log::Abstraction object stored correctly by new()' => sub {
 	plan tests => 2;
 
-	my $captured;
-	my $ctx_person = bless { id => 'ctx-001' }, 'SomePerson';
+	my $la    = Log::Abstraction->new(logger => sub {});
+	my $namer = Genealogy::Relationship::Name->new(logger => $la);
 
-	my $namer = Genealogy::Relationship::Name->new(
-		logger => sub { $captured = shift },
-		ctx    => $ctx_person,
-	);
-
-	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
-
-	is(ref $captured->{ctx}, 'SomePerson', 'ctx is a SomePerson object');
-	is($captured->{ctx}{id}, 'ctx-001', 'constructor ctx used when no per-call person');
-};
-
-subtest 'no ctx key in logger args when neither ctx nor person set' => sub {
-	plan tests => 1;
-
-	my $captured;
-	my $namer = Genealogy::Relationship::Name->new(
-		logger => sub { $captured = shift },
-	);
-
-	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
-
-	ok(!exists $captured->{ctx}, 'ctx key absent when no ctx or person set');
+	ok(defined $namer->{logger}, 'logger key present on object');
+	isa_ok($namer->{logger}, 'Log::Abstraction');
 };
 
 done_testing();

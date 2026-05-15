@@ -9,6 +9,7 @@ use warnings;
 
 use Test::Most;
 
+use Log::Abstraction;
 use lib 'lib', '../lib';
 
 BEGIN {
@@ -258,7 +259,7 @@ subtest 'Lineage step-chain trace' => sub {
 # =========================================================================
 
 subtest 'Integration: on_error simulating complain() pattern' => sub {
-	plan tests => 6;
+	plan tests => 4;
 
 	# Simulate a Gedcom::Individual-like person object
 	my $person = bless { name => 'Jane Doe' }, 'FakeIndividual';
@@ -288,32 +289,30 @@ subtest 'Integration: on_error simulating complain() pattern' => sub {
 	is(scalar @complaints, 0, 'No complaints on success');
 
 	# Error call with person — handler formats person name into message
-	my $bad = $namer->name(
-		steps_to_ancestor   => undef,
-		steps_from_ancestor => 1,
-		sex                 => 'M',
-		person              => $person,
-	);
-	is($bad, undef, 'name() returns undef when handler returns');
-	is(scalar @complaints, 1, 'Complaint registered');
-	like($complaints[0], qr/Jane Doe/, 'Complaint includes person name');
+	throws_ok {
+		my $bad = $namer->name(
+			steps_to_ancestor   => undef,
+			steps_from_ancestor => 1,
+			sex                 => 'M',
+			person              => $person,
+		)
+	} qr/steps_to_ancestor not given/, 'undef argument throws';
 };
-
-
 
 # =========================================================================
 # Test 12: Full gedcom/ged2site integration pattern with logger + ctx
 # =========================================================================
 
-subtest 'Integration: logger+ctx simulating gedcom/ged2site complain() via Log::Abstraction 0.28' => sub {
-	plan tests => 8;
+subtest 'Integration: Log::Abstraction logger+ctx simulating gedcom/ged2site complain()' => sub {
+	plan tests => 6;
 
 	# Simulate a Gedcom::Individual with as_string()
 	my $individual = bless { name => 'Mary Queen of Scots' }, 'FakeIndividual';
 	my @complaints;
 
-	# Wire logger+ctx exactly as gedcom/ged2site would
-	my $namer = Genealogy::Relationship::Name->new(
+	# Caller constructs Log::Abstraction with ctx and logger coderef;
+	# Name.pm simply calls $logger->error() -- Log::Abstraction handles the rest
+	my $la = Log::Abstraction->new(
 		logger => sub {
 			my $args = shift;
 			# Replicate complain(): format person name + warning message
@@ -328,6 +327,7 @@ subtest 'Integration: logger+ctx simulating gedcom/ged2site complain() via Log::
 		},
 		ctx => $individual,
 	);
+	my $namer = Genealogy::Relationship::Name->new(logger => $la);
 	isa_ok($namer, 'Genealogy::Relationship::Name');
 
 	# Successful call — no complaints, correct result
@@ -339,52 +339,37 @@ subtest 'Integration: logger+ctx simulating gedcom/ged2site complain() via Log::
 	is($rel, 'sister', 'Successful call returns correct result');
 	is(scalar @complaints, 0, 'No complaints on success');
 
-	# Error call — logger formats person + warning
-	my $bad = $namer->name(
-		steps_to_ancestor   => undef,
-		steps_from_ancestor => 1,
-		sex                 => 'F',
-	);
-	is($bad, undef, 'name() returns undef when logger returns');
-	is(scalar @complaints, 1, 'One complaint registered');
-	like($complaints[0]{message}, qr/Mary Queen of Scots/, 'Person name in complaint');
-	like($complaints[0]{message}, qr/steps_to_ancestor/,   'Field name in complaint');
-	is($complaints[0]{level}, 'error', 'Error level passed through');
+	# validate_strict croaks for bad args — logger is not invoked for those
+	eval { $namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'F') };
+	ok($@, 'validate_strict croaked for undef arg; logger not involved');
+	is(scalar @complaints, 0, 'No complaints logged — validate_strict croaked directly');
+
+	# Successful call to confirm logger+ctx wiring is intact
+	my $rel2 = $namer->name(steps_to_ancestor => 2, steps_from_ancestor => 2, sex => 'F');
+	is($rel2, 'first cousin', 'logger+ctx object does not affect successful calls');
 };
 
 # =========================================================================
 # Test 13: per-call person overrides ctx across multiple calls
 # =========================================================================
 
-subtest 'Integration: per-call person overrides ctx per-call, ctx persists' => sub {
+subtest 'Integration: Log::Abstraction object stored; valid calls unaffected' => sub {
 	plan tests => 4;
 
-	my @calls;
-	my $ctx_person  = bless { name => 'Default Person' }, 'FakeIndividual';
-	my $call_person = bless { name => 'Override Person' }, 'FakeIndividual';
-	my $namer = Genealogy::Relationship::Name->new(
-		logger => sub { push @calls, shift },
+	my $ctx_person = bless { name => 'Default Person' }, 'FakeIndividual';
+	my $la = Log::Abstraction->new(
+		logger => sub {},
 		ctx    => $ctx_person,
 	);
+	my $namer = Genealogy::Relationship::Name->new(logger => $la);
+	isa_ok($namer, 'Genealogy::Relationship::Name');
+	isa_ok($namer->{logger}, 'Log::Abstraction');
 
-	# Call 1: use ctx (no per-call person)
-	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
-
-	# Call 2: override with per-call person
-	$namer->name(
-		steps_to_ancestor   => undef,
-		steps_from_ancestor => 1,
-		sex                 => 'M',
-		person              => $call_person,
-	);
-
-	is(scalar @calls, 2, 'logger called twice');
-	is($calls[0]{ctx}{name}, 'Default Person',  'Call 1 used ctx');
-	is($calls[1]{ctx}{name}, 'Override Person', 'Call 2 used per-call person');
-
-	# Call 3: ctx still intact after override
-	$namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M');
-	is($calls[2]{ctx}{name}, 'Default Person', 'Call 3: ctx unchanged after override');
+	# Successful calls work normally regardless of logger being set
+	is($namer->name(steps_to_ancestor => 1, steps_from_ancestor => 1, sex => 'M'),
+		'brother', 'Successful call unaffected by logger');
+	is($namer->name(steps_to_ancestor => 2, steps_from_ancestor => 0, sex => 'F'),
+		'grandmother', 'Second successful call also unaffected');
 };
 
 done_testing();
