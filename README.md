@@ -4,7 +4,7 @@ Genealogy::Relationship::Name - Return a genealogical relationship name from ste
 
 # VERSION
 
-Version 0.01
+Version 0.02
 
 # SYNOPSIS
 
@@ -39,6 +39,118 @@ distributions inside `Gedcom::Individual::relationship_up()`; this module
 extracts them into a reusable, installable CPAN distribution.
 
 Supported languages: `en` (English, default), `fr` (French), `de` (German).
+
+# METHODS
+
+## new
+
+Constructor.  Creates and returns a blessed `Genealogy::Relationship::Name`
+object.
+
+### PURPOSE
+
+Initialises the object with optional configuration: a default language for
+subsequent `name()` calls, and an optional [Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction) object to
+use as the error logger.  Configuration may also be loaded from an INI-style
+file via [Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure).
+
+### ARGUMENTS
+
+- `language` (string, optional)
+
+    Default BCP-47 language tag (primary subtag only) for all `name()` calls
+    on this object.  Supported values: `en` (default), `fr`, `de`.  May be
+    overridden per-call by passing `language` to `name()`.
+
+- `logger`
+
+    A pre-constructed loggining object.  When a required argument is
+    passed as `undef` to `name()`, the error is reported via
+    `$logger->error($msg)` rather than `croak`.  This allows
+    programs to route errors through their own 
+    infrastructure with full `ctx` context.
+
+    See [Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction) and the ["CONFIGURATION"](#configuration) section for the
+    recommended construction pattern.
+
+- `config_file` (string, optional)
+
+    Path to an INI-style configuration file processed by [Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure).
+    Any keys it sets may be overridden by arguments passed directly to `new()`.
+
+### RETURNS
+
+A blessed `Genealogy::Relationship::Name` object.
+
+### SIDE EFFECTS
+
+Calls [Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure) `configure()`, which may read from a
+configuration file on disk if `config_file` is supplied or if a default
+configuration file exists for the class.
+
+### NOTES
+
+[Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure) cannot handle object or coderef values (it treats
+unknown scalar values as configuration file paths).  The `logger` key is
+therefore stashed before the `configure()` call and restored afterward.
+Any future object-valued constructor arguments must follow the same pattern.
+
+### EXAMPLE
+
+    use Genealogy::Relationship::Name;
+    use Log::Abstraction;
+
+    # Minimal construction
+    my $namer = Genealogy::Relationship::Name->new();
+
+    # With a default language
+    my $namer_fr = Genealogy::Relationship::Name->new(language => 'fr');
+
+    # With a Log::Abstraction logger
+    my $la = Log::Abstraction->new(
+        logger => sub {
+            my $args = shift;
+            my $msg = $args->{ctx}
+                ? $args->{ctx}->as_string() . ': ' . join('', @{$args->{message}})
+                : join('', @{$args->{message}});
+            complain({ message => $msg, person => $args->{ctx} });
+        },
+        ctx => $individual,
+    );
+    my $namer = Genealogy::Relationship::Name->new(language => 'en', logger => $la);
+
+### API SPECIFICATION
+
+#### Input
+
+    {
+        language => { type => 'string', regex => qr/^(?:en|fr|de)/, optional => 1 },
+        logger   => { type => 'object', optional => 1 },
+    }
+
+#### Output
+
+    {
+        type  => 'object',
+        class => 'Genealogy::Relationship::Name',
+    }
+
+### FORMAL SPECIFICATION
+
+    new ________________________________________________________
+    [In]  class    : String                  (class name or object)
+          language : {en, fr, de}?           (optional default language)
+          logger   : Log::Abstraction?       (optional error logger)
+    [Out] self     : Genealogy::Relationship::Name
+
+    Let params == get_params(args)
+    Let params' == configure(class, params \ {logger})
+                   union {logger -> params.logger}  if logger in dom params
+    self == bless(params', class)
+
+    post: self.language == params.language  if language in dom params
+          self.logger   == params.logger    if logger   in dom params
+          ref(self)     == 'Genealogy::Relationship::Name'
 
 # METHODS
 
@@ -108,7 +220,7 @@ is not found in the lookup table.
         steps_from_ancestor => { type => 'integer', minimum => 0 },
         sex                 => { type => 'string', memberof => ['M', 'F'] },
         language            => { type => 'string', regex => qr/^(?:en|de|fr)/, optional => 1 },
-        person              => { optional => 1 },
+        # person is extracted before validate_strict to avoid PVS inferring constraints
     }
 
 #### Output
@@ -237,69 +349,45 @@ reconfiguration.
 
 Errors are dispatched through the following priority chain:
 
-- 1. `logger` coderef ([Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction) >= 0.28)
+- 1. [Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction) object (preferred)
 
-    The preferred integration path for `gedcom`/`ged2site`.  Pass a `logger`
-    coderef and a `ctx` value (typically a `Gedcom::Individual` object) to
-    `new()`.  On error, `_error()` calls the logger with a hashref containing
-    `class`, `file`, `line`, `level` (`"error"`), `message`, and `ctx`.
-    This matches the shape that [Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction) 0.28 uses for all coderef
-    logger callbacks, so the same handler works for both normal logging and errors.
+    Construct a `Log::Abstraction` object with the desired logger coderef and
+    `ctx` (typically a `Gedcom::Individual`), then pass it as `logger` to
+    `new()`.  On error, this module simply calls `$logger->error($msg)`
+    and Log::Abstraction handles ctx forwarding, formatting, and dispatch.
 
-        my $namer = Genealogy::Relationship::Name->new(
+        use Log::Abstraction;
+
+        my $logger = Log::Abstraction->new(
             logger => sub {
                 my $args = shift;
-                complain(
-                    warning => join('', @{$args->{message}}),
-                    person  => $args->{ctx},
-                );
+                my $msg = $args->{ctx}
+                    ? $args->{ctx}->as_string() . ': ' . join('', @{$args->{message}})
+                    : join('', @{$args->{message}});
+                complain({ message => $msg, person => $args->{ctx} });
             },
-            ctx => $individual,   # Gedcom::Individual for this lookup
+            ctx => $individual,
         );
 
-- 2. `on_error` coderef
+        my $namer = Genealogy::Relationship::Name->new(logger => $logger);
 
-    A simpler fallback for callers not using [Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction).  The coderef
-    is called with a flat hash matching the `complain()` interface in
-    `gedcom`/`ged2site`: `warning => $msg, person => $person`.
-    `person` is resolved from the per-call `name()` argument first, then from
-    the constructor `ctx`, so a single handler works in both cases.
-
-        my $namer = Genealogy::Relationship::Name->new(
-            on_error => sub {
-                my %args = @_;
-                complain(warning => $args{warning}, person => $args{person});
-            },
-        );
-
-- 3. `croak` (default)
-
-    When neither `logger` nor `on_error` is set, errors croak normally.
-
-If any handler returns without dying (e.g. a warning-only handler),
-`name()` returns `undef`.
-
-## ctx
-
-The `ctx` constructor argument is stored on the object and passed to the
-`logger` coderef (as `$args->{ctx}`) and to the `on_error` coderef
-(as `person => $ctx`) on every error.  A per-call `person` argument
-to `name()` takes priority over `ctx` when both are present.
+If any handler returns without dying (e.g. a warning-only handler in
+[Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction)), `name()` returns `undef`.
 
 # DIAGNOSTICS
 
-- on\_error must be a CODE reference
+- steps\_to\_ancestor not given
 
-    `on_error` was passed to `new()` but is not a code reference.
+    `steps_to_ancestor` was passed as `undef`. Passing `undef` explicitly is
+    distinct from omitting the argument; use a defined non-negative integer.
 
-- steps\_to\_ancestor must be a defined non-negative integer
-
-    `steps_to_ancestor` was `undef`; this is not caught by `validate_strict`
-    for `type => 'integer'` and is caught explicitly.
-
-- steps\_from\_ancestor must be a defined non-negative integer
+- steps\_from\_ancestor not given
 
     As above, for `steps_from_ancestor`.
+
+- sex not given
+
+    `sex` was passed as `undef`. Supply `'M'` or `'F'`.
 
 # DEPENDENCIES
 

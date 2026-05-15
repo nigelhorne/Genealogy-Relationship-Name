@@ -308,46 +308,34 @@ subtest 'name() multi-great relationships' => sub {
 
 
 # -------------------------------------------------------------------------
-# 16. on_error not a coderef: new() croaks
+# 16. Log::Abstraction object stored correctly in new()
 # -------------------------------------------------------------------------
 
-subtest 'new() croaks when on_error is not a coderef' => sub {
-	plan tests => 2;
+subtest 'new() stores Log::Abstraction object as logger' => sub {
+	plan tests => 3;
 
-	# validate_strict handles all argument errors in name(); on_error is only
-	# invoked by _error() for internal errors not covered by validate_strict.
-	# We can still test that new() validates on_error itself.
-	throws_ok {
-		Genealogy::Relationship::Name->new(on_error => 'not a coderef')
-	} qr/on_error must be a CODE reference/, 'String on_error croaks in new()';
+	my $la    = Log::Abstraction->new(logger => sub {});
+	my $namer = Genealogy::Relationship::Name->new(logger => $la);
 
-	throws_ok {
-		Genealogy::Relationship::Name->new(on_error => 42)
-	} qr/on_error must be a CODE reference/, 'Numeric on_error croaks in new()';
+	isa_ok($namer, 'Genealogy::Relationship::Name');
+	ok(defined $namer->{logger}, 'logger stored on object');
+	isa_ok($namer->{logger}, 'Log::Abstraction');
 };
 
 # -------------------------------------------------------------------------
-# 17. Invalid args croak via validate_strict, not via on_error/_error
+# 17. undef args: logger invoked if set, croak otherwise
 # -------------------------------------------------------------------------
 
-subtest 'validate_strict croaks directly; on_error is not invoked' => sub {
-	plan tests => 3;
+subtest 'undef arg: logger invoked when set' => sub {
+	plan tests => 2;
 
-	my @errors;
-	my $namer = Genealogy::Relationship::Name->new(
-		on_error => sub { push @errors, {@_} },
-	);
+	my @log_calls;
+	my $la = Log::Abstraction->new(logger => sub { push @log_calls, shift });
+	my $namer = Genealogy::Relationship::Name->new(logger => $la);
 
-	# undef steps_to_ancestor — validate_strict croaks, bypassing on_error
-	throws_ok {
-		$namer->name(steps_from_ancestor => 1, sex => 'M')
-	} qr/.+/, 'undef steps_to_ancestor croaks via validate_strict';
-
-	throws_ok {
-		$namer->name(steps_to_ancestor => 1, sex => 'M')
-	} qr/.+/, 'undef steps_from_ancestor croaks via validate_strict';
-
-	is(scalar @errors, 0, 'on_error was never called — validate_strict croaks directly');
+	eval { $namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M') };
+	is(scalar @log_calls, 1, 'logger called for undef arg');
+	like(join('', @{$log_calls[0]{message}}), qr/steps_to_ancestor not given/, 'correct message');
 };
 
 # -------------------------------------------------------------------------

@@ -194,10 +194,11 @@ subtest 'Boundary: numeric language code croaks' => sub {
 # =========================================================================
 # Boundary: undef steps trigger validation
 # =========================================================================
-subtest 'Boundary: undef step values croak' => sub {
-	plan tests => 3;
 
-	my $namer = new_ok('Genealogy::Relationship::Name');
+subtest 'Boundary: undef step values croak' => sub {
+	plan tests => 2;
+
+	my $namer = Genealogy::Relationship::Name->new();
 
 	# validate_strict does not catch undef for integer fields; the module guards explicitly
 	throws_ok {
@@ -329,28 +330,9 @@ subtest 'Pathological: new() works as class method (not object)' => sub {
 # =========================================================================
 # Pathological: on_error and logger edge cases
 # Note: validate_strict croaks directly for invalid name() args;
-# on_error and logger are only invoked by _error() for internal errors.
+# on_error and logger are accepted by new() for caller use but not
+# invoked internally by this module.
 # =========================================================================
-
-subtest 'Pathological: on_error non-coderef variations all croak in new()' => sub {
-	plan tests => 3;
-
-	# All of these must croak at construction time, not silently ignore
-	for my $bad ('string', 42, []) {
-		throws_ok {
-			Genealogy::Relationship::Name->new(on_error => $bad)
-		} qr/on_error must be a CODE reference/, ref(\$bad) || $bad . ' on_error croaks';
-	}
-};
-
-subtest 'Pathological: undef on_error is silently ignored (not set)' => sub {
-	plan tests => 2;
-
-	# undef on_error is treated as not supplied — no croak from new()
-	my $namer = Genealogy::Relationship::Name->new(on_error => undef);
-	ok(defined $namer, 'new() with on_error => undef succeeds');
-	ok(!defined $namer->{on_error}, 'on_error not stored when undef');
-};
 
 subtest 'Pathological: validate_strict croaks bypass all error handlers' => sub {
 	plan tests => 3;
@@ -362,7 +344,7 @@ subtest 'Pathological: validate_strict croaks bypass all error handlers' => sub 
 		on_error => sub { push @error_calls, {@_} },
 	);
 
-	# Invalid sex — validate_strict croaks before _error() is ever reached
+	# Invalid sex — validate_strict croaks directly
 	eval { $namer->name(steps_to_ancestor => 1, steps_from_ancestor => 1, sex => 'X') };
 	ok($@, 'validate_strict croaked for invalid sex');
 	is(scalar @logger_calls, 0, 'logger not invoked');

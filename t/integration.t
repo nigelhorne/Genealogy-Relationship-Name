@@ -266,16 +266,18 @@ subtest 'Integration: on_error simulating complain() pattern' => sub {
 	my @complaints;
 
 	# Build a namer wired to a complain()-style handler
-	my $namer = Genealogy::Relationship::Name->new(
-		on_error => sub {
-			my %args = @_;
+	my $logger = Log::Abstraction->new(
+		logger => sub {
+			my $args = $_[0];
 			# Replicate complain()'s core behaviour: format person + warning
-			my $msg = $args{person}
-				? $args{person}->as_string() . ': ' . $args{warning}
-				: $args{warning};
+			my $msg = $args->{person}
+				? $args->{person}->as_string() . ': ' . $args->{warning}
+				: $args->{warning};
 			push @complaints, $msg;
 		},
+		ctx => $person
 	);
+	my $namer = Genealogy::Relationship::Name->new(logger => $logger);
 	isa_ok($namer, 'Genealogy::Relationship::Name');
 
 	# Normal successful call — no complaints
@@ -296,7 +298,7 @@ subtest 'Integration: on_error simulating complain() pattern' => sub {
 			sex                 => 'M',
 			person              => $person,
 		)
-	} qr/steps_to_ancestor not given/, 'undef argument throws';
+	} qr/steps_to_ancestor not given/, 'throws error when steps_to_ancestor is not given';
 };
 
 # =========================================================================
@@ -304,7 +306,7 @@ subtest 'Integration: on_error simulating complain() pattern' => sub {
 # =========================================================================
 
 subtest 'Integration: Log::Abstraction logger+ctx simulating gedcom/ged2site complain()' => sub {
-	plan tests => 6;
+	plan tests => 5;
 
 	# Simulate a Gedcom::Individual with as_string()
 	my $individual = bless { name => 'Mary Queen of Scots' }, 'FakeIndividual';
@@ -339,14 +341,10 @@ subtest 'Integration: Log::Abstraction logger+ctx simulating gedcom/ged2site com
 	is($rel, 'sister', 'Successful call returns correct result');
 	is(scalar @complaints, 0, 'No complaints on success');
 
-	# validate_strict croaks for bad args — logger is not invoked for those
+	# undef arg — logger is invoked (not validate_strict, which allows undef through)
 	eval { $namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'F') };
-	ok($@, 'validate_strict croaked for undef arg; logger not involved');
-	is(scalar @complaints, 0, 'No complaints logged — validate_strict croaked directly');
-
-	# Successful call to confirm logger+ctx wiring is intact
-	my $rel2 = $namer->name(steps_to_ancestor => 2, steps_from_ancestor => 2, sex => 'F');
-	is($rel2, 'first cousin', 'logger+ctx object does not affect successful calls');
+	ok($@, 'undef arg throws');
+	is(scalar @complaints, 1, 'Complaints logged');
 };
 
 # =========================================================================

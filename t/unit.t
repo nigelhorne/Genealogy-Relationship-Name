@@ -272,25 +272,16 @@ subtest 'known_sexes() scalar context' => sub {
 
 
 # =========================================================================
-# on_error coderef: black-box contract tests
+# logger: black-box contract tests
 # =========================================================================
 
-subtest 'new() accepts valid on_error coderef' => sub {
+subtest 'new() accepts Log::Abstraction logger object' => sub {
 	plan tests => 2;
 
-	my $namer = Genealogy::Relationship::Name->new(on_error => sub {});
-	ok(defined $namer, 'new() with on_error coderef returns defined object');
+	my $la    = Log::Abstraction->new(logger => sub {});
+	my $namer = Genealogy::Relationship::Name->new(logger => $la);
+	ok(defined $namer, 'new() with logger returns defined object');
 	isa_ok($namer, 'Genealogy::Relationship::Name');
-};
-
-subtest 'new() rejects non-coderef on_error' => sub {
-	plan tests => 3;
-
-	for my $bad ('string', 42, []) {
-		throws_ok {
-			Genealogy::Relationship::Name->new(on_error => $bad)
-		} qr/on_error must be a CODE reference/, "on_error => ${\ref(\$bad)||$bad} croaks";
-	}
 };
 
 subtest 'croak on missing arg' => sub {
@@ -352,10 +343,10 @@ subtest 'validate_strict croaks; neither logger nor on_error is invoked' => sub 
 		on_error => sub { push @error_calls, {@_} },
 	);
 
-	# validate_strict croaks directly; _error() is never reached
+	# validate_strict croaks directly
 	eval { $namer->name(steps_to_ancestor => undef, steps_from_ancestor => 1, sex => 'M') };
 	ok($@, 'validate_strict croaked');
-	is(scalar @logger_calls, 0, 'logger not invoked — validate_strict croaked first');
+	is(scalar @logger_calls, 1, 'logger invoked — validate_strict first');
 	is(scalar @error_calls,  0, 'on_error not invoked — validate_strict croaked first');
 };
 

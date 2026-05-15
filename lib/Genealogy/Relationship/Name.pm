@@ -329,6 +329,122 @@ extracts them into a reusable, installable CPAN distribution.
 
 Supported languages: C<en> (English, default), C<fr> (French), C<de> (German).
 
+=head1 METHODS
+
+=head2 new
+
+Constructor.  Creates and returns a blessed C<Genealogy::Relationship::Name>
+object.
+
+=head3 PURPOSE
+
+Initialises the object with optional configuration: a default language for
+subsequent C<name()> calls, and an optional L<Log::Abstraction> object to
+use as the error logger.  Configuration may also be loaded from an INI-style
+file via L<Object::Configure>.
+
+=head3 ARGUMENTS
+
+=over 4
+
+=item C<language> (string, optional)
+
+Default BCP-47 language tag (primary subtag only) for all C<name()> calls
+on this object.  Supported values: C<en> (default), C<fr>, C<de>.  May be
+overridden per-call by passing C<language> to C<name()>.
+
+=item C<logger>
+
+A pre-constructed loggining object.  When a required argument is
+passed as C<undef> to C<name()>, the error is reported via
+C<< $logger->error($msg) >> rather than C<croak>.  This allows
+programs to route errors through their own 
+infrastructure with full C<ctx> context.
+
+See L<Log::Abstraction> and the L</CONFIGURATION> section for the
+recommended construction pattern.
+
+=item C<config_file> (string, optional)
+
+Path to an INI-style configuration file processed by L<Object::Configure>.
+Any keys it sets may be overridden by arguments passed directly to C<new()>.
+
+=back
+
+=head3 RETURNS
+
+A blessed C<Genealogy::Relationship::Name> object.
+
+=head3 SIDE EFFECTS
+
+Calls L<Object::Configure> C<configure()>, which may read from a
+configuration file on disk if C<config_file> is supplied or if a default
+configuration file exists for the class.
+
+=head3 NOTES
+
+L<Object::Configure> cannot handle object or coderef values (it treats
+unknown scalar values as configuration file paths).  The C<logger> key is
+therefore stashed before the C<configure()> call and restored afterward.
+Any future object-valued constructor arguments must follow the same pattern.
+
+=head3 EXAMPLE
+
+    use Genealogy::Relationship::Name;
+    use Log::Abstraction;
+
+    # Minimal construction
+    my $namer = Genealogy::Relationship::Name->new();
+
+    # With a default language
+    my $namer_fr = Genealogy::Relationship::Name->new(language => 'fr');
+
+    # With a Log::Abstraction logger
+    my $la = Log::Abstraction->new(
+        logger => sub {
+            my $args = shift;
+            my $msg = $args->{ctx}
+                ? $args->{ctx}->as_string() . ': ' . join('', @{$args->{message}})
+                : join('', @{$args->{message}});
+            complain({ message => $msg, person => $args->{ctx} });
+        },
+        ctx => $individual,
+    );
+    my $namer = Genealogy::Relationship::Name->new(language => 'en', logger => $la);
+
+=head3 API SPECIFICATION
+
+=head4 Input
+
+    {
+        language => { type => 'string', regex => qr/^(?:en|fr|de)/, optional => 1 },
+        logger   => { type => 'object', optional => 1 },
+    }
+
+=head4 Output
+
+    {
+        type  => 'object',
+        class => 'Genealogy::Relationship::Name',
+    }
+
+=head3 FORMAL SPECIFICATION
+
+    new ________________________________________________________
+    [In]  class    : String                  (class name or object)
+          language : {en, fr, de}?           (optional default language)
+          logger   : Log::Abstraction?       (optional error logger)
+    [Out] self     : Genealogy::Relationship::Name
+
+    Let params == get_params(args)
+    Let params' == configure(class, params \ {logger})
+                   union {logger -> params.logger}  if logger in dom params
+    self == bless(params', class)
+
+    post: self.language == params.language  if language in dom params
+          self.logger   == params.logger    if logger   in dom params
+          ref(self)     == 'Genealogy::Relationship::Name'
+
 =cut
 
 sub new {
@@ -341,7 +457,7 @@ sub new {
 	# Stash keys that are coderefs or objects before passing to Object::Configure,
 	# which cannot handle them (it treats unknown scalar values as config file paths)
 	my %stash;
-	for my $key (qw(logger on_error ctx)) {
+	for my $key (qw(logger)) {
 		next unless exists $params->{$key};
 		$stash{$key} = delete $params->{$key};
 	}
@@ -352,14 +468,8 @@ sub new {
 	# Restore the stashed coderefs and objects after configure()
 	@{$params}{keys %stash} = values %stash;
 
-	# Validate on_error if supplied -- must be a coderef
-	if(defined $params->{on_error}) {
-		croak 'on_error must be a CODE reference'
-			unless ref($params->{on_error}) eq 'CODE';
-	}
-
 	# Bless and return the object; logger/ctx/level keys from params
-	# are stored directly and accessed by _error() via $self->{logger} etc.
+	# are stored directly and accessed via $self->{logger} etc.
 	my $self = bless {
 		# Store any constructor-time config for Object::Configure compatibility
 		%{$params},
@@ -488,18 +598,28 @@ sub name {
 	);
 
 	# Extract individual parameters; undef means arg was not given, so croak
+	foreach my $arg('steps_to_ancestor', 'steps_from_ancestor', 'sex') {
+		if(!defined($args->{$arg})) {
+			if(my $logger = $self->{logger}) {
+				$logger->error("$arg not given");
+			} else {
+				croak("$arg not given");
+			}
+		}
+	}
+
 	my $steps1 = $args->{steps_to_ancestor} // croak('steps_to_ancestor not given');
 	my $steps2 = $args->{steps_from_ancestor} // croak('steps_from_ancestor not given');
 	my $sex    = $args->{sex} // croak('sex not given');
 	my $person = $args->{person};
 
-	# Fall back to constructor default or hard default if no per-call language given
+	# Fall back to the constructor default or hard default if no per-call language given
 	my $lang = lc($args->{language} // $self->{language} // $DEFAULT_LANGUAGE);
 
 	# Strip any region subtag (e.g. 'en-GB' -> 'en') after lowercasing
 	($lang) = split /-/, $lang;
 
-	# Build lookup key from the two step counts
+	# Build lookup key from the two-step counts
 	my $key = "${steps1},${steps2}";
 
 	# Retrieve the correct gender-specific table for the chosen language
@@ -667,25 +787,6 @@ and Log::Abstraction handles ctx forwarding, formatting, and dispatch.
 
     my $namer = Genealogy::Relationship::Name->new(logger => $logger);
 
-=item 2. C<on_error> coderef
-
-A simpler fallback for callers not using L<Log::Abstraction>.  The coderef
-is called with a flat hash matching the C<complain()> interface in
-C<gedcom>/C<ged2site>: C<warning =E<gt> $msg, person =E<gt> $person>.
-C<person> is resolved from the per-call C<name()> C<person> argument first,
-then from the constructor C<ctx>.
-
-    my $namer = Genealogy::Relationship::Name->new(
-        on_error => sub {
-            my %args = @_;
-            complain(warning => $args{warning}, person => $args{person});
-        },
-    );
-
-=item 3. C<croak> (default)
-
-When neither C<logger> nor C<on_error> is set, errors croak normally.
-
 =back
 
 If any handler returns without dying (e.g. a warning-only handler in
@@ -694,10 +795,6 @@ L<Log::Abstraction>), C<name()> returns C<undef>.
 =head1 DIAGNOSTICS
 
 =over 4
-
-=item on_error must be a CODE reference
-
-C<on_error> was passed to C<new()> but is not a code reference.
 
 =item steps_to_ancestor not given
 
