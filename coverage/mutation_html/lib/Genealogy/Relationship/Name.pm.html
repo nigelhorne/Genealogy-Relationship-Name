@@ -244,9 +244,9 @@ pre details.mutant-details ul {
 <div class="nav"><a href="../../../../index.html">Index</a>
 </div><div class='summary'>
 <strong>Structural Coverage (Approximate)</strong><p>
-TER1 (Statement): 100.00%<br>
-TER2 (Branch): 100.00%<br>
-TER3 (LCSAJ): 100.0% (5/5)<br>
+TER1 (Statement): 98.25%<br>
+TER2 (Branch): 90.00%<br>
+TER3 (LCSAJ): 100.0% (6/6)<br>
 Approximate LCSAJ segments: 11<br>
 </div>
 
@@ -621,479 +621,344 @@ Approximate LCSAJ segments: 11<br>
 </span><span class="">  329: 
 </span><span class="">  330: Supported languages: C&lt;en&gt; (English, default), C&lt;fr&gt; (French), C&lt;de&gt; (German).
 </span><span class="">  331: 
-</span><span class="">  332: =cut
+</span><span class="">  332: =head1 METHODS
 </span><span class="">  333: 
-</span><span class="">  334: sub new {
-</span><span class="">  335: 	# Create and return a blessed object
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">336 → 344 → 350</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">336 → 344 → 0</span></span>  336: 	my $class = shift;
-</span><span class="">  337: 
-</span><span class="">  338: 	# Handle hash or hashref arguments
-</span><span class="">  339: 	my $params = Params::Get::get_params(undef, \@_);
+</span><span class="">  334: =head2 new
+</span><span class="">  335: 
+</span><span class="">  336: Constructor.  Creates and returns a blessed C&lt;Genealogy::Relationship::Name&gt;
+</span><span class="">  337: object.
+</span><span class="">  338: 
+</span><span class="">  339: =head3 PURPOSE
 </span><span class="">  340: 
-</span><span class="">  341: 	# Stash keys that are coderefs or objects before passing to Object::Configure,
-</span><span class="">  342: 	# which cannot handle them (it treats unknown scalar values as config file paths)
-</span><span class="">  343: 	my %stash;
-</span><span class="">  344: 	for my $key (qw(logger on_error ctx)) {
-</span><span class="">  345: 		next unless exists $params-&gt;{$key};
-</span><span class="">  346: 		$stash{$key} = delete $params-&gt;{$key};
-</span><span class="">  347: 	}
-</span><span class="">  348: 
-</span><span class="">  349: 	# Load the configuration from a config file, if provided
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">350 → 356 → 363</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">350 → 356 → 0</span></span>  350: 	$params = Object::Configure::configure($class, $params);
+</span><span class="">  341: Initialises the object with optional configuration: a default language for
+</span><span class="">  342: subsequent C&lt;name()&gt; calls, and an optional L&lt;Log::Abstraction&gt; object to
+</span><span class="">  343: use as the error logger.  Configuration may also be loaded from an INI-style
+</span><span class="">  344: file via L&lt;Object::Configure&gt;.
+</span><span class="">  345: 
+</span><span class="">  346: =head3 ARGUMENTS
+</span><span class="">  347: 
+</span><span class="">  348: =over 4
+</span><span class="">  349: 
+</span><span class="">  350: =item C&lt;language&gt; (string, optional)
 </span><span class="">  351: 
-</span><span class="">  352: 	# Restore the stashed coderefs and objects after configure()
-</span><span class="">  353: 	@{$params}{keys %stash} = values %stash;
-</span><span class="">  354: 
-</span><span class="">  355: 	# Validate on_error if supplied -- must be a coderef
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  356: 	if(defined $params-&gt;{on_error}) {
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_356_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  357: 		croak &#39;on_error must be a CODE reference&#39;
-</span><span class="">  358: 			unless ref($params-&gt;{on_error}) eq &#39;CODE&#39;;
-</span><span class="">  359: 	}
-</span><span class="">  360: 
-</span><span class="">  361: 	# Bless and return the object; logger/ctx/level keys from params
-</span><span class="">  362: 	# are stored directly and accessed by _error() via $self-&gt;{logger} etc.
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">363 → 368 → 0</span></span>  363: 	my $self = bless {
-</span><span class="">  364: 		# Store any constructor-time config for Object::Configure compatibility
-</span><span class="">  365: 		%{$params},
-</span><span class="">  366: 	}, ref($class) || $class;
-</span><span class="">  367: 
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  368: 	return $self;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_368_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_368_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  369: }
-</span><span class="">  370: 
-</span><span class="">  371: # ---------------------------------------------------------------------------
-</span><span class="">  372: # Public method: name()
-</span><span class="">  373: # ---------------------------------------------------------------------------
-</span><span class="">  374: 
-</span><span class="">  375: =head1 METHODS
-</span><span class="">  376: 
-</span><span class="">  377: =head2 name
-</span><span class="">  378: 
-</span><span class="">  379: Returns the name of the relationship between person A and person B.
-</span><span class="">  380: 
-</span><span class="">  381: =head3 PURPOSE
-</span><span class="">  382: 
-</span><span class="">  383: Given the number of steps from person A up to the nearest common ancestor
-</span><span class="">  384: (C&lt;steps_to_ancestor&gt;) and the number of steps from that ancestor down to
-</span><span class="">  385: person B (C&lt;steps_from_ancestor&gt;), plus the sex of person B and a language
-</span><span class="">  386: code, returns a localised relationship-name string.
-</span><span class="">  387: 
-</span><span class="">  388: =head3 ARGUMENTS
-</span><span class="">  389: 
-</span><span class="">  390: =over 4
-</span><span class="">  391: 
-</span><span class="">  392: =item C&lt;steps_to_ancestor&gt; (integer, required)
-</span><span class="">  393: 
-</span><span class="">  394: Number of generational steps from person A up to the common ancestor.
-</span><span class="">  395: Must be a non-negative integer.  Zero means person A I&lt;is&gt; the ancestor.
-</span><span class="">  396: 
-</span><span class="">  397: =item C&lt;steps_from_ancestor&gt; (integer, required)
+</span><span class="">  352: Default BCP-47 language tag (primary subtag only) for all C&lt;name()&gt; calls
+</span><span class="">  353: on this object.  Supported values: C&lt;en&gt; (default), C&lt;fr&gt;, C&lt;de&gt;.  May be
+</span><span class="">  354: overridden per-call by passing C&lt;language&gt; to C&lt;name()&gt;.
+</span><span class="">  355: 
+</span><span class="">  356: =item C&lt;logger&gt;
+</span><span class="">  357: 
+</span><span class="">  358: A pre-constructed loggining object.  When a required argument is
+</span><span class="">  359: passed as C&lt;undef&gt; to C&lt;name()&gt;, the error is reported via
+</span><span class="">  360: C&lt;&lt; $logger-&gt;error($msg) &gt;&gt; rather than C&lt;croak&gt;.  This allows
+</span><span class="">  361: programs to route errors through their own 
+</span><span class="">  362: infrastructure with full C&lt;ctx&gt; context.
+</span><span class="">  363: 
+</span><span class="">  364: See L&lt;Log::Abstraction&gt; and the L&lt;/CONFIGURATION&gt; section for the
+</span><span class="">  365: recommended construction pattern.
+</span><span class="">  366: 
+</span><span class="">  367: =item C&lt;config_file&gt; (string, optional)
+</span><span class="">  368: 
+</span><span class="">  369: Path to an INI-style configuration file processed by L&lt;Object::Configure&gt;.
+</span><span class="">  370: Any keys it sets may be overridden by arguments passed directly to C&lt;new()&gt;.
+</span><span class="">  371: 
+</span><span class="">  372: =back
+</span><span class="">  373: 
+</span><span class="">  374: =head3 RETURNS
+</span><span class="">  375: 
+</span><span class="">  376: A blessed C&lt;Genealogy::Relationship::Name&gt; object.
+</span><span class="">  377: 
+</span><span class="">  378: =head3 SIDE EFFECTS
+</span><span class="">  379: 
+</span><span class="">  380: Calls L&lt;Object::Configure&gt; C&lt;configure()&gt;, which may read from a
+</span><span class="">  381: configuration file on disk if C&lt;config_file&gt; is supplied or if a default
+</span><span class="">  382: configuration file exists for the class.
+</span><span class="">  383: 
+</span><span class="">  384: =head3 NOTES
+</span><span class="">  385: 
+</span><span class="">  386: L&lt;Object::Configure&gt; cannot handle object or coderef values (it treats
+</span><span class="">  387: unknown scalar values as configuration file paths).  The C&lt;logger&gt; key is
+</span><span class="">  388: therefore stashed before the C&lt;configure()&gt; call and restored afterward.
+</span><span class="">  389: Any future object-valued constructor arguments must follow the same pattern.
+</span><span class="">  390: 
+</span><span class="">  391: =head3 EXAMPLE
+</span><span class="">  392: 
+</span><span class="">  393:     use Genealogy::Relationship::Name;
+</span><span class="">  394:     use Log::Abstraction;
+</span><span class="">  395: 
+</span><span class="">  396:     # Minimal construction
+</span><span class="">  397:     my $namer = Genealogy::Relationship::Name-&gt;new();
 </span><span class="">  398: 
-</span><span class="">  399: Number of generational steps from the common ancestor down to person B.
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  400: Must be a non-negative integer.
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_400_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  401: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_401_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  402: =item C&lt;sex&gt; (string, required)
-</span><span class="">  403: 
-</span><span class="">  404: Sex of person B.  Must be C&lt;&#39;M&#39;&gt; (male) or C&lt;&#39;F&#39;&gt; (female).
-</span><span class="">  405: 
-</span><span class="">  406: =item C&lt;language&gt; (string, optional)
-</span><span class="">  407: 
-</span><span class="">  408: BCP-47-style language tag (only the primary subtag is used).
-</span><span class="">  409: Supported values: C&lt;en&gt; (default), C&lt;fr&gt;, C&lt;de&gt;.
-</span><span class="">  410: 
-</span><span class="">  411: =item C&lt;person&gt; (object, optional)
-</span><span class="">  412: 
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  413: An optional person object (e.g. a C&lt;Gedcom::Individual&gt; instance) passed
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_413_4: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_413_4: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  414: through to the error handler when an error occurs.  Takes priority over the
-</span><span class="">  415: C&lt;ctx&gt; set at construction time.  The handler receives it as C&lt;ctx&gt; (logger
-</span><span class="">  416: path) or C&lt;person&gt; (on_error path), matching the C&lt;complain()&gt; interface
-</span><span class="">  417: in C&lt;gedcom&gt;/C&lt;ged2site&gt;.
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  418: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_418_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  419: =back
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  420: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_420_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_420_3: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  421: =head3 RETURNS
-</span><span class="">  422: 
-</span><span class="">  423: A string containing the relationship name, or C&lt;undef&gt; if the combination
-</span><span class="">  424: is not found in the lookup table.
+</span><span class="">  399:     # With a default language
+</span><span class="">  400:     my $namer_fr = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;fr&#39;);
+</span><span class="">  401: 
+</span><span class="">  402:     # With a Log::Abstraction logger
+</span><span class="">  403:     my $la = Log::Abstraction-&gt;new(
+</span><span class="">  404:         logger =&gt; sub {
+</span><span class="">  405:             my $args = shift;
+</span><span class="">  406:             my $msg = $args-&gt;{ctx}
+</span><span class="">  407:                 ? $args-&gt;{ctx}-&gt;as_string() . &#39;: &#39; . join(&#39;&#39;, @{$args-&gt;{message}})
+</span><span class="">  408:                 : join(&#39;&#39;, @{$args-&gt;{message}});
+</span><span class="">  409:             complain({ message =&gt; $msg, person =&gt; $args-&gt;{ctx} });
+</span><span class="">  410:         },
+</span><span class="">  411:         ctx =&gt; $individual,
+</span><span class="">  412:     );
+</span><span class="">  413:     my $namer = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;en&#39;, logger =&gt; $la);
+</span><span class="">  414: 
+</span><span class="">  415: =head3 API SPECIFICATION
+</span><span class="">  416: 
+</span><span class="">  417: =head4 Input
+</span><span class="">  418: 
+</span><span class="">  419:     {
+</span><span class="">  420:         language =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|fr|de)/, optional =&gt; 1 },
+</span><span class="">  421:         logger   =&gt; { type =&gt; &#39;object&#39;, optional =&gt; 1 },
+</span><span class="">  422:     }
+</span><span class="">  423: 
+</span><span class="">  424: =head4 Output
 </span><span class="">  425: 
-</span><span class="">  426: =head3 EXAMPLE
-</span><span class="">  427: 
-</span><span class="">  428:     my $namer = Genealogy::Relationship::Name-&gt;new();
-</span><span class="">  429: 
-</span><span class="">  430:     # Person A is the grandparent (2 steps up) of the common ancestor,
-</span><span class="">  431:     # and person B is 3 steps below the ancestor; B is female =&gt; first cousin once-removed
-</span><span class="">  432:     my $rel = $namer-&gt;name(
-</span><span class="">  433:         steps_to_ancestor   =&gt; 2,
-</span><span class="">  434:         steps_from_ancestor =&gt; 3,
-</span><span class="">  435:         sex                 =&gt; &#39;F&#39;,
-</span><span class="">  436:     );
-</span><span class="">  437: 
-</span><span class="">  438: =head3 API SPECIFICATION
-</span><span class="">  439: 
-</span><span class="">  440: =head4 Input
-</span><span class="">  441: 
-</span><span class="">  442:     {
-</span><span class="">  443: 	steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  444: 	steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  445: 	sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
-</span><span class="">  446: 	language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/, optional =&gt; 1 },
-</span><span class="">  447: 	# person is extracted before validate_strict to avoid PVS inferring constraints
-</span><span class="">  448:     }
+</span><span class="">  426:     {
+</span><span class="">  427:         type  =&gt; &#39;object&#39;,
+</span><span class="">  428:         class =&gt; &#39;Genealogy::Relationship::Name&#39;,
+</span><span class="">  429:     }
+</span><span class="">  430: 
+</span><span class="">  431: =head3 FORMAL SPECIFICATION
+</span><span class="">  432: 
+</span><span class="">  433:     new ________________________________________________________
+</span><span class="">  434:     [In]  class    : String                  (class name or object)
+</span><span class="">  435:           language : {en, fr, de}?           (optional default language)
+</span><span class="">  436:           logger   : Log::Abstraction?       (optional error logger)
+</span><span class="">  437:     [Out] self     : Genealogy::Relationship::Name
+</span><span class="">  438: 
+</span><span class="">  439:     Let params == get_params(args)
+</span><span class="">  440:     Let params&#39; == configure(class, params \ {logger})
+</span><span class="">  441:                    union {logger -&gt; params.logger}  if logger in dom params
+</span><span class="">  442:     self == bless(params&#39;, class)
+</span><span class="">  443: 
+</span><span class="">  444:     post: self.language == params.language  if language in dom params
+</span><span class="">  445:           self.logger   == params.logger    if logger   in dom params
+</span><span class="">  446:           ref(self)     == &#39;Genealogy::Relationship::Name&#39;
+</span><span class="">  447: 
+</span><span class="">  448: =cut
 </span><span class="">  449: 
-</span><span class="">  450: =head4 Output
-</span><span class="">  451: 
-</span><span class="">  452:     {
-</span><span class="">  453:         type     =&gt; &#39;string&#39;,
-</span><span class="">  454:         optional =&gt; 1,     # undef when the combination is not tabulated
-</span><span class="">  455:     }
+</span><span class="">  450: sub new {
+</span><span class="">  451: 	# Create and return a blessed object
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">452 → 460 → 466</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">452 → 460 → 0</span></span>  452: 	my $class = shift;
+</span><span class="">  453: 
+</span><span class="">  454: 	# Handle hash or hashref arguments
+</span><span class="">  455: 	my $params = Params::Get::get_params(undef, \@_);
 </span><span class="">  456: 
-</span><span class="">  457: =head3 FORMAL SPECIFICATION
-</span><span class="">  458: 
-</span><span class="">  459:     name ______________________________________________________
-</span><span class="">  460:     [In]  steps_to_ancestor   : N0
-</span><span class="">  461:           steps_from_ancestor : N0
-</span><span class="">  462:           sex                 : {M, F}
-</span><span class="">  463:           language            : {en, fr, de}?  (default en)
-</span><span class="">  464:           person              : Object?
-</span><span class="">  465:     [Out] result              : String | undef
-</span><span class="">  466: 
-</span><span class="">  467:     Let key == steps_to_ancestor ++ &quot;,&quot; ++ steps_from_ancestor
-</span><span class="">  468:     Let table == RELATIONSHIP_TABLES(language)(sex)
-</span><span class="">  469:     result == table(key)  if key in dom table
-</span><span class="">  470:            == undef       otherwise
-</span><span class="">  471: 
-</span><span class="">  472: =cut
-</span><span class="">  473: 
-</span><span class="">  474: sub name {
-</span><span class="">  475: 	my $self = shift;
-</span><span class="">  476: 
-</span><span class="">  477: 	# Validate and extract the remaining parameters; capture the return value
-</span><span class="">  478: 	my $args = Params::Validate::Strict::validate_strict(
-</span><span class="">  479: 		args   =&gt; Params::Get::get_params(undef, \@_) || {},
-</span><span class="">  480: 		schema =&gt; {
-</span><span class="">  481: 			steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  482: 			steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  483: 			sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
-</span><span class="">  484: 			language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/,
-</span><span class="">  485: 			                         optional =&gt; 1 },
-</span><span class="">  486: 			person              =&gt; { type =&gt; &#39;object&#39;, optional =&gt; 1 },
-</span><span class="">  487: 		}
-</span><span class="">  488: 	);
-</span><span class="">  489: 
-</span><span class="">  490: 	# Extract individual parameters; undef means arg was not given, so croak
-</span><span class="">  491: 	my $steps1 = $args-&gt;{steps_to_ancestor} // croak(&#39;steps_to_ancestor not given&#39;);
-</span><span class="">  492: 	my $steps2 = $args-&gt;{steps_from_ancestor} // croak(&#39;steps_from_ancestor not given&#39;);
-</span><span class="">  493: 	my $sex    = $args-&gt;{sex} // croak(&#39;sex not given&#39;);
-</span><span class="">  494: 	my $person = $args-&gt;{person};
-</span><span class="">  495: 
-</span><span class="">  496: 	# Fall back to constructor default or hard default if no per-call language given
-</span><span class="">  497: 	my $lang = lc($args-&gt;{language} // $self-&gt;{language} // $DEFAULT_LANGUAGE);
-</span><span class="">  498: 
-</span><span class="">  499: 	# Strip any region subtag (e.g. &#39;en-GB&#39; -&gt; &#39;en&#39;) after lowercasing
-</span><span class="">  500: 	($lang) = split /-/, $lang;
+</span><span class="">  457: 	# Stash keys that are coderefs or objects before passing to Object::Configure,
+</span><span class="">  458: 	# which cannot handle them (it treats unknown scalar values as config file paths)
+</span><span class="">  459: 	my %stash;
+</span><span class="">  460: 	for my $key (qw(logger)) {
+</span><span class="">  461: 		next unless exists $params-&gt;{$key};
+</span><span class="">  462: 		$stash{$key} = delete $params-&gt;{$key};
+</span><span class="">  463: 	}
+</span><span class="">  464: 
+</span><span class="">  465: 	# Load the configuration from a config file, if provided
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">466 → 478 → 0</span></span>  466: 	$params = Object::Configure::configure($class, $params);
+</span><span class="">  467: 
+</span><span class="">  468: 	# Restore the stashed coderefs and objects after configure()
+</span><span class="">  469: 	@{$params}{keys %stash} = values %stash;
+</span><span class="">  470: 
+</span><span class="">  471: 	# Bless and return the object; logger/ctx/level keys from params
+</span><span class="">  472: 	# are stored directly and accessed via $self-&gt;{logger} etc.
+</span><span class="">  473: 	my $self = bless {
+</span><span class="">  474: 		# Store any constructor-time config for Object::Configure compatibility
+</span><span class="">  475: 		%{$params},
+</span><span class="">  476: 	}, ref($class) || $class;
+</span><span class="">  477: 
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  478: 	return $self;
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_478_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_478_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  479: }
+</span><span class="">  480: 
+</span><span class="">  481: # ---------------------------------------------------------------------------
+</span><span class="">  482: # Public method: name()
+</span><span class="">  483: # ---------------------------------------------------------------------------
+</span><span class="">  484: 
+</span><span class="">  485: =head1 METHODS
+</span><span class="">  486: 
+</span><span class="">  487: =head2 name
+</span><span class="">  488: 
+</span><span class="">  489: Returns the name of the relationship between person A and person B.
+</span><span class="">  490: 
+</span><span class="">  491: =head3 PURPOSE
+</span><span class="">  492: 
+</span><span class="">  493: Given the number of steps from person A up to the nearest common ancestor
+</span><span class="">  494: (C&lt;steps_to_ancestor&gt;) and the number of steps from that ancestor down to
+</span><span class="">  495: person B (C&lt;steps_from_ancestor&gt;), plus the sex of person B and a language
+</span><span class="">  496: code, returns a localised relationship-name string.
+</span><span class="">  497: 
+</span><span class="">  498: =head3 ARGUMENTS
+</span><span class="">  499: 
+</span><span class="">  500: =over 4
 </span><span class="">  501: 
-</span><span class="">  502: 	# Build lookup key from the two step counts
-</span><span class="">  503: 	my $key = &quot;${steps1},${steps2}&quot;;
-</span><span class="">  504: 
-</span><span class="">  505: 	# Retrieve the correct gender-specific table for the chosen language
-</span><span class="">  506: 	my $table = $RELATIONSHIP_TABLES{$lang}{$sex};
-</span><span class="">  507: 
-</span><span class="">  508: 	# Look up and return; undef when the combination is not tabulated
-</span><span class="">  509: 	my $result = $table-&gt;{$key};
-</span><span class="">  510: 
-</span><span class="">  511: 	return $result;
-</span><span class="">  512: }
+</span><span class="">  502: =item C&lt;steps_to_ancestor&gt; (integer, required)
+</span><span class="">  503: 
+</span><span class="">  504: Number of generational steps from person A up to the common ancestor.
+</span><span class="">  505: Must be a non-negative integer.  Zero means person A I&lt;is&gt; the ancestor.
+</span><span class="">  506: 
+</span><span class="">  507: =item C&lt;steps_from_ancestor&gt; (integer, required)
+</span><span class="">  508: 
+</span><span class="">  509: Number of generational steps from the common ancestor down to person B.
+</span><span class="">  510: Must be a non-negative integer.
+</span><span class="">  511: 
+</span><span class="">  512: =item C&lt;sex&gt; (string, required)
 </span><span class="">  513: 
-</span><span class="">  514: # ---------------------------------------------------------------------------
-</span><span class="">  515: # Public method: supported_languages()
-</span><span class="">  516: # ---------------------------------------------------------------------------
+</span><span class="">  514: Sex of person B.  Must be C&lt;&#39;M&#39;&gt; (male) or C&lt;&#39;F&#39;&gt; (female).
+</span><span class="">  515: 
+</span><span class="">  516: =item C&lt;language&gt; (string, optional)
 </span><span class="">  517: 
-</span><span class="">  518: =head2 supported_languages
-</span><span class="">  519: 
-</span><span class="">  520: Returns a sorted list of the language codes that the module supports.
-</span><span class="">  521: 
-</span><span class="">  522: =head3 PURPOSE
-</span><span class="">  523: 
-</span><span class="">  524: Allows calling code to enumerate the languages available for C&lt;name()&gt;
-</span><span class="">  525: without hard-coding them.
-</span><span class="">  526: 
-</span><span class="">  527: =head3 ARGUMENTS
+</span><span class="">  518: BCP-47-style language tag (only the primary subtag is used).
+</span><span class="">  519: Supported values: C&lt;en&gt; (default), C&lt;fr&gt;, C&lt;de&gt;.
+</span><span class="">  520: 
+</span><span class="">  521: =item C&lt;person&gt; (object, optional)
+</span><span class="">  522: 
+</span><span class="">  523: An optional person object (e.g. a C&lt;Gedcom::Individual&gt; instance) passed
+</span><span class="">  524: through to the error handler when an error occurs.  Takes priority over the
+</span><span class="">  525: C&lt;ctx&gt; set at construction time.  The handler receives it as C&lt;ctx&gt; (logger
+</span><span class="">  526: path) or C&lt;person&gt; (on_error path), matching the C&lt;complain()&gt; interface
+</span><span class="">  527: in C&lt;gedcom&gt;/C&lt;ged2site&gt;.
 </span><span class="">  528: 
-</span><span class="">  529: None.
+</span><span class="">  529: =back
 </span><span class="">  530: 
 </span><span class="">  531: =head3 RETURNS
 </span><span class="">  532: 
-</span><span class="">  533: A list (or array-ref in scalar context) of language code strings,
-</span><span class="">  534: currently C&lt;(&#39;de&#39;, &#39;en&#39;, &#39;fr&#39;)&gt;.
+</span><span class="">  533: A string containing the relationship name, or C&lt;undef&gt; if the combination
+</span><span class="">  534: is not found in the lookup table.
 </span><span class="">  535: 
 </span><span class="">  536: =head3 EXAMPLE
 </span><span class="">  537: 
-</span><span class="">  538:     my @langs = $namer-&gt;supported_languages();
-</span><span class="">  539:     # ( &#39;de&#39;, &#39;en&#39;, &#39;fr&#39; )
-</span><span class="">  540: 
-</span><span class="">  541: =head3 API SPECIFICATION
-</span><span class="">  542: 
-</span><span class="">  543: =head4 Input
-</span><span class="">  544: 
-</span><span class="">  545:     {}   # no arguments
-</span><span class="">  546: 
-</span><span class="">  547: =head4 Output
-</span><span class="">  548: 
-</span><span class="">  549:     {
-</span><span class="">  550:         type =&gt; ARRAYREF,   # sorted list of language codes
-</span><span class="">  551:     }
-</span><span class="">  552: 
-</span><span class="">  553: =head3 FORMAL SPECIFICATION
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  554: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_554_2: Invert condition unless to if</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  555:     supported_languages ______________________________________
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_555_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_555_3: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  556:     [In]  (none)
-</span><span class="">  557:     [Out] result : seq String
-</span><span class="">  558: 
-</span><span class="">  559:     result == sort(dom RELATIONSHIP_TABLES)
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  560: 
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_560_2: Invert condition unless to if</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  561: =cut
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_561_3: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_561_3: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  562: 
-</span><span class="">  563: sub supported_languages {
-</span><span class="">  564: 	# Return the sorted set of keys from the master dispatch table
-</span><span class="">  565: 	my @langs = sort keys %RELATIONSHIP_TABLES;
-</span><span class="">  566: 	return wantarray ? @langs : \@langs;
-</span><span class="">  567: }
+</span><span class="">  538:     my $namer = Genealogy::Relationship::Name-&gt;new();
+</span><span class="">  539: 
+</span><span class="">  540:     # Person A is the grandparent (2 steps up) of the common ancestor,
+</span><span class="">  541:     # and person B is 3 steps below the ancestor; B is female =&gt; first cousin once-removed
+</span><span class="">  542:     my $rel = $namer-&gt;name(
+</span><span class="">  543:         steps_to_ancestor   =&gt; 2,
+</span><span class="">  544:         steps_from_ancestor =&gt; 3,
+</span><span class="">  545:         sex                 =&gt; &#39;F&#39;,
+</span><span class="">  546:     );
+</span><span class="">  547: 
+</span><span class="">  548: =head3 API SPECIFICATION
+</span><span class="">  549: 
+</span><span class="">  550: =head4 Input
+</span><span class="">  551: 
+</span><span class="">  552:     {
+</span><span class="">  553: 	steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class="">  554: 	steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class="">  555: 	sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
+</span><span class="">  556: 	language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/, optional =&gt; 1 },
+</span><span class="">  557: 	# person is extracted before validate_strict to avoid PVS inferring constraints
+</span><span class="">  558:     }
+</span><span class="">  559: 
+</span><span class="">  560: =head4 Output
+</span><span class="">  561: 
+</span><span class="">  562:     {
+</span><span class="">  563:         type     =&gt; &#39;string&#39;,
+</span><span class="">  564:         optional =&gt; 1,     # undef when the combination is not tabulated
+</span><span class="">  565:     }
+</span><span class="">  566: 
+</span><span class="">  567: =head3 FORMAL SPECIFICATION
 </span><span class="">  568: 
-</span><span class="">  569: # ---------------------------------------------------------------------------
-</span><span class="">  570: # Public method: known_sexes()
-</span><span class="">  571: # ---------------------------------------------------------------------------
-</span><span class="">  572: 
-</span><span class="">  573: =head2 known_sexes
-</span><span class="">  574: 
-</span><span class="">  575: Returns the list of sex codes accepted by C&lt;name()&gt;.
+</span><span class="">  569:     name ______________________________________________________
+</span><span class="">  570:     [In]  steps_to_ancestor   : N0
+</span><span class="">  571:           steps_from_ancestor : N0
+</span><span class="">  572:           sex                 : {M, F}
+</span><span class="">  573:           language            : {en, fr, de}?  (default en)
+</span><span class="">  574:           person              : Object?
+</span><span class="">  575:     [Out] result              : String | undef
 </span><span class="">  576: 
-</span><span class="">  577: =head3 PURPOSE
-</span><span class="">  578: 
-</span><span class="">  579: Documents and exposes the set of valid C&lt;sex&gt; values so that callers can
-</span><span class="">  580: validate their own input without duplicating knowledge.
+</span><span class="">  577:     Let key == steps_to_ancestor ++ &quot;,&quot; ++ steps_from_ancestor
+</span><span class="">  578:     Let table == RELATIONSHIP_TABLES(language)(sex)
+</span><span class="">  579:     result == table(key)  if key in dom table
+</span><span class="">  580:            == undef       otherwise
 </span><span class="">  581: 
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  582: =head3 ARGUMENTS
+</span><span class="">  582: =cut
+</span><span class="">  583: 
+</span><span class="">  584: sub name {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">585 → 601 → 611</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">585 → 601 → 0</span></span>  585: 	my $self = shift;
+</span><span class="">  586: 
+</span><span class="">  587: 	# Validate and extract the remaining parameters; capture the return value
+</span><span class="">  588: 	my $args = Params::Validate::Strict::validate_strict(
+</span><span class="">  589: 		args   =&gt; Params::Get::get_params(undef, \@_) || {},
+</span><span class="">  590: 		schema =&gt; {
+</span><span class="">  591: 			steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class="">  592: 			steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class="">  593: 			sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
+</span><span class="">  594: 			language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/,
+</span><span class="">  595: 			                         optional =&gt; 1 },
+</span><span class="">  596: 			person              =&gt; { type =&gt; &#39;object&#39;, optional =&gt; 1 },
+</span><span class="">  597: 		}
+</span><span class="">  598: 	);
+</span><span class="">  599: 
+</span><span class="">  600: 	# Extract individual parameters; undef means arg was not given, so croak
+</span><span class="">  601: 	foreach my $arg(&#39;steps_to_ancestor&#39;, &#39;steps_from_ancestor&#39;, &#39;sex&#39;) {
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  602: 		if(!defined($args-&gt;{$arg})) {
 </span>
 					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_582_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_582_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  583: 
-</span><span class="">  584: None.
-</span><span class="">  585: 
-</span><span class="">  586: =head3 RETURNS
-</span><span class="">  587: 
-</span><span class="">  588: A list (or array-ref in scalar context) of valid sex code strings: C&lt;(&#39;F&#39;, &#39;M&#39;)&gt;.
-</span><span class="">  589: 
-</span><span class="">  590: =head3 SIDE EFFECTS
-</span><span class="">  591: 
-</span><span class="">  592: None.
-</span><span class="">  593: 
-</span><span class="">  594: =head3 EXAMPLE
-</span><span class="">  595: 
-</span><span class="">  596:     my @sexes = $namer-&gt;known_sexes();
-</span><span class="">  597:     # ( &#39;F&#39;, &#39;M&#39; )
-</span><span class="">  598: 
-</span><span class="">  599: =head3 API SPECIFICATION
-</span><span class="">  600: 
-</span><span class="">  601: =head4 Input
-</span><span class="">  602: 
-</span><span class="">  603:     {}   # no arguments
-</span><span class="">  604: 
-</span><span class="">  605: =head4 Output
-</span><span class="">  606: 
-</span><span class="">  607:     {
-</span><span class="">  608:         type =&gt; ARRAYREF,
-</span><span class="">  609:     }
+				<li><b>COND_INV_602_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  603: 			if(my $logger = $self-&gt;{logger}) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_603_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="">  604: 				$logger-&gt;error(&quot;$arg not given&quot;);
+</span><span class="">  605: 			} else {
+</span><span class="">  606: 				croak(&quot;$arg not given&quot;);
+</span><span class="">  607: 			}
+</span><span class="">  608: 		}
+</span><span class="">  609: 	}
 </span><span class="">  610: 
-</span><span class="">  611: =head3 FORMAL SPECIFICATION
-</span><span class="">  612: 
-</span><span class="">  613:     known_sexes ______________________________________________
-</span><span class="">  614:     [In]  (none)
-</span><span class="">  615:     [Out] result : seq String
-</span><span class="">  616: 
-</span><span class="">  617:     result == sort { $SEX_FEMALE, $SEX_MALE }
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">611 → 631 → 0</span></span>  611: 	my $steps1 = $args-&gt;{steps_to_ancestor} // croak(&#39;steps_to_ancestor not given&#39;);
+</span><span class="">  612: 	my $steps2 = $args-&gt;{steps_from_ancestor} // croak(&#39;steps_from_ancestor not given&#39;);
+</span><span class="">  613: 	my $sex    = $args-&gt;{sex} // croak(&#39;sex not given&#39;);
+</span><span class="">  614: 	my $person = $args-&gt;{person};
+</span><span class="">  615: 
+</span><span class="">  616: 	# Fall back to the constructor default or hard default if no per-call language given
+</span><span class="">  617: 	my $lang = lc($args-&gt;{language} // $self-&gt;{language} // $DEFAULT_LANGUAGE);
 </span><span class="">  618: 
-</span><span class="">  619: =cut
-</span><span class="">  620: 
-</span><span class="">  621: sub known_sexes {
-</span><span class="">  622: 	# Return the two valid sex codes in sorted order
-</span><span class="">  623: 	my @sexes = sort($SEX_FEMALE, $SEX_MALE);
-</span><span class="">  624: 	return wantarray ? @sexes : \@sexes;
-</span><span class="">  625: }
-</span><span class="">  626: 
-</span><span class="">  627: 1;
-</span><span class="">  628: 
-</span><span class="">  629: __END__
+</span><span class="">  619: 	# Strip any region subtag (e.g. &#39;en-GB&#39; -&gt; &#39;en&#39;) after lowercasing
+</span><span class="">  620: 	($lang) = split /-/, $lang;
+</span><span class="">  621: 
+</span><span class="">  622: 	# Build lookup key from the two-step counts
+</span><span class="">  623: 	my $key = &quot;${steps1},${steps2}&quot;;
+</span><span class="">  624: 
+</span><span class="">  625: 	# Retrieve the correct gender-specific table for the chosen language
+</span><span class="">  626: 	my $table = $RELATIONSHIP_TABLES{$lang}{$sex};
+</span><span class="">  627: 
+</span><span class="">  628: 	# Look up and return; undef when the combination is not tabulated
+</span><span class="">  629: 	my $result = $table-&gt;{$key};
 </span><span class="">  630: 
-</span><span class="">  631: =head1 CONFIGURATION
-</span><span class="">  632: 
-</span><span class="">  633: The constructor accepts an optional C&lt;language&gt; key which sets the default
-</span><span class="">  634: language for all subsequent calls to C&lt;name()&gt;:
-</span><span class="">  635: 
-</span><span class="">  636:     my $namer = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;fr&#39;);
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  637: 
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  631: 	return $result;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_637_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_631_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -1101,7 +966,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_637_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
+							</li><li><b>RETURN_UNDEF_631_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -1110,69 +975,66 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  638: This default can be overridden per-call by passing C&lt;language&gt; to C&lt;name()&gt;.
-</span><span class="">  639: The object is also compatible with C&lt;Object::Configure&gt; for runtime
-</span><span class="">  640: reconfiguration.
+<span class="">  632: }
+</span><span class="">  633: 
+</span><span class="">  634: # ---------------------------------------------------------------------------
+</span><span class="">  635: # Public method: supported_languages()
+</span><span class="">  636: # ---------------------------------------------------------------------------
+</span><span class="">  637: 
+</span><span class="">  638: =head2 supported_languages
+</span><span class="">  639: 
+</span><span class="">  640: Returns a sorted list of the language codes that the module supports.
 </span><span class="">  641: 
-</span><span class="">  642: =head2 Error handling
+</span><span class="">  642: =head3 PURPOSE
 </span><span class="">  643: 
-</span><span class="">  644: Errors are dispatched through the following priority chain:
-</span><span class="">  645: 
-</span><span class="">  646: =over 4
-</span><span class="">  647: 
-</span><span class="">  648: =item 1. L&lt;Log::Abstraction&gt; object (preferred)
-</span><span class="">  649: 
-</span><span class="">  650: Construct a C&lt;Log::Abstraction&gt; object with the desired logger coderef and
-</span><span class="">  651: C&lt;ctx&gt; (typically a C&lt;Gedcom::Individual&gt;), then pass it as C&lt;logger&gt; to
-</span><span class="">  652: C&lt;new()&gt;.  On error, this module simply calls C&lt;&lt; $logger-&gt;error($msg) &gt;&gt;
-</span><span class="">  653: and Log::Abstraction handles ctx forwarding, formatting, and dispatch.
-</span><span class="">  654: 
-</span><span class="">  655:     use Log::Abstraction;
-</span><span class="">  656: 
-</span><span class="">  657:     my $logger = Log::Abstraction-&gt;new(
-</span><span class="">  658:         logger =&gt; sub {
-</span><span class="">  659:             my $args = shift;
-</span><span class="">  660:             my $msg = $args-&gt;{ctx}
-</span><span class="">  661:                 ? $args-&gt;{ctx}-&gt;as_string() . &#39;: &#39; . join(&#39;&#39;, @{$args-&gt;{message}})
-</span><span class="">  662:                 : join(&#39;&#39;, @{$args-&gt;{message}});
-</span><span class="">  663:             complain({ message =&gt; $msg, person =&gt; $args-&gt;{ctx} });
-</span><span class="">  664:         },
-</span><span class="">  665:         ctx =&gt; $individual,
-</span><span class="">  666:     );
-</span><span class="">  667: 
-</span><span class="">  668:     my $namer = Genealogy::Relationship::Name-&gt;new(logger =&gt; $logger);
-</span><span class="">  669: 
-</span><span class="">  670: =item 2. C&lt;on_error&gt; coderef
-</span><span class="">  671: 
-</span><span class="">  672: A simpler fallback for callers not using L&lt;Log::Abstraction&gt;.  The coderef
-</span><span class="">  673: is called with a flat hash matching the C&lt;complain()&gt; interface in
-</span><span class="">  674: C&lt;gedcom&gt;/C&lt;ged2site&gt;: C&lt;warning =E&lt;gt&gt; $msg, person =E&lt;gt&gt; $person&gt;.
-</span><span class="">  675: C&lt;person&gt; is resolved from the per-call C&lt;name()&gt; C&lt;person&gt; argument first,
-</span><span class="">  676: then from the constructor C&lt;ctx&gt;.
-</span><span class="">  677: 
-</span><span class="">  678:     my $namer = Genealogy::Relationship::Name-&gt;new(
-</span><span class="">  679:         on_error =&gt; sub {
-</span><span class="">  680:             my %args = @_;
-</span><span class="">  681:             complain(warning =&gt; $args{warning}, person =&gt; $args{person});
-</span><span class="">  682:         },
-</span><span class="">  683:     );
-</span><span class="">  684: 
-</span><span class="">  685: =item 3. C&lt;croak&gt; (default)
-</span><span class="">  686: 
-</span><span class="">  687: When neither C&lt;logger&gt; nor C&lt;on_error&gt; is set, errors croak normally.
-</span><span class="">  688: 
-</span><span class="">  689: =back
-</span><span class="">  690: 
-</span><span class="">  691: If any handler returns without dying (e.g. a warning-only handler in
-</span><span class="">  692: L&lt;Log::Abstraction&gt;), C&lt;name()&gt; returns C&lt;undef&gt;.
-</span><span class="">  693: 
-</span><span class="">  694: =head1 DIAGNOSTICS
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  695: 
+</span><span class="">  644: Allows calling code to enumerate the languages available for C&lt;name()&gt;
+</span><span class="">  645: without hard-coding them.
+</span><span class="">  646: 
+</span><span class="">  647: =head3 ARGUMENTS
+</span><span class="">  648: 
+</span><span class="">  649: None.
+</span><span class="">  650: 
+</span><span class="">  651: =head3 RETURNS
+</span><span class="">  652: 
+</span><span class="">  653: A list (or array-ref in scalar context) of language code strings,
+</span><span class="">  654: currently C&lt;(&#39;de&#39;, &#39;en&#39;, &#39;fr&#39;)&gt;.
+</span><span class="">  655: 
+</span><span class="">  656: =head3 EXAMPLE
+</span><span class="">  657: 
+</span><span class="">  658:     my @langs = $namer-&gt;supported_languages();
+</span><span class="">  659:     # ( &#39;de&#39;, &#39;en&#39;, &#39;fr&#39; )
+</span><span class="">  660: 
+</span><span class="">  661: =head3 API SPECIFICATION
+</span><span class="">  662: 
+</span><span class="">  663: =head4 Input
+</span><span class="">  664: 
+</span><span class="">  665:     {}   # no arguments
+</span><span class="">  666: 
+</span><span class="">  667: =head4 Output
+</span><span class="">  668: 
+</span><span class="">  669:     {
+</span><span class="">  670:         type =&gt; ARRAYREF,   # sorted list of language codes
+</span><span class="">  671:     }
+</span><span class="">  672: 
+</span><span class="">  673: =head3 FORMAL SPECIFICATION
+</span><span class="">  674: 
+</span><span class="">  675:     supported_languages ______________________________________
+</span><span class="">  676:     [In]  (none)
+</span><span class="">  677:     [Out] result : seq String
+</span><span class="">  678: 
+</span><span class="">  679:     result == sort(dom RELATIONSHIP_TABLES)
+</span><span class="">  680: 
+</span><span class="">  681: =cut
+</span><span class="">  682: 
+</span><span class="">  683: sub supported_languages {
+</span><span class="">  684: 	# Return the sorted set of keys from the master dispatch table
+</span><span class="">  685: 	my @langs = sort keys %RELATIONSHIP_TABLES;
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  686: 	return wantarray ? @langs : \@langs;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_695_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_686_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -1180,7 +1042,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_695_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
+							</li><li><b>RETURN_UNDEF_686_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -1189,106 +1051,233 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class="">  696: =over 4
-</span><span class="">  697: 
-</span><span class="">  698: =item on_error must be a CODE reference
-</span><span class="">  699: 
-</span><span class="">  700: C&lt;on_error&gt; was passed to C&lt;new()&gt; but is not a code reference.
+<span class="">  687: }
+</span><span class="">  688: 
+</span><span class="">  689: # ---------------------------------------------------------------------------
+</span><span class="">  690: # Public method: known_sexes()
+</span><span class="">  691: # ---------------------------------------------------------------------------
+</span><span class="">  692: 
+</span><span class="">  693: =head2 known_sexes
+</span><span class="">  694: 
+</span><span class="">  695: Returns the list of sex codes accepted by C&lt;name()&gt;.
+</span><span class="">  696: 
+</span><span class="">  697: =head3 PURPOSE
+</span><span class="">  698: 
+</span><span class="">  699: Documents and exposes the set of valid C&lt;sex&gt; values so that callers can
+</span><span class="">  700: validate their own input without duplicating knowledge.
 </span><span class="">  701: 
-</span><span class="">  702: =item steps_to_ancestor not given
+</span><span class="">  702: =head3 ARGUMENTS
 </span><span class="">  703: 
-</span><span class="">  704: C&lt;steps_to_ancestor&gt; was passed as C&lt;undef&gt;. Passing C&lt;undef&gt; explicitly is
-</span><span class="">  705: distinct from omitting the argument; use a defined non-negative integer.
-</span><span class="">  706: 
-</span><span class="">  707: =item steps_from_ancestor not given
-</span><span class="">  708: 
-</span><span class="">  709: As above, for C&lt;steps_from_ancestor&gt;.
-</span><span class="">  710: 
-</span><span class="">  711: =item sex not given
-</span><span class="">  712: 
-</span><span class="">  713: C&lt;sex&gt; was passed as C&lt;undef&gt;. Supply C&lt;&#39;M&#39;&gt; or C&lt;&#39;F&#39;&gt;.
-</span><span class="">  714: 
-</span><span class="">  715: =back
-</span><span class="">  716: 
-</span><span class="">  717: =head1 DEPENDENCIES
+</span><span class="">  704: None.
+</span><span class="">  705: 
+</span><span class="">  706: =head3 RETURNS
+</span><span class="">  707: 
+</span><span class="">  708: A list (or array-ref in scalar context) of valid sex code strings: C&lt;(&#39;F&#39;, &#39;M&#39;)&gt;.
+</span><span class="">  709: 
+</span><span class="">  710: =head3 SIDE EFFECTS
+</span><span class="">  711: 
+</span><span class="">  712: None.
+</span><span class="">  713: 
+</span><span class="">  714: =head3 EXAMPLE
+</span><span class="">  715: 
+</span><span class="">  716:     my @sexes = $namer-&gt;known_sexes();
+</span><span class="">  717:     # ( &#39;F&#39;, &#39;M&#39; )
 </span><span class="">  718: 
-</span><span class="">  719: L&lt;Carp&gt;, L&lt;Object::Configure&gt;
+</span><span class="">  719: =head3 API SPECIFICATION
 </span><span class="">  720: 
-</span><span class="">  721: Optionally L&lt;Log::Abstraction&gt; (E&lt;gt&gt;= 0.28) for the C&lt;logger&gt;/C&lt;ctx&gt; error
-</span><span class="">  722: dispatch path.
-</span><span class="">  723: L&lt;Params::Get&gt;, L&lt;Params::Validate::Strict&gt;, L&lt;Readonly&gt;
+</span><span class="">  721: =head4 Input
+</span><span class="">  722: 
+</span><span class="">  723:     {}   # no arguments
 </span><span class="">  724: 
-</span><span class="">  725: =head1 BUGS AND LIMITATIONS
+</span><span class="">  725: =head4 Output
 </span><span class="">  726: 
-</span><span class="">  727: The lookup tables currently cover steps 0-6 in both directions.  Relationships
-</span><span class="">  728: further removed (seventh cousin, etc.) return C&lt;undef&gt;.  Pull requests adding
-</span><span class="">  729: deeper tables are welcome.
+</span><span class="">  727:     {
+</span><span class="">  728:         type =&gt; ARRAYREF,
+</span><span class="">  729:     }
 </span><span class="">  730: 
-</span><span class="">  731: =head1 SEE ALSO
+</span><span class="">  731: =head3 FORMAL SPECIFICATION
 </span><span class="">  732: 
-</span><span class="">  733: =over 4
-</span><span class="">  734: 
-</span><span class="">  735: =item * L&lt;Configure an Object at Runtime|Object::Configure&gt;
+</span><span class="">  733:     known_sexes ______________________________________________
+</span><span class="">  734:     [In]  (none)
+</span><span class="">  735:     [Out] result : seq String
 </span><span class="">  736: 
-</span><span class="">  737: =item * L&lt;Test Dashboard|https://nigelhorne.github.io/Genealogy-Relationship-Name/coverage/&gt;
+</span><span class="">  737:     result == sort { $SEX_FEMALE, $SEX_MALE }
 </span><span class="">  738: 
-</span><span class="">  739: =item * L&lt;Gedcom::Individual&gt;, L&lt;Genealogy::Relationship&gt;
+</span><span class="">  739: =cut
 </span><span class="">  740: 
-</span><span class="">  741: =back
-</span><span class="">  742: 
-</span><span class="">  743: =head1 AUTHOR
-</span><span class="">  744: 
-</span><span class="">  745: Nigel Horne C&lt;&lt; &lt;njh@nigelhorne.com&gt; &gt;&gt;
+</span><span class="">  741: sub known_sexes {
+</span><span class="">  742: 	# Return the two valid sex codes in sorted order
+</span><span class="">  743: 	my @sexes = sort($SEX_FEMALE, $SEX_MALE);
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  744: 	return wantarray ? @sexes : \@sexes;
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_744_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_744_2: Replace return expression with undef</b><br>LOW: Mutation survived but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class="">  745: }
 </span><span class="">  746: 
-</span><span class="">  747: =head1 REPOSITORY
+</span><span class="">  747: 1;
 </span><span class="">  748: 
-</span><span class="">  749: L&lt;https://github.com/nigelhorne/Genealogy-Relationship-Name&gt;
+</span><span class="">  749: __END__
 </span><span class="">  750: 
-</span><span class="">  751: =head1 SUPPORT
+</span><span class="">  751: =head1 CONFIGURATION
 </span><span class="">  752: 
-</span><span class="">  753: This module is provided as-is without any warranty.
-</span><span class="">  754: 
-</span><span class="">  755: Please report any bugs or feature requests to C&lt;bug-genealogy-relationship-name at rt.cpan.org&gt;,
-</span><span class="">  756: or through the web interface at
-</span><span class="">  757: L&lt;http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name&gt;.
-</span><span class="">  758: I will be notified, and then you&#39;ll
-</span><span class="">  759: automatically be notified of progress on your bug as I make changes.
-</span><span class="">  760: 
-</span><span class="">  761: You can find documentation for this module with the perldoc command.
-</span><span class="">  762: 
-</span><span class="">  763:     perldoc Genealogy::Relationship::Name
-</span><span class="">  764: 
-</span><span class="">  765: You can also look for information at:
-</span><span class="">  766: 
-</span><span class="">  767: =over 4
-</span><span class="">  768: 
-</span><span class="">  769: =item * MetaCPAN
-</span><span class="">  770: 
-</span><span class="">  771: L&lt;https://metacpan.org/dist/Genealogy-Relationship-Name&gt;
-</span><span class="">  772: 
-</span><span class="">  773: =item * RT: CPAN&#39;s request tracker
+</span><span class="">  753: The constructor accepts an optional C&lt;language&gt; key which sets the default
+</span><span class="">  754: language for all subsequent calls to C&lt;name()&gt;:
+</span><span class="">  755: 
+</span><span class="">  756:     my $namer = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;fr&#39;);
+</span><span class="">  757: 
+</span><span class="">  758: This default can be overridden per-call by passing C&lt;language&gt; to C&lt;name()&gt;.
+</span><span class="">  759: The object is also compatible with C&lt;Object::Configure&gt; for runtime
+</span><span class="">  760: reconfiguration.
+</span><span class="">  761: 
+</span><span class="">  762: =head2 Error handling
+</span><span class="">  763: 
+</span><span class="">  764: Errors are dispatched through the following priority chain:
+</span><span class="">  765: 
+</span><span class="">  766: =over 4
+</span><span class="">  767: 
+</span><span class="">  768: =item 1. L&lt;Log::Abstraction&gt; object (preferred)
+</span><span class="">  769: 
+</span><span class="">  770: Construct a C&lt;Log::Abstraction&gt; object with the desired logger coderef and
+</span><span class="">  771: C&lt;ctx&gt; (typically a C&lt;Gedcom::Individual&gt;), then pass it as C&lt;logger&gt; to
+</span><span class="">  772: C&lt;new()&gt;.  On error, this module simply calls C&lt;&lt; $logger-&gt;error($msg) &gt;&gt;
+</span><span class="">  773: and Log::Abstraction handles ctx forwarding, formatting, and dispatch.
 </span><span class="">  774: 
-</span><span class="">  775: L&lt;https://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-Relationship-Name&gt;
+</span><span class="">  775:     use Log::Abstraction;
 </span><span class="">  776: 
-</span><span class="">  777: =item * CPAN Testers&#39; Matrix
-</span><span class="">  778: 
-</span><span class="">  779: L&lt;http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name&gt;
-</span><span class="">  780: 
-</span><span class="">  781: =item * CPAN Testers Dependencies
-</span><span class="">  782: 
-</span><span class="">  783: L&lt;http://deps.cpantesters.org/?module=Genealogy::Relationship::Name&gt;
-</span><span class="">  784: 
-</span><span class="">  785: =back
-</span><span class="">  786: 
-</span><span class="">  787: =head1 LICENCE AND COPYRIGHT
-</span><span class="">  788: 
-</span><span class="">  789: Copyright 2026 Nigel Horne.
-</span><span class="">  790: 
-</span><span class="">  791: Usage is subject to the GPL2 licence terms.
-</span><span class="">  792: If you use it,
-</span><span class="">  793: please let me know.
+</span><span class="">  777:     my $logger = Log::Abstraction-&gt;new(
+</span><span class="">  778:         logger =&gt; sub {
+</span><span class="">  779:             my $args = shift;
+</span><span class="">  780:             my $msg = $args-&gt;{ctx}
+</span><span class="">  781:                 ? $args-&gt;{ctx}-&gt;as_string() . &#39;: &#39; . join(&#39;&#39;, @{$args-&gt;{message}})
+</span><span class="">  782:                 : join(&#39;&#39;, @{$args-&gt;{message}});
+</span><span class="">  783:             complain({ message =&gt; $msg, person =&gt; $args-&gt;{ctx} });
+</span><span class="">  784:         },
+</span><span class="">  785:         ctx =&gt; $individual,
+</span><span class="">  786:     );
+</span><span class="">  787: 
+</span><span class="">  788:     my $namer = Genealogy::Relationship::Name-&gt;new(logger =&gt; $logger);
+</span><span class="">  789: 
+</span><span class="">  790: =back
+</span><span class="">  791: 
+</span><span class="">  792: If any handler returns without dying (e.g. a warning-only handler in
+</span><span class="">  793: L&lt;Log::Abstraction&gt;), C&lt;name()&gt; returns C&lt;undef&gt;.
 </span><span class="">  794: 
-</span><span class="">  795: =cut
+</span><span class="">  795: =head1 DIAGNOSTICS
+</span><span class="">  796: 
+</span><span class="">  797: =over 4
+</span><span class="">  798: 
+</span><span class="">  799: =item steps_to_ancestor not given
+</span><span class="">  800: 
+</span><span class="">  801: C&lt;steps_to_ancestor&gt; was passed as C&lt;undef&gt;. Passing C&lt;undef&gt; explicitly is
+</span><span class="">  802: distinct from omitting the argument; use a defined non-negative integer.
+</span><span class="">  803: 
+</span><span class="">  804: =item steps_from_ancestor not given
+</span><span class="">  805: 
+</span><span class="">  806: As above, for C&lt;steps_from_ancestor&gt;.
+</span><span class="">  807: 
+</span><span class="">  808: =item sex not given
+</span><span class="">  809: 
+</span><span class="">  810: C&lt;sex&gt; was passed as C&lt;undef&gt;. Supply C&lt;&#39;M&#39;&gt; or C&lt;&#39;F&#39;&gt;.
+</span><span class="">  811: 
+</span><span class="">  812: =back
+</span><span class="">  813: 
+</span><span class="">  814: =head1 DEPENDENCIES
+</span><span class="">  815: 
+</span><span class="">  816: L&lt;Carp&gt;, L&lt;Object::Configure&gt;
+</span><span class="">  817: 
+</span><span class="">  818: Optionally L&lt;Log::Abstraction&gt; (E&lt;gt&gt;= 0.28) for the C&lt;logger&gt;/C&lt;ctx&gt; error
+</span><span class="">  819: dispatch path.
+</span><span class="">  820: L&lt;Params::Get&gt;, L&lt;Params::Validate::Strict&gt;, L&lt;Readonly&gt;
+</span><span class="">  821: 
+</span><span class="">  822: =head1 BUGS AND LIMITATIONS
+</span><span class="">  823: 
+</span><span class="">  824: The lookup tables currently cover steps 0-6 in both directions.  Relationships
+</span><span class="">  825: further removed (seventh cousin, etc.) return C&lt;undef&gt;.  Pull requests adding
+</span><span class="">  826: deeper tables are welcome.
+</span><span class="">  827: 
+</span><span class="">  828: =head1 SEE ALSO
+</span><span class="">  829: 
+</span><span class="">  830: =over 4
+</span><span class="">  831: 
+</span><span class="">  832: =item * L&lt;Configure an Object at Runtime|Object::Configure&gt;
+</span><span class="">  833: 
+</span><span class="">  834: =item * L&lt;Test Dashboard|https://nigelhorne.github.io/Genealogy-Relationship-Name/coverage/&gt;
+</span><span class="">  835: 
+</span><span class="">  836: =item * L&lt;Gedcom::Individual&gt;, L&lt;Genealogy::Relationship&gt;
+</span><span class="">  837: 
+</span><span class="">  838: =back
+</span><span class="">  839: 
+</span><span class="">  840: =head1 AUTHOR
+</span><span class="">  841: 
+</span><span class="">  842: Nigel Horne C&lt;&lt; &lt;njh@nigelhorne.com&gt; &gt;&gt;
+</span><span class="">  843: 
+</span><span class="">  844: =head1 REPOSITORY
+</span><span class="">  845: 
+</span><span class="">  846: L&lt;https://github.com/nigelhorne/Genealogy-Relationship-Name&gt;
+</span><span class="">  847: 
+</span><span class="">  848: =head1 SUPPORT
+</span><span class="">  849: 
+</span><span class="">  850: This module is provided as-is without any warranty.
+</span><span class="">  851: 
+</span><span class="">  852: Please report any bugs or feature requests to C&lt;bug-genealogy-relationship-name at rt.cpan.org&gt;,
+</span><span class="">  853: or through the web interface at
+</span><span class="">  854: L&lt;http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name&gt;.
+</span><span class="">  855: I will be notified, and then you&#39;ll
+</span><span class="">  856: automatically be notified of progress on your bug as I make changes.
+</span><span class="">  857: 
+</span><span class="">  858: You can find documentation for this module with the perldoc command.
+</span><span class="">  859: 
+</span><span class="">  860:     perldoc Genealogy::Relationship::Name
+</span><span class="">  861: 
+</span><span class="">  862: You can also look for information at:
+</span><span class="">  863: 
+</span><span class="">  864: =over 4
+</span><span class="">  865: 
+</span><span class="">  866: =item * MetaCPAN
+</span><span class="">  867: 
+</span><span class="">  868: L&lt;https://metacpan.org/dist/Genealogy-Relationship-Name&gt;
+</span><span class="">  869: 
+</span><span class="">  870: =item * RT: CPAN&#39;s request tracker
+</span><span class="">  871: 
+</span><span class="">  872: L&lt;https://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-Relationship-Name&gt;
+</span><span class="">  873: 
+</span><span class="">  874: =item * CPAN Testers&#39; Matrix
+</span><span class="">  875: 
+</span><span class="">  876: L&lt;http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name&gt;
+</span><span class="">  877: 
+</span><span class="">  878: =item * CPAN Testers Dependencies
+</span><span class="">  879: 
+</span><span class="">  880: L&lt;http://deps.cpantesters.org/?module=Genealogy::Relationship::Name&gt;
+</span><span class="">  881: 
+</span><span class="">  882: =back
+</span><span class="">  883: 
+</span><span class="">  884: =head1 LICENCE AND COPYRIGHT
+</span><span class="">  885: 
+</span><span class="">  886: Copyright 2026 Nigel Horne.
+</span><span class="">  887: 
+</span><span class="">  888: Usage is subject to the GPL2 licence terms.
+</span><span class="">  889: If you use it,
+</span><span class="">  890: please let me know.
+</span><span class="">  891: 
+</span><span class="">  892: =cut
 </span></pre>
 
 <script>
