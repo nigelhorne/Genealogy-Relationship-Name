@@ -1,13 +1,17 @@
 Revision history for Genealogy::Relationship::Name
 
-0.02
+0.02	Fri May 15 20:25:51 EDT 2026
 
   [Enhancements]
 
-   - Added logger+ctx error dispatch (Log::Abstraction >= 0.28) as primary handler
-   - on_error coderef retained as secondary handler for non-Log::Abstraction callers
-   - per-call person arg to name() overrides constructor ctx in error dispatch
-   - Updated POD CONFIGURATION section to document three-level error priority chain
+  - Added logger arg to new(): accepts a Log::Abstraction object for better logging
+  - name() gains optional person arg (Log::Abstraction object); explicit
+    undef on required args now routes through logger->error() if set,
+    otherwise croaks with "$arg not given"
+  - Removed on_error coderef interface (superseded by Log::Abstraction)
+  - Removed internal _error() helper (no longer needed)
+  - Added full POD for new() including API spec and Z-calculus formal spec
+  - Object::Configure stash/restore pattern documented in new() POD
 
 0.01	Thu May 14 14:02:44 EDT 2026
       - Initial release; extracted en/fr/de relationship tables from gedcom/ged2site

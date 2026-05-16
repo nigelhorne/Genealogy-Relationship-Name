@@ -69,3 +69,4 @@ schemas\.yml$
 Genealogy-.*
 .test-script-*
 typescript
+mutation.json
