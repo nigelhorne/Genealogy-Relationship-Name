@@ -13,7 +13,7 @@ use autodie qw(:all);
 use Carp qw(croak carp);
 use Object::Configure;
 use Params::Get;
-use Params::Validate::Strict;
+use Params::Validate::Strict 0.31;
 use Readonly;
 
 our $VERSION = '0.02';
@@ -470,12 +470,10 @@ sub new {
 
 	# Bless and return the object; logger/ctx/level keys from params
 	# are stored directly and accessed via $self->{logger} etc.
-	my $self = bless {
+	return bless {
 		# Store any constructor-time config for Object::Configure compatibility
 		%{$params},
 	}, ref($class) || $class;
-
-	return $self;
 }
 
 # ---------------------------------------------------------------------------
