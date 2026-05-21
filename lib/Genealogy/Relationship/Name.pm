@@ -358,7 +358,7 @@ overridden per-call by passing C<language> to C<name()>.
 A pre-constructed loggining object.  When a required argument is
 passed as C<undef> to C<name()>, the error is reported via
 C<< $logger->error($msg) >> rather than C<croak>.  This allows
-programs to route errors through their own 
+programs to route errors through their own
 infrastructure with full C<ctx> context.
 
 See L<Log::Abstraction> and the L</CONFIGURATION> section for the
@@ -479,8 +479,6 @@ sub new {
 # ---------------------------------------------------------------------------
 # Public method: name()
 # ---------------------------------------------------------------------------
-
-=head1 METHODS
 
 =head2 name
 
@@ -822,6 +820,16 @@ L<Params::Get>, L<Params::Validate::Strict>, L<Readonly>
 The lookup tables currently cover steps 0-6 in both directions.  Relationships
 further removed (seventh cousin, etc.) return C<undef>.  Pull requests adding
 deeper tables are welcome.
+
+=head1 TODO
+
+=over 4
+
+=item * Extract and integrate the Latin relationship handling code currently
+embedded in the C<gedcom> and C<ged2site> programs, adding C<la> as a
+supported language alongside C<en>, C<fr>, and C<de>.
+
+=back
 
 =head1 SEE ALSO
 

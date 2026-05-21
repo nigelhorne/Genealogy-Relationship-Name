@@ -67,7 +67,7 @@ file via [Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure).
     A pre-constructed loggining object.  When a required argument is
     passed as `undef` to `name()`, the error is reported via
     `$logger->error($msg)` rather than `croak`.  This allows
-    programs to route errors through their own 
+    programs to route errors through their own
     infrastructure with full `ctx` context.
 
     See [Log::Abstraction](https://metacpan.org/pod/Log%3A%3AAbstraction) and the ["CONFIGURATION"](#configuration) section for the
@@ -151,8 +151,6 @@ Any future object-valued constructor arguments must follow the same pattern.
     post: self.language == params.language  if language in dom params
           self.logger   == params.logger    if logger   in dom params
           ref(self)     == 'Genealogy::Relationship::Name'
-
-# METHODS
 
 ## name
 
@@ -402,6 +400,12 @@ dispatch path.
 The lookup tables currently cover steps 0-6 in both directions.  Relationships
 further removed (seventh cousin, etc.) return `undef`.  Pull requests adding
 deeper tables are welcome.
+
+# TODO
+
+- Extract and integrate the Latin relationship handling code currently
+embedded in the `gedcom` and `ged2site` programs, adding `la` as a
+supported language alongside `en`, `fr`, and `de`.
 
 # SEE ALSO
 
