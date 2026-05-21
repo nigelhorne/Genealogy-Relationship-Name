@@ -1,14 +1,11 @@
 #!/usr/bin/env perl
 
 # function.t - white-box unit tests for Genealogy::Relationship::Name
-# Tests each function individually, mocking non-core dependencies.
-# Uses Test::Mockingbird for mocking.
 
 use strict;
 use warnings;
 
 use Test::Most;
-use Test::Mockingbird;
 
 # Add lib path so we can load from the distribution tree
 use Log::Abstraction;
