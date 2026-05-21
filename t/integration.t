@@ -22,7 +22,7 @@ BEGIN {
 # =========================================================================
 
 subtest 'Full lifecycle: construct -> query -> helper validation' => sub {
-	plan tests => 7;
+	plan tests => 10;
 
 	# Step 1: construct
 	my $namer = new_ok('Genealogy::Relationship::Name');

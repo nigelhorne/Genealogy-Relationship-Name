@@ -4,6 +4,10 @@ Revision history for Genealogy::Relationship::Name
 
 	[Enhancements]
 	- Expanded all relationship tables from 0-6 to 0-10 (ninth cousin coverage)
+	- Added Spanish (es), Farsi (fa), and Classical Latin (la) language tables
+	  Latin table is sparse; only step-count pairs with a classical term are tabulated
+	- Added family_side argument to name() for paternal/maternal distinction
+	  (currently used by la and fa uncle/aunt/cousin terms)
 
 	[Bug Fixes]
 	- Fixed some French translations

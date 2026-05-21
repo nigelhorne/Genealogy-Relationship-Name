@@ -149,7 +149,7 @@ subtest 'Pathological: invalid language codes croak' => sub {
 	my $namer = Genealogy::Relationship::Name->new();
 
 	# validate_strict rejects anything not matching /^(?:en|de|fr)/
-	for my $bad_lang (qw(zz xx zh ja es)) {
+	for my $bad_lang (qw(zz xx zh ja cy)) {
 		throws_ok {
 			$namer->name(steps_to_ancestor => 1, steps_from_ancestor => 1,
 			             sex => 'M', language => $bad_lang)

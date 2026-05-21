@@ -792,6 +792,622 @@ Readonly::Hash my %DE_FEMALE_RELATIONSHIPS => (
 );
 
 # ---------------------------------------------------------------------------
+# Spanish relationship tables
+# ---------------------------------------------------------------------------
+
+Readonly::Hash my %ES_MALE_RELATIONSHIPS => (
+	'0,0' => 'uno mismo',
+	'0,1' => 'hijo',
+	'0,2' => 'nieto',
+	'0,3' => 'bisnieto',
+	'0,4' => 'tataranieto',
+	'0,5' => 'chozno',
+	'0,6' => 'bisnieto quinto',
+	'0,7' => 'descendiente lejano',
+	'0,8' => 'descendiente lejano',
+	'0,9' => 'descendiente lejano',
+	'0,10' => 'descendiente lejano',
+	'1,0' => 'padre',
+	'1,1' => 'hermano',
+	'1,2' => 'sobrino',
+	'1,3' => 'sobrino nieto',
+	'1,4' => 'sobrino bisnieto',
+	'1,5' => 'sobrino tataranieto',
+	'1,6' => 'sobrino lejano',
+	'1,7' => 'sobrino lejano',
+	'1,8' => 'sobrino lejano',
+	'1,9' => 'sobrino lejano',
+	'1,10' => 'sobrino lejano',
+	'2,0' => 'abuelo',
+	'2,1' => 'tio',
+	'2,2' => 'primo hermano',
+	'2,3' => 'primo hermano una vez removido',
+	'2,4' => 'primo hermano dos veces removido',
+	'2,5' => 'primo hermano tres veces removido',
+	'2,6' => 'primo hermano cuatro veces removido',
+	'2,7' => 'primo hermano cinco veces removido',
+	'2,8' => 'primo hermano seis veces removido',
+	'2,9' => 'primo hermano siete veces removido',
+	'2,10' => 'primo hermano ocho veces removido',
+	'3,0' => 'bisabuelo',
+	'3,1' => 'tio abuelo',
+	'3,2' => 'primo hermano una vez removido',
+	'3,3' => 'primo segundo',
+	'3,4' => 'primo segundo una vez removido',
+	'3,5' => 'primo segundo dos veces removido',
+	'3,6' => 'primo segundo tres veces removido',
+	'3,7' => 'primo segundo cuatro veces removido',
+	'3,8' => 'primo segundo cinco veces removido',
+	'3,9' => 'primo segundo seis veces removido',
+	'3,10' => 'primo segundo siete veces removido',
+	'4,0' => 'tatarabuelo',
+	'4,1' => 'tio bisabuelo',
+	'4,2' => 'primo hermano dos veces removido',
+	'4,3' => 'primo segundo una vez removido',
+	'4,4' => 'primo tercero',
+	'4,5' => 'primo tercero una vez removido',
+	'4,6' => 'primo tercero dos veces removido',
+	'4,7' => 'primo tercero tres veces removido',
+	'4,8' => 'primo tercero cuatro veces removido',
+	'4,9' => 'primo tercero cinco veces removido',
+	'4,10' => 'primo tercero seis veces removido',
+	'5,0' => 'chozno',
+	'5,1' => 'tio tatarabuelo',
+	'5,2' => 'primo hermano tres veces removido',
+	'5,3' => 'primo segundo dos veces removido',
+	'5,4' => 'primo tercero una vez removido',
+	'5,5' => 'primo cuarto',
+	'5,6' => 'primo cuarto una vez removido',
+	'5,7' => 'primo cuarto dos veces removido',
+	'5,8' => 'primo cuarto tres veces removido',
+	'5,9' => 'primo cuarto cuatro veces removido',
+	'5,10' => 'primo cuarto cinco veces removido',
+	'6,0' => 'bisabuelo quinto',
+	'6,1' => 'tio lejano',
+	'6,2' => 'primo hermano cuatro veces removido',
+	'6,3' => 'primo segundo tres veces removido',
+	'6,4' => 'primo tercero dos veces removido',
+	'6,5' => 'primo cuarto una vez removido',
+	'6,6' => 'primo quinto',
+	'6,7' => 'primo quinto una vez removido',
+	'6,8' => 'primo quinto dos veces removido',
+	'6,9' => 'primo quinto tres veces removido',
+	'6,10' => 'primo quinto cuatro veces removido',
+	'7,0' => 'antepasado lejano',
+	'7,1' => 'tio lejano',
+	'7,2' => 'primo hermano cinco veces removido',
+	'7,3' => 'primo segundo cuatro veces removido',
+	'7,4' => 'primo tercero tres veces removido',
+	'7,5' => 'primo cuarto dos veces removido',
+	'7,6' => 'primo quinto una vez removido',
+	'7,7' => 'primo sexto',
+	'7,8' => 'primo sexto una vez removido',
+	'7,9' => 'primo sexto dos veces removido',
+	'7,10' => 'primo sexto tres veces removido',
+	'8,0' => 'antepasado lejano',
+	'8,1' => 'tio lejano',
+	'8,2' => 'primo hermano seis veces removido',
+	'8,3' => 'primo segundo cinco veces removido',
+	'8,4' => 'primo tercero cuatro veces removido',
+	'8,5' => 'primo cuarto tres veces removido',
+	'8,6' => 'primo quinto dos veces removido',
+	'8,7' => 'primo sexto una vez removido',
+	'8,8' => 'primo septimo',
+	'8,9' => 'primo septimo una vez removido',
+	'8,10' => 'primo septimo dos veces removido',
+	'9,0' => 'antepasado lejano',
+	'9,1' => 'tio lejano',
+	'9,2' => 'primo hermano siete veces removido',
+	'9,3' => 'primo segundo seis veces removido',
+	'9,4' => 'primo tercero cinco veces removido',
+	'9,5' => 'primo cuarto cuatro veces removido',
+	'9,6' => 'primo quinto tres veces removido',
+	'9,7' => 'primo sexto dos veces removido',
+	'9,8' => 'primo septimo una vez removido',
+	'9,9' => 'primo octavo',
+	'9,10' => 'primo octavo una vez removido',
+	'10,0' => 'antepasado lejano',
+	'10,1' => 'tio lejano',
+	'10,2' => 'primo hermano ocho veces removido',
+	'10,3' => 'primo segundo siete veces removido',
+	'10,4' => 'primo tercero seis veces removido',
+	'10,5' => 'primo cuarto cinco veces removido',
+	'10,6' => 'primo quinto cuatro veces removido',
+	'10,7' => 'primo sexto tres veces removido',
+	'10,8' => 'primo septimo dos veces removido',
+	'10,9' => 'primo octavo una vez removido',
+	'10,10' => 'primo noveno',
+);
+
+Readonly::Hash my %ES_FEMALE_RELATIONSHIPS => (
+	'0,0' => 'una misma',
+	'0,1' => 'hija',
+	'0,2' => 'nieta',
+	'0,3' => 'bisnieta',
+	'0,4' => 'tataranieta',
+	'0,5' => 'chozna',
+	'0,6' => 'bisnieta quinta',
+	'0,7' => 'descendiente lejana',
+	'0,8' => 'descendiente lejana',
+	'0,9' => 'descendiente lejana',
+	'0,10' => 'descendiente lejana',
+	'1,0' => 'madre',
+	'1,1' => 'hermana',
+	'1,2' => 'sobrina',
+	'1,3' => 'sobrina nieta',
+	'1,4' => 'sobrina bisnieta',
+	'1,5' => 'sobrina tataranieta',
+	'1,6' => 'sobrina lejana',
+	'1,7' => 'sobrina lejana',
+	'1,8' => 'sobrina lejana',
+	'1,9' => 'sobrina lejana',
+	'1,10' => 'sobrina lejana',
+	'2,0' => 'abuela',
+	'2,1' => 'tia',
+	'2,2' => 'prima hermana',
+	'2,3' => 'prima hermana una vez removida',
+	'2,4' => 'prima hermana dos veces removida',
+	'2,5' => 'prima hermana tres veces removida',
+	'2,6' => 'prima hermana cuatro veces removida',
+	'2,7' => 'prima hermana cinco veces removida',
+	'2,8' => 'prima hermana seis veces removida',
+	'2,9' => 'prima hermana siete veces removida',
+	'2,10' => 'prima hermana ocho veces removida',
+	'3,0' => 'bisabuela',
+	'3,1' => 'tia abuela',
+	'3,2' => 'prima hermana una vez removida',
+	'3,3' => 'prima segunda',
+	'3,4' => 'prima segunda una vez removida',
+	'3,5' => 'prima segunda dos veces removida',
+	'3,6' => 'prima segunda tres veces removida',
+	'3,7' => 'prima segunda cuatro veces removida',
+	'3,8' => 'prima segunda cinco veces removida',
+	'3,9' => 'prima segunda seis veces removida',
+	'3,10' => 'prima segunda siete veces removida',
+	'4,0' => 'tatarabuela',
+	'4,1' => 'tia bisabuela',
+	'4,2' => 'prima hermana dos veces removida',
+	'4,3' => 'prima segunda una vez removida',
+	'4,4' => 'prima tercera',
+	'4,5' => 'prima tercera una vez removida',
+	'4,6' => 'prima tercera dos veces removida',
+	'4,7' => 'prima tercera tres veces removida',
+	'4,8' => 'prima tercera cuatro veces removida',
+	'4,9' => 'prima tercera cinco veces removida',
+	'4,10' => 'prima tercera seis veces removida',
+	'5,0' => 'chozna',
+	'5,1' => 'tia tatarabuela',
+	'5,2' => 'prima hermana tres veces removida',
+	'5,3' => 'prima segunda dos veces removida',
+	'5,4' => 'prima tercera una vez removida',
+	'5,5' => 'prima cuarta',
+	'5,6' => 'prima cuarta una vez removida',
+	'5,7' => 'prima cuarta dos veces removida',
+	'5,8' => 'prima cuarta tres veces removida',
+	'5,9' => 'prima cuarta cuatro veces removida',
+	'5,10' => 'prima cuarta cinco veces removida',
+	'6,0' => 'bisabuela quinta',
+	'6,1' => 'tia lejana',
+	'6,2' => 'prima hermana cuatro veces removida',
+	'6,3' => 'prima segunda tres veces removida',
+	'6,4' => 'prima tercera dos veces removida',
+	'6,5' => 'prima cuarta una vez removida',
+	'6,6' => 'prima quinta',
+	'6,7' => 'prima quinta una vez removida',
+	'6,8' => 'prima quinta dos veces removida',
+	'6,9' => 'prima quinta tres veces removida',
+	'6,10' => 'prima quinta cuatro veces removida',
+	'7,0' => 'antepasada lejana',
+	'7,1' => 'tia lejana',
+	'7,2' => 'prima hermana cinco veces removida',
+	'7,3' => 'prima segunda cuatro veces removida',
+	'7,4' => 'prima tercera tres veces removida',
+	'7,5' => 'prima cuarta dos veces removida',
+	'7,6' => 'prima quinta una vez removida',
+	'7,7' => 'prima sexta',
+	'7,8' => 'prima sexta una vez removida',
+	'7,9' => 'prima sexta dos veces removida',
+	'7,10' => 'prima sexta tres veces removida',
+	'8,0' => 'antepasada lejana',
+	'8,1' => 'tia lejana',
+	'8,2' => 'prima hermana seis veces removida',
+	'8,3' => 'prima segunda cinco veces removida',
+	'8,4' => 'prima tercera cuatro veces removida',
+	'8,5' => 'prima cuarta tres veces removida',
+	'8,6' => 'prima quinta dos veces removida',
+	'8,7' => 'prima sexta una vez removida',
+	'8,8' => 'prima septima',
+	'8,9' => 'prima septima una vez removida',
+	'8,10' => 'prima septima dos veces removida',
+	'9,0' => 'antepasada lejana',
+	'9,1' => 'tia lejana',
+	'9,2' => 'prima hermana siete veces removida',
+	'9,3' => 'prima segunda seis veces removida',
+	'9,4' => 'prima tercera cinco veces removida',
+	'9,5' => 'prima cuarta cuatro veces removida',
+	'9,6' => 'prima quinta tres veces removida',
+	'9,7' => 'prima sexta dos veces removida',
+	'9,8' => 'prima septima una vez removida',
+	'9,9' => 'prima octava',
+	'9,10' => 'prima octava una vez removida',
+	'10,0' => 'antepasada lejana',
+	'10,1' => 'tia lejana',
+	'10,2' => 'prima hermana ocho veces removida',
+	'10,3' => 'prima segunda siete veces removida',
+	'10,4' => 'prima tercera seis veces removida',
+	'10,5' => 'prima cuarta cinco veces removida',
+	'10,6' => 'prima quinta cuatro veces removida',
+	'10,7' => 'prima sexta tres veces removida',
+	'10,8' => 'prima septima dos veces removida',
+	'10,9' => 'prima octava una vez removida',
+	'10,10' => 'prima novena',
+);
+
+# ---------------------------------------------------------------------------
+# Farsi (Persian) relationship tables
+# Values use \N{U+XXXX} Unicode escapes (right-to-left script)
+# Side-specific keys: "s1,s2,paternal" / "s1,s2,maternal"
+# ---------------------------------------------------------------------------
+
+
+Readonly::Hash my %FA_MALE_RELATIONSHIPS => (
+	'0,0' => '\N{U+062E}\N{U+0648}\N{U+062F}',
+	'0,1' => '\N{U+067E}\N{U+0633}\N{U+0631}',
+	'0,2' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,3' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,4' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,5' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,6' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,7' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,8' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,9' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,10' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'1,0' => '\N{U+067E}\N{U+062F}\N{U+0631}',
+	'1,1' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}',
+	'1,2' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,3' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,4' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,5' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,6' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,7' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,8' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,9' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,10' => '\N{U+0628}\N{U+0631}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'2,0' => '\N{U+067E}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'2,1' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,2' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,3' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,4' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,5' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,6' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,7' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,8' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,9' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,10' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,0' => '\N{U+067E}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'3,1' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,2' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,3' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,4' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,5' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,6' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,7' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,8' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,9' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,10' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,0' => '\N{U+067E}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'4,1' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,2' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,3' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,4' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,5' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,6' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,7' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,8' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,9' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,10' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,0' => '\N{U+067E}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'5,1' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,2' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,3' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,4' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,5' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,6' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,7' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,8' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,9' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,10' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,0' => '\N{U+067E}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'6,1' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,2' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,3' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,4' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,5' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,6' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,7' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,8' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,9' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,10' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,0' => '\N{U+067E}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'7,1' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,2' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,3' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,4' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,5' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,6' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,7' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,8' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,9' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,10' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,0' => '\N{U+067E}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'8,1' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,2' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,3' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,4' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,5' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,6' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,7' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,8' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,9' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,10' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,0' => '\N{U+067E}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'9,1' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,2' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,3' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,4' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,5' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,6' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,7' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,8' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,9' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,10' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,0' => '\N{U+067E}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'10,1' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,2' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,3' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,4' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,5' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,6' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,7' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,8' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,9' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,10' => '\N{U+067E}\N{U+0633}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,1,maternal' => '\N{U+062F}\N{U+0627}\N{U+06CC}\N{U+06CC}',
+	'2,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,1,maternal' => '\N{U+062F}\N{U+0627}\N{U+06CC}\N{U+06CC}',
+	'3,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,1,maternal' => '\N{U+062F}\N{U+0627}\N{U+06CC}\N{U+06CC}',
+	'4,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,1,maternal' => '\N{U+062F}\N{U+0627}\N{U+06CC}\N{U+06CC}',
+	'5,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,1,maternal' => '\N{U+062F}\N{U+0627}\N{U+06CC}\N{U+06CC}',
+	'6,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,1,maternal' => '\N{U+062F}\N{U+0627}\N{U+06CC}\N{U+06CC}',
+	'7,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,1,maternal' => '\N{U+062F}\N{U+0627}\N{U+06CC}\N{U+06CC}',
+	'8,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,1,maternal' => '\N{U+062F}\N{U+0627}\N{U+06CC}\N{U+06CC}',
+	'9,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,1,maternal' => '\N{U+062F}\N{U+0627}\N{U+06CC}\N{U+06CC}',
+	'10,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0648}',
+);
+
+Readonly::Hash my %FA_FEMALE_RELATIONSHIPS => (
+	'0,0' => '\N{U+062E}\N{U+0648}\N{U+062F}',
+	'0,1' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}',
+	'0,2' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,3' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,4' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,5' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,6' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,7' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,8' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,9' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'0,10' => '\N{U+0646}\N{U+0648}\N{U+0647}',
+	'1,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}',
+	'1,1' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}',
+	'1,2' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,3' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,4' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,5' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,6' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,7' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,8' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,9' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'1,10' => '\N{U+062E}\N{U+0648}\N{U+0627}\N{U+0647}\N{U+0631}\N{U+0632}\N{U+0627}\N{U+062F}\N{U+0647}',
+	'2,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'2,1' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'2,2' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,3' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,4' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,5' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,6' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,7' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,8' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,9' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,10' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'3,1' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'3,2' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,3' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,4' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,5' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,6' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,7' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,8' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,9' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'3,10' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'4,1' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'4,2' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,3' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,4' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,5' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,6' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,7' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,8' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,9' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'4,10' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'5,1' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'5,2' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,3' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,4' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,5' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,6' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,7' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,8' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,9' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'5,10' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'6,1' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'6,2' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,3' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,4' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,5' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,6' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,7' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,8' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,9' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'6,10' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'7,1' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'7,2' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,3' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,4' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,5' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,6' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,7' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,8' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,9' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'7,10' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'8,1' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'8,2' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,3' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,4' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,5' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,6' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,7' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,8' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,9' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'8,10' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'9,1' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'9,2' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,3' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,4' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,5' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,6' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,7' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,8' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,9' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'9,10' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,0' => '\N{U+0645}\N{U+0627}\N{U+062F}\N{U+0631}\N{U+0628}\N{U+0632}\N{U+0631}\N{U+06AF}',
+	'10,1' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'10,2' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,3' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,4' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,5' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,6' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,7' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,8' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,9' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'10,10' => '\N{U+062F}\N{U+062E}\N{U+062A}\N{U+0631}\N{U+0639}\N{U+0645}\N{U+0648}',
+	'2,1,maternal' => '\N{U+062E}\N{U+0627}\N{U+0644}\N{U+0647}',
+	'2,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'3,1,maternal' => '\N{U+062E}\N{U+0627}\N{U+0644}\N{U+0647}',
+	'3,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'4,1,maternal' => '\N{U+062E}\N{U+0627}\N{U+0644}\N{U+0647}',
+	'4,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'5,1,maternal' => '\N{U+062E}\N{U+0627}\N{U+0644}\N{U+0647}',
+	'5,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'6,1,maternal' => '\N{U+062E}\N{U+0627}\N{U+0644}\N{U+0647}',
+	'6,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'7,1,maternal' => '\N{U+062E}\N{U+0627}\N{U+0644}\N{U+0647}',
+	'7,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'8,1,maternal' => '\N{U+062E}\N{U+0627}\N{U+0644}\N{U+0647}',
+	'8,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'9,1,maternal' => '\N{U+062E}\N{U+0627}\N{U+0644}\N{U+0647}',
+	'9,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+	'10,1,maternal' => '\N{U+062E}\N{U+0627}\N{U+0644}\N{U+0647}',
+	'10,1,paternal' => '\N{U+0639}\N{U+0645}\N{U+0647}',
+);
+
+# ---------------------------------------------------------------------------
+# Classical Latin relationship tables
+# Many step-count combinations have no classical term; those keys are absent.
+# Side-specific keys: "s1,s2,paternal" / "s1,s2,maternal"
+# ---------------------------------------------------------------------------
+
+
+Readonly::Hash my %LA_MALE_RELATIONSHIPS => (
+	'0,0' => 'ipse',
+	'0,1' => 'filius',
+	'0,2' => 'nepos',
+	'0,3' => 'pronepos',
+	'0,4' => 'abnepos',
+	'0,5' => 'atnepos',
+	'0,6' => 'trinepos',
+	'1,0' => 'pater',
+	'1,1' => 'frater',
+	'1,2' => 'nepos',
+	'2,0' => 'avus',
+	'2,1' => 'patruus',
+	'2,2' => 'consobrinus',
+	'3,0' => 'proavus',
+	'3,1' => 'patruus magnus',
+	'4,0' => 'abavus',
+	'4,1' => 'patruus maior',
+	'5,0' => 'atavus',
+	'5,1' => 'patruus maximus',
+	'6,0' => 'tritavus',
+	'2,1,maternal' => 'avunculus',
+	'2,1,paternal' => 'patruus',
+	'2,2,maternal' => 'consobrinus',
+	'2,2,paternal' => 'patruelis',
+	'3,1,maternal' => 'avunculus magnus',
+	'3,1,paternal' => 'patruus magnus',
+	'4,1,maternal' => 'avunculus maior',
+	'4,1,paternal' => 'patruus maior',
+	'5,1,maternal' => 'avunculus maximus',
+	'5,1,paternal' => 'patruus maximus',
+);
+
+Readonly::Hash my %LA_FEMALE_RELATIONSHIPS => (
+	'0,0' => 'ipsa',
+	'0,1' => 'filia',
+	'0,2' => 'neptis',
+	'0,3' => 'proneptis',
+	'0,4' => 'abneptis',
+	'0,5' => 'atneptis',
+	'0,6' => 'trineptis',
+	'1,0' => 'mater',
+	'1,1' => 'soror',
+	'1,2' => 'neptis',
+	'2,0' => 'avia',
+	'2,1' => 'amita',
+	'2,2' => 'consobrina',
+	'3,0' => 'proavia',
+	'3,1' => 'amita magna',
+	'4,0' => 'abavia',
+	'4,1' => 'amita maior',
+	'5,0' => 'atavia',
+	'5,1' => 'amita maxima',
+	'6,0' => 'tritavia',
+	'2,1,maternal' => 'matertera',
+	'2,1,paternal' => 'amita',
+	'2,2,maternal' => 'consobrina',
+	'2,2,paternal' => 'patruelis',
+	'3,1,maternal' => 'matertera magna',
+	'3,1,paternal' => 'amita magna',
+	'4,1,maternal' => 'matertera maior',
+	'4,1,paternal' => 'amita maior',
+	'5,1,maternal' => 'matertera maxima',
+	'5,1,paternal' => 'amita maxima',
+);
+
+# ---------------------------------------------------------------------------
 # Master dispatch table: lang -> sex -> hashref
 # ---------------------------------------------------------------------------
 
@@ -799,15 +1415,23 @@ Readonly::Hash my %RELATIONSHIP_TABLES => (
 	'en' => {
 		$SEX_MALE   => \%EN_MALE_RELATIONSHIPS,
 		$SEX_FEMALE => \%EN_FEMALE_RELATIONSHIPS,
+	}, 'es' => {
+		$SEX_MALE   => \%ES_MALE_RELATIONSHIPS,
+		$SEX_FEMALE => \%ES_FEMALE_RELATIONSHIPS,
+	}, 'fa' => {
+		$SEX_MALE   => \%FA_MALE_RELATIONSHIPS,
+		$SEX_FEMALE => \%FA_FEMALE_RELATIONSHIPS,
 	}, 'fr' => {
 		$SEX_MALE   => \%FR_MALE_RELATIONSHIPS,
 		$SEX_FEMALE => \%FR_FEMALE_RELATIONSHIPS,
 	}, 'de' => {
 		$SEX_MALE   => \%DE_MALE_RELATIONSHIPS,
 		$SEX_FEMALE => \%DE_FEMALE_RELATIONSHIPS,
+	}, 'la' => {
+		$SEX_MALE   => \%LA_MALE_RELATIONSHIPS,
+		$SEX_FEMALE => \%LA_FEMALE_RELATIONSHIPS,
 	},
 );
-
 # ---------------------------------------------------------------------------
 # Constructor
 # ---------------------------------------------------------------------------
@@ -852,7 +1476,8 @@ The relationship tables were originally embedded in the C<gedcom> and C<ged2site
 distributions inside C<Gedcom::Individual::relationship_up()>; this module
 extracts them into a reusable, installable CPAN distribution.
 
-Supported languages: C<en> (English, default), C<fr> (French), C<de> (German).
+Supported languages: C<en> (English, default), C<de> (German), C<es> (Spanish),
+C<fa> (Farsi/Persian), C<fr> (French), C<la> (Classical Latin).
 
 =head1 METHODS
 
@@ -953,23 +1578,6 @@ Any future object-valued constructor arguments must follow the same pattern.
         class => 'Genealogy::Relationship::Name',
     }
 
-=head3 FORMAL SPECIFICATION
-
-    new ________________________________________________________
-    [In]  class    : String                  (class name or object)
-          language : {en, fr, de}?           (optional default language)
-          logger   : Log::Abstraction?       (optional error logger)
-    [Out] self     : Genealogy::Relationship::Name
-
-    Let params == get_params(args)
-    Let params' == configure(class, params \ {logger})
-                   union {logger -> params.logger}  if logger in dom params
-    self == bless(params', class)
-
-    post: self.language == params.language  if language in dom params
-          self.logger   == params.logger    if logger   in dom params
-          ref(self)     == 'Genealogy::Relationship::Name'
-
 =cut
 
 sub new {
@@ -1037,7 +1645,12 @@ Sex of person B.  Must be C<'M'> (male) or C<'F'> (female).
 =item C<language> (string, optional)
 
 BCP-47-style language tag (only the primary subtag is used).
-Supported values: C<en> (default), C<fr>, C<de>.
+Supported values: C<en> (default), C<de>, C<es>, C<fa>, C<fr>, C<la>.
+
+Note: C<fa> (Farsi/Persian) values are stored as C<\N{U+XXXX}> Unicode
+escapes and render correctly in any Unicode-aware context.  C<la>
+(Classical Latin) has a sparse table; many step-count combinations have
+no classical term and return C<undef>.
 
 =item C<person> (object, optional)
 
@@ -1046,6 +1659,25 @@ through to the error handler when an error occurs.  Takes priority over the
 C<ctx> set at construction time.  The handler receives it as C<ctx> (logger
 path) or C<person> (on_error path), matching the C<complain()> interface
 in C<gedcom>/C<ged2site>.
+
+=item C<family_side> (string, optional)
+
+C<'paternal'> or C<'maternal'>.  Used by languages that distinguish the
+paternal from the maternal line for the same step counts.  Currently
+relevant for:
+
+=over 4
+
+=item * C<la> (Latin) -- uncle/aunt (C<patruus>/C<avunculus>,
+C<amita>/C<matertera>) and first cousin (C<patruelis>/C<consobrinus>)
+
+=item * C<fa> (Farsi) -- uncle (C<amoo>/C<dayi>) and aunt
+(C<ammeh>/C<khaleh>)
+
+=back
+
+When C<family_side> is not supplied, the table falls back to the generic
+(non-side-specific) entry for that step-count pair.
 
 =back
 
@@ -1074,8 +1706,9 @@ is not found in the lookup table.
 	steps_to_ancestor   => { type => 'integer', minimum => 0 },
 	steps_from_ancestor => { type => 'integer', minimum => 0 },
 	sex                 => { type => 'string', memberof => ['M', 'F'] },
-	language            => { type => 'string', regex => qr/^(?:en|de|fr)/, optional => 1 },
-	# person is extracted before validate_strict to avoid PVS inferring constraints
+	language            => { type => 'string', regex => qr/^(?:en|de|es|fa|fr|la)/, optional => 1 },
+	# person is handled before validate_strict (PVS infers constraints from objects)
+	family_side => { type => 'string', memberof => ['paternal','maternal'], optional => 1 },
     }
 
 =head4 Output
@@ -1091,14 +1724,16 @@ is not found in the lookup table.
     [In]  steps_to_ancestor   : N0
           steps_from_ancestor : N0
           sex                 : {M, F}
-          language            : {en, fr, de}?  (default en)
+          language            : {en, es, fa, fr, de, la}?  (default en)
           person              : Object?
     [Out] result              : String | undef
 
-    Let key == steps_to_ancestor ++ "," ++ steps_from_ancestor
-    Let table == RELATIONSHIP_TABLES(language)(sex)
-    result == table(key)  if key in dom table
-           == undef       otherwise
+    Let key      == steps_to_ancestor ++ "," ++ steps_from_ancestor
+    Let side_key == key ++ "," ++ family_side  if family_side defined
+    Let table    == RELATIONSHIP_TABLES(language)(sex)
+    result == table(side_key)  if family_side defined and side_key in dom table
+           == table(key)       if key in dom table
+           == undef            otherwise
 
 =cut
 
@@ -1112,14 +1747,16 @@ sub name {
 			steps_to_ancestor   => { type => 'integer', minimum => 0 },
 			steps_from_ancestor => { type => 'integer', minimum => 0 },
 			sex                 => { type => 'string', memberof => ['M', 'F'] },
-			language            => { type => 'string', regex => qr/^(?:en|de|fr)/,
-			                         optional => 1 },
+			language            => { type => 'string', regex => qr/^(?:en|de|es|fa|fr|la)/, optional => 1 },
 			person              => { type => 'object', optional => 1 },
+			family_side         => { type => 'string', memberof => ['paternal','maternal'],
+			                         optional => 1 },
 		}
 	);
 
-	# Extract individual parameters; undef means arg was not given, so croak
-	foreach my $arg('steps_to_ancestor', 'steps_from_ancestor', 'sex') {
+	# Extract individual parameters; undef means arg was given as undef, so
+	# report via logger if set, otherwise croak
+	foreach my $arg(qw(steps_to_ancestor steps_from_ancestor sex)) {
 		if(!defined($args->{$arg})) {
 			if(my $logger = $self->{logger}) {
 				$logger->error("$arg not given");
@@ -1128,26 +1765,30 @@ sub name {
 			}
 		}
 	}
-
 	my $steps1 = $args->{steps_to_ancestor} // croak('steps_to_ancestor not given');
 	my $steps2 = $args->{steps_from_ancestor} // croak('steps_from_ancestor not given');
 	my $sex    = $args->{sex} // croak('sex not given');
-	my $person = $args->{person};
+	my $person      = $args->{person};
+	my $family_side = $args->{family_side};
 
-	# Fall back to the constructor default or hard default if no per-call language given
+	# Fall back to constructor default or hard default if no per-call language given
 	my $lang = lc($args->{language} // $self->{language} // $DEFAULT_LANGUAGE);
 
 	# Strip any region subtag (e.g. 'en-GB' -> 'en') after lowercasing
 	($lang) = split /-/, $lang;
 
-	# Build lookup key from the two-step counts
-	my $key = "${steps1},${steps2}";
+	# Build lookup key from the two step counts; try side-specific key first
+	# for languages that distinguish paternal/maternal (Latin, Farsi)
+	my $key      = "${steps1},${steps2}";
+	my $side_key = defined($family_side) ? "${key},${family_side}" : undef;
 
 	# Retrieve the correct gender-specific table for the chosen language
 	my $table = $RELATIONSHIP_TABLES{$lang}{$sex};
 
-	# Look up and return; undef when the combination is not tabulated
-	my $result = $table->{$key};
+	# Prefer side-specific entry when family_side is given; fall back to generic key
+	my $result = (defined($side_key) && exists $table->{$side_key})
+	             ? $table->{$side_key}
+	             : $table->{$key};
 
 	return $result;
 }
@@ -1190,14 +1831,6 @@ currently C<('de', 'en', 'fr')>.
     {
         type => ARRAYREF,   # sorted list of language codes
     }
-
-=head3 FORMAL SPECIFICATION
-
-    supported_languages ______________________________________
-    [In]  (none)
-    [Out] result : seq String
-
-    result == sort(dom RELATIONSHIP_TABLES)
 
 =cut
 
@@ -1248,14 +1881,6 @@ None.
     {
         type => ARRAYREF,
     }
-
-=head3 FORMAL SPECIFICATION
-
-    known_sexes ______________________________________________
-    [In]  (none)
-    [Out] result : seq String
-
-    result == sort { $SEX_FEMALE, $SEX_MALE }
 
 =cut
 
@@ -1411,6 +2036,56 @@ L<http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name>
 L<http://deps.cpantesters.org/?module=Genealogy::Relationship::Name>
 
 =back
+
+=head1 FORMAL SPECIFICATION
+
+=head2 new
+
+    new ________________________________________________________
+    [In]  class    : String                  (class name or object)
+          language            : {en, es, fa, fr, de, la}?  (optional default language
+          logger   : Log::Abstraction?       (optional error logger)
+    [Out] self     : Genealogy::Relationship::Name
+
+    Let params == get_params(args)
+    Let params' == configure(class, params \ {logger})
+                   union {logger -> params.logger}  if logger in dom params
+    self == bless(params', class)
+
+    post: self.language == params.language  if language in dom params
+          self.logger   == params.logger    if logger   in dom params
+          ref(self)     == 'Genealogy::Relationship::Name'
+
+=head2 name
+
+    name ______________________________________________________
+    [In]  steps_to_ancestor   : N0
+          steps_from_ancestor : N0
+          sex                 : {M, F}
+          language            : {en, fr, de}?  (default en)
+          person              : Object?
+    [Out] result              : String | undef
+
+    Let key == steps_to_ancestor ++ "," ++ steps_from_ancestor
+    Let table == RELATIONSHIP_TABLES(language)(sex)
+    result == table(key)  if key in dom table
+           == undef       otherwise
+
+=head2 supported_languages
+
+    supported_languages ______________________________________
+    [In]  (none)
+    [Out] result : seq String
+
+    result == sort(dom RELATIONSHIP_TABLES)
+
+=head2 known_sexes
+
+    known_sexes ______________________________________________
+    [In]  (none)
+    [Out] result : seq String
+
+    result == sort { $SEX_FEMALE, $SEX_MALE }
 
 =head1 LICENCE AND COPYRIGHT
 
