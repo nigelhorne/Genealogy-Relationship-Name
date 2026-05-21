@@ -184,12 +184,12 @@ subtest 'name() returns undef for unknown step combination' => sub {
 	my $namer = Genealogy::Relationship::Name->new();
 
 	# A combination not in the table
-	my $result = $namer->name(steps_to_ancestor => 9, steps_from_ancestor => 9, sex => 'M');
+	my $result = $namer->name(steps_to_ancestor => 100, steps_from_ancestor => 100, sex => 'M');
 	is($result, undef, 'Very large step count returns undef');
 
 	# Asymmetric combination not tabulated
-	my $result2 = $namer->name(steps_to_ancestor => 6, steps_from_ancestor => 1, sex => 'F');
-	is($result2, undef, '6,1 not in table => undef');
+	my $result2 = $namer->name(steps_to_ancestor => 50, steps_from_ancestor => 1, sex => 'F');
+	is($result2, undef, '50,1 not in table => undef');
 };
 
 # -------------------------------------------------------------------------
