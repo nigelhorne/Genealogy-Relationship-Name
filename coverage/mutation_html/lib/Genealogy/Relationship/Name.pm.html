@@ -336,933 +336,1457 @@ Approximate LCSAJ segments: 11<br>
 </span><span class="">   44: 	&#39;0,2&#39; =&gt; &#39;grandson&#39;,
 </span><span class="">   45: 	&#39;0,3&#39; =&gt; &#39;great-grandson&#39;,
 </span><span class="">   46: 	&#39;0,4&#39; =&gt; &#39;great-great-grandson&#39;,
-</span><span class="">   47: 	&#39;1,0&#39; =&gt; &#39;father&#39;,
-</span><span class="">   48: 	&#39;1,1&#39; =&gt; &#39;brother&#39;,
-</span><span class="">   49: 	&#39;1,2&#39; =&gt; &#39;nephew&#39;,
-</span><span class="">   50: 	&#39;1,3&#39; =&gt; &#39;great-nephew&#39;,
-</span><span class="">   51: 	&#39;1,4&#39; =&gt; &#39;great-great-nephew&#39;,
-</span><span class="">   52: 	&#39;2,0&#39; =&gt; &#39;grandfather&#39;,
-</span><span class="">   53: 	&#39;2,1&#39; =&gt; &#39;uncle&#39;,
-</span><span class="">   54: 	&#39;2,2&#39; =&gt; &#39;first cousin&#39;,
-</span><span class="">   55: 	&#39;2,3&#39; =&gt; &#39;first cousin once-removed&#39;,
-</span><span class="">   56: 	&#39;2,4&#39; =&gt; &#39;first cousin twice-removed&#39;,
-</span><span class="">   57: 	&#39;2,5&#39; =&gt; &#39;first cousin three-times-removed&#39;,
-</span><span class="">   58: 	&#39;3,0&#39; =&gt; &#39;great-grandfather&#39;,
-</span><span class="">   59: 	&#39;3,1&#39; =&gt; &#39;great-uncle&#39;,
-</span><span class="">   60: 	&#39;3,2&#39; =&gt; &#39;first cousin once-removed&#39;,
-</span><span class="">   61: 	&#39;3,3&#39; =&gt; &#39;second cousin&#39;,
-</span><span class="">   62: 	&#39;3,4&#39; =&gt; &#39;second cousin once-removed&#39;,
-</span><span class="">   63: 	&#39;3,5&#39; =&gt; &#39;second cousin twice-removed&#39;,
-</span><span class="">   64: 	&#39;3,6&#39; =&gt; &#39;second cousin three-times-removed&#39;,
-</span><span class="">   65: 	&#39;4,0&#39; =&gt; &#39;great-great-grandfather&#39;,
-</span><span class="">   66: 	&#39;4,1&#39; =&gt; &#39;great-great-uncle&#39;,
-</span><span class="">   67: 	&#39;4,2&#39; =&gt; &#39;first cousin twice-removed&#39;,
-</span><span class="">   68: 	&#39;4,3&#39; =&gt; &#39;second cousin once-removed&#39;,
-</span><span class="">   69: 	&#39;4,4&#39; =&gt; &#39;third cousin&#39;,
-</span><span class="">   70: 	&#39;4,5&#39; =&gt; &#39;third cousin once-removed&#39;,
-</span><span class="">   71: 	&#39;4,6&#39; =&gt; &#39;third cousin twice-removed&#39;,
-</span><span class="">   72: 	&#39;5,0&#39; =&gt; &#39;great-great-great-grandfather&#39;,
-</span><span class="">   73: 	&#39;5,1&#39; =&gt; &#39;great-great-great-uncle&#39;,
-</span><span class="">   74: 	&#39;5,2&#39; =&gt; &#39;first cousin three-times-removed&#39;,
-</span><span class="">   75: 	&#39;5,3&#39; =&gt; &#39;second cousin twice-removed&#39;,
-</span><span class="">   76: 	&#39;5,4&#39; =&gt; &#39;third cousin once-removed&#39;,
-</span><span class="">   77: 	&#39;5,5&#39; =&gt; &#39;fourth cousin&#39;,
-</span><span class="">   78: 	&#39;5,6&#39; =&gt; &#39;fourth cousin once-removed&#39;,
-</span><span class="">   79: 	&#39;6,0&#39; =&gt; &#39;great-great-great-great-grandfather&#39;,
-</span><span class="">   80: 	&#39;6,2&#39; =&gt; &#39;first cousin four-times-removed&#39;,
-</span><span class="">   81: 	&#39;6,3&#39; =&gt; &#39;second cousin three-times-removed&#39;,
-</span><span class="">   82: 	&#39;6,4&#39; =&gt; &#39;third cousin twice-removed&#39;,
-</span><span class="">   83: 	&#39;6,5&#39; =&gt; &#39;fourth cousin once-removed&#39;,
-</span><span class="">   84: 	&#39;6,6&#39; =&gt; &#39;fifth cousin&#39;,
-</span><span class="">   85: );
-</span><span class="">   86: 
-</span><span class="">   87: Readonly::Hash my %EN_FEMALE_RELATIONSHIPS =&gt; (
-</span><span class="">   88: 	&#39;0,0&#39; =&gt; &#39;self&#39;,
-</span><span class="">   89: 	&#39;0,1&#39; =&gt; &#39;daughter&#39;,
-</span><span class="">   90: 	&#39;0,2&#39; =&gt; &#39;granddaughter&#39;,
-</span><span class="">   91: 	&#39;0,3&#39; =&gt; &#39;great-granddaughter&#39;,
-</span><span class="">   92: 	&#39;0,4&#39; =&gt; &#39;great-great-granddaughter&#39;,
-</span><span class="">   93: 	&#39;1,0&#39; =&gt; &#39;mother&#39;,
-</span><span class="">   94: 	&#39;1,1&#39; =&gt; &#39;sister&#39;,
-</span><span class="">   95: 	&#39;1,2&#39; =&gt; &#39;niece&#39;,
-</span><span class="">   96: 	&#39;1,3&#39; =&gt; &#39;great-niece&#39;,
-</span><span class="">   97: 	&#39;1,4&#39; =&gt; &#39;great-great-niece&#39;,
-</span><span class="">   98: 	&#39;2,0&#39; =&gt; &#39;grandmother&#39;,
-</span><span class="">   99: 	&#39;2,1&#39; =&gt; &#39;aunt&#39;,
-</span><span class="">  100: 	&#39;2,2&#39; =&gt; &#39;first cousin&#39;,
-</span><span class="">  101: 	&#39;2,3&#39; =&gt; &#39;first cousin once-removed&#39;,
-</span><span class="">  102: 	&#39;2,4&#39; =&gt; &#39;first cousin twice-removed&#39;,
-</span><span class="">  103: 	&#39;2,5&#39; =&gt; &#39;first cousin three-times-removed&#39;,
-</span><span class="">  104: 	&#39;3,0&#39; =&gt; &#39;great-grandmother&#39;,
-</span><span class="">  105: 	&#39;3,1&#39; =&gt; &#39;great-aunt&#39;,
-</span><span class="">  106: 	&#39;3,2&#39; =&gt; &#39;first cousin once-removed&#39;,
-</span><span class="">  107: 	&#39;3,3&#39; =&gt; &#39;second cousin&#39;,
-</span><span class="">  108: 	&#39;3,4&#39; =&gt; &#39;second cousin once-removed&#39;,
-</span><span class="">  109: 	&#39;3,5&#39; =&gt; &#39;second cousin twice-removed&#39;,
-</span><span class="">  110: 	&#39;3,6&#39; =&gt; &#39;second cousin three-times-removed&#39;,
-</span><span class="">  111: 	&#39;4,0&#39; =&gt; &#39;great-great-grandmother&#39;,
-</span><span class="">  112: 	&#39;4,1&#39; =&gt; &#39;great-great-aunt&#39;,
-</span><span class="">  113: 	&#39;4,2&#39; =&gt; &#39;first cousin twice-removed&#39;,
-</span><span class="">  114: 	&#39;4,3&#39; =&gt; &#39;second cousin once-removed&#39;,
-</span><span class="">  115: 	&#39;4,4&#39; =&gt; &#39;third cousin&#39;,
-</span><span class="">  116: 	&#39;4,5&#39; =&gt; &#39;third cousin once-removed&#39;,
-</span><span class="">  117: 	&#39;4,6&#39; =&gt; &#39;third cousin twice-removed&#39;,
-</span><span class="">  118: 	&#39;5,0&#39; =&gt; &#39;great-great-great-grandmother&#39;,
-</span><span class="">  119: 	&#39;5,1&#39; =&gt; &#39;great-great-great-aunt&#39;,
-</span><span class="">  120: 	&#39;5,2&#39; =&gt; &#39;first cousin three-times-removed&#39;,
-</span><span class="">  121: 	&#39;5,3&#39; =&gt; &#39;second cousin twice-removed&#39;,
-</span><span class="">  122: 	&#39;5,4&#39; =&gt; &#39;third cousin once-removed&#39;,
-</span><span class="">  123: 	&#39;5,5&#39; =&gt; &#39;fourth cousin&#39;,
-</span><span class="">  124: 	&#39;5,6&#39; =&gt; &#39;fourth cousin once-removed&#39;,
-</span><span class="">  125: 	&#39;6,0&#39; =&gt; &#39;great-great-great-great-grandmother&#39;,
-</span><span class="">  126: 	&#39;6,2&#39; =&gt; &#39;first cousin four-times-removed&#39;,
-</span><span class="">  127: 	&#39;6,3&#39; =&gt; &#39;second cousin three-times-removed&#39;,
-</span><span class="">  128: 	&#39;6,4&#39; =&gt; &#39;third cousin twice-removed&#39;,
-</span><span class="">  129: 	&#39;6,5&#39; =&gt; &#39;fourth cousin once-removed&#39;,
-</span><span class="">  130: 	&#39;6,6&#39; =&gt; &#39;fifth cousin&#39;,
-</span><span class="">  131: );
-</span><span class="">  132: 
-</span><span class="">  133: # ---------------------------------------------------------------------------
-</span><span class="">  134: # French relationship tables
-</span><span class="">  135: # ---------------------------------------------------------------------------
-</span><span class="">  136: 
-</span><span class="">  137: Readonly::Hash my %FR_MALE_RELATIONSHIPS =&gt; (
-</span><span class="">  138: 	&#39;0,0&#39; =&gt; &#39;soi-meme&#39;,
-</span><span class="">  139: 	&#39;0,1&#39; =&gt; &#39;fils&#39;,
-</span><span class="">  140: 	&#39;0,2&#39; =&gt; &#39;petit-fils&#39;,
-</span><span class="">  141: 	&#39;0,3&#39; =&gt; &#39;arriere-petit-fils&#39;,
-</span><span class="">  142: 	&#39;0,4&#39; =&gt; &#39;arriere-arriere-petit-fils&#39;,
-</span><span class="">  143: 	&#39;1,0&#39; =&gt; &#39;pere&#39;,
-</span><span class="">  144: 	&#39;1,1&#39; =&gt; &#39;frere&#39;,
-</span><span class="">  145: 	&#39;1,2&#39; =&gt; &#39;neveu&#39;,
-</span><span class="">  146: 	&#39;1,3&#39; =&gt; &#39;grand-neveu&#39;,
-</span><span class="">  147: 	&#39;1,4&#39; =&gt; &#39;arriere-grand-neveu&#39;,
-</span><span class="">  148: 	&#39;2,0&#39; =&gt; &#39;grand-pere&#39;,
-</span><span class="">  149: 	&#39;2,1&#39; =&gt; &#39;oncle&#39;,
-</span><span class="">  150: 	&#39;2,2&#39; =&gt; &#39;cousin germain&#39;,
-</span><span class="">  151: 	&#39;2,3&#39; =&gt; &#39;cousin issu de germain&#39;,
-</span><span class="">  152: 	&#39;2,4&#39; =&gt; &#39;cousin au troisieme degre&#39;,
-</span><span class="">  153: 	&#39;3,0&#39; =&gt; &#39;arriere-grand-pere&#39;,
-</span><span class="">  154: 	&#39;3,1&#39; =&gt; &#39;grand-oncle&#39;,
-</span><span class="">  155: 	&#39;3,2&#39; =&gt; &#39;cousin issu de germain&#39;,
-</span><span class="">  156: 	&#39;3,3&#39; =&gt; &#39;cousin au troisieme degre&#39;,
-</span><span class="">  157: 	&#39;3,4&#39; =&gt; &#39;cousin au quatrieme degre&#39;,
-</span><span class="">  158: 	&#39;4,0&#39; =&gt; &#39;arriere-arriere-grand-pere&#39;,
-</span><span class="">  159: 	&#39;4,1&#39; =&gt; &#39;arriere-grand-oncle&#39;,
-</span><span class="">  160: 	&#39;4,2&#39; =&gt; &#39;cousin au troisieme degre&#39;,
-</span><span class="">  161: 	&#39;4,3&#39; =&gt; &#39;cousin au quatrieme degre&#39;,
-</span><span class="">  162: 	&#39;4,4&#39; =&gt; &#39;cousin au cinquieme degre&#39;,
-</span><span class="">  163: 	&#39;5,0&#39; =&gt; &#39;trisaieul&#39;,
-</span><span class="">  164: 	&#39;5,5&#39; =&gt; &#39;cousin au sixieme degre&#39;,
-</span><span class="">  165: 	&#39;6,0&#39; =&gt; &#39;quadrisaieul&#39;,
-</span><span class="">  166: 	&#39;6,6&#39; =&gt; &#39;cousin au septieme degre&#39;,
-</span><span class="">  167: );
-</span><span class="">  168: 
-</span><span class="">  169: Readonly::Hash my %FR_FEMALE_RELATIONSHIPS =&gt; (
-</span><span class="">  170: 	&#39;0,0&#39; =&gt; &#39;soi-meme&#39;,
-</span><span class="">  171: 	&#39;0,1&#39; =&gt; &#39;fille&#39;,
-</span><span class="">  172: 	&#39;0,2&#39; =&gt; &#39;petite-fille&#39;,
-</span><span class="">  173: 	&#39;0,3&#39; =&gt; &#39;arriere-petite-fille&#39;,
-</span><span class="">  174: 	&#39;0,4&#39; =&gt; &#39;arriere-arriere-petite-fille&#39;,
-</span><span class="">  175: 	&#39;1,0&#39; =&gt; &#39;mere&#39;,
-</span><span class="">  176: 	&#39;1,1&#39; =&gt; &#39;soeur&#39;,
-</span><span class="">  177: 	&#39;1,2&#39; =&gt; &#39;niece&#39;,
-</span><span class="">  178: 	&#39;1,3&#39; =&gt; &#39;grand-niece&#39;,
-</span><span class="">  179: 	&#39;1,4&#39; =&gt; &#39;arriere-grand-niece&#39;,
-</span><span class="">  180: 	&#39;2,0&#39; =&gt; &#39;grand-mere&#39;,
-</span><span class="">  181: 	&#39;2,1&#39; =&gt; &#39;tante&#39;,
-</span><span class="">  182: 	&#39;2,2&#39; =&gt; &#39;cousine germaine&#39;,
-</span><span class="">  183: 	&#39;2,3&#39; =&gt; &#39;cousine issue de germaine&#39;,
-</span><span class="">  184: 	&#39;2,4&#39; =&gt; &#39;cousine au troisieme degre&#39;,
-</span><span class="">  185: 	&#39;3,0&#39; =&gt; &#39;arriere-grand-mere&#39;,
-</span><span class="">  186: 	&#39;3,1&#39; =&gt; &#39;grand-tante&#39;,
-</span><span class="">  187: 	&#39;3,2&#39; =&gt; &#39;cousine issue de germaine&#39;,
-</span><span class="">  188: 	&#39;3,3&#39; =&gt; &#39;cousine au troisieme degre&#39;,
-</span><span class="">  189: 	&#39;3,4&#39; =&gt; &#39;cousine au quatrieme degre&#39;,
-</span><span class="">  190: 	&#39;4,0&#39; =&gt; &#39;arriere-arriere-grand-mere&#39;,
-</span><span class="">  191: 	&#39;4,1&#39; =&gt; &#39;arriere-grand-tante&#39;,
-</span><span class="">  192: 	&#39;4,2&#39; =&gt; &#39;cousine au troisieme degre&#39;,
-</span><span class="">  193: 	&#39;4,3&#39; =&gt; &#39;cousine au quatrieme degre&#39;,
-</span><span class="">  194: 	&#39;4,4&#39; =&gt; &#39;cousine au cinquieme degre&#39;,
-</span><span class="">  195: 	&#39;5,0&#39; =&gt; &#39;trisaieule&#39;,
-</span><span class="">  196: 	&#39;5,5&#39; =&gt; &#39;cousine au sixieme degre&#39;,
-</span><span class="">  197: 	&#39;6,0&#39; =&gt; &#39;quadrisaieule&#39;,
-</span><span class="">  198: 	&#39;6,6&#39; =&gt; &#39;cousine au septieme degre&#39;,
-</span><span class="">  199: );
-</span><span class="">  200: 
-</span><span class="">  201: # ---------------------------------------------------------------------------
-</span><span class="">  202: # German relationship tables
-</span><span class="">  203: # ---------------------------------------------------------------------------
-</span><span class="">  204: 
-</span><span class="">  205: Readonly::Hash my %DE_MALE_RELATIONSHIPS =&gt; (
-</span><span class="">  206: 	&#39;0,0&#39; =&gt; &#39;sich selbst&#39;,
-</span><span class="">  207: 	&#39;0,1&#39; =&gt; &#39;Sohn&#39;,
-</span><span class="">  208: 	&#39;0,2&#39; =&gt; &#39;Enkel&#39;,
-</span><span class="">  209: 	&#39;0,3&#39; =&gt; &#39;Urenkel&#39;,
-</span><span class="">  210: 	&#39;0,4&#39; =&gt; &#39;Ururenkel&#39;,
-</span><span class="">  211: 	&#39;1,0&#39; =&gt; &#39;Vater&#39;,
-</span><span class="">  212: 	&#39;1,1&#39; =&gt; &#39;Bruder&#39;,
-</span><span class="">  213: 	&#39;1,2&#39; =&gt; &#39;Neffe&#39;,
-</span><span class="">  214: 	&#39;1,3&#39; =&gt; &#39;Grossneffe&#39;,
-</span><span class="">  215: 	&#39;1,4&#39; =&gt; &#39;Urgrossneffe&#39;,
-</span><span class="">  216: 	&#39;2,0&#39; =&gt; &#39;Grossvater&#39;,
-</span><span class="">  217: 	&#39;2,1&#39; =&gt; &#39;Onkel&#39;,
-</span><span class="">  218: 	&#39;2,2&#39; =&gt; &#39;Cousin&#39;,
-</span><span class="">  219: 	&#39;2,3&#39; =&gt; &#39;Cousin ersten Grades einmal entfernt&#39;,
-</span><span class="">  220: 	&#39;2,4&#39; =&gt; &#39;Cousin ersten Grades zweimal entfernt&#39;,
-</span><span class="">  221: 	&#39;3,0&#39; =&gt; &#39;Urgrossvater&#39;,
-</span><span class="">  222: 	&#39;3,1&#39; =&gt; &#39;Grossonkel&#39;,
-</span><span class="">  223: 	&#39;3,2&#39; =&gt; &#39;Cousin ersten Grades einmal entfernt&#39;,
-</span><span class="">  224: 	&#39;3,3&#39; =&gt; &#39;Cousin zweiten Grades&#39;,
-</span><span class="">  225: 	&#39;3,4&#39; =&gt; &#39;Cousin zweiten Grades einmal entfernt&#39;,
-</span><span class="">  226: 	&#39;4,0&#39; =&gt; &#39;Urururgrossvater&#39;,
-</span><span class="">  227: 	&#39;4,1&#39; =&gt; &#39;Urgrossonkel&#39;,
-</span><span class="">  228: 	&#39;4,2&#39; =&gt; &#39;Cousin ersten Grades zweimal entfernt&#39;,
-</span><span class="">  229: 	&#39;4,3&#39; =&gt; &#39;Cousin zweiten Grades einmal entfernt&#39;,
-</span><span class="">  230: 	&#39;4,4&#39; =&gt; &#39;Cousin dritten Grades&#39;,
-</span><span class="">  231: 	&#39;5,0&#39; =&gt; &#39;Urururgrossvater&#39;,
-</span><span class="">  232: 	&#39;5,5&#39; =&gt; &#39;Cousin vierten Grades&#39;,
-</span><span class="">  233: 	&#39;6,0&#39; =&gt; &#39;Ururururgrossvater&#39;,
-</span><span class="">  234: 	&#39;6,6&#39; =&gt; &#39;Cousin fuenften Grades&#39;,
-</span><span class="">  235: );
-</span><span class="">  236: 
-</span><span class="">  237: Readonly::Hash my %DE_FEMALE_RELATIONSHIPS =&gt; (
-</span><span class="">  238: 	&#39;0,0&#39; =&gt; &#39;sich selbst&#39;,
-</span><span class="">  239: 	&#39;0,1&#39; =&gt; &#39;Tochter&#39;,
-</span><span class="">  240: 	&#39;0,2&#39; =&gt; &#39;Enkelin&#39;,
-</span><span class="">  241: 	&#39;0,3&#39; =&gt; &#39;Urenkelin&#39;,
-</span><span class="">  242: 	&#39;0,4&#39; =&gt; &#39;Ururenkelin&#39;,
-</span><span class="">  243: 	&#39;1,0&#39; =&gt; &#39;Mutter&#39;,
-</span><span class="">  244: 	&#39;1,1&#39; =&gt; &#39;Schwester&#39;,
-</span><span class="">  245: 	&#39;1,2&#39; =&gt; &#39;Nichte&#39;,
-</span><span class="">  246: 	&#39;1,3&#39; =&gt; &#39;Grossnichte&#39;,
-</span><span class="">  247: 	&#39;1,4&#39; =&gt; &#39;Urgrossnichte&#39;,
-</span><span class="">  248: 	&#39;2,0&#39; =&gt; &#39;Grossmutter&#39;,
-</span><span class="">  249: 	&#39;2,1&#39; =&gt; &#39;Tante&#39;,
-</span><span class="">  250: 	&#39;2,2&#39; =&gt; &#39;Cousine&#39;,
-</span><span class="">  251: 	&#39;2,3&#39; =&gt; &#39;Cousine ersten Grades einmal entfernt&#39;,
-</span><span class="">  252: 	&#39;2,4&#39; =&gt; &#39;Cousine ersten Grades zweimal entfernt&#39;,
-</span><span class="">  253: 	&#39;3,0&#39; =&gt; &#39;Urgrossmutter&#39;,
-</span><span class="">  254: 	&#39;3,1&#39; =&gt; &#39;Grosstante&#39;,
-</span><span class="">  255: 	&#39;3,2&#39; =&gt; &#39;Cousine ersten Grades einmal entfernt&#39;,
-</span><span class="">  256: 	&#39;3,3&#39; =&gt; &#39;Cousine zweiten Grades&#39;,
-</span><span class="">  257: 	&#39;3,4&#39; =&gt; &#39;Cousine zweiten Grades einmal entfernt&#39;,
-</span><span class="">  258: 	&#39;4,0&#39; =&gt; &#39;Urururgrossmutter&#39;,
-</span><span class="">  259: 	&#39;4,1&#39; =&gt; &#39;Urgrosstante&#39;,
-</span><span class="">  260: 	&#39;4,2&#39; =&gt; &#39;Cousine ersten Grades zweimal entfernt&#39;,
-</span><span class="">  261: 	&#39;4,3&#39; =&gt; &#39;Cousine zweiten Grades einmal entfernt&#39;,
-</span><span class="">  262: 	&#39;4,4&#39; =&gt; &#39;Cousine dritten Grades&#39;,
-</span><span class="">  263: 	&#39;5,0&#39; =&gt; &#39;Urururgrossmutter&#39;,
-</span><span class="">  264: 	&#39;5,5&#39; =&gt; &#39;Cousine vierten Grades&#39;,
-</span><span class="">  265: 	&#39;6,0&#39; =&gt; &#39;Ururururgrossmutter&#39;,
-</span><span class="">  266: 	&#39;6,6&#39; =&gt; &#39;Cousine fuenften Grades&#39;,
-</span><span class="">  267: );
-</span><span class="">  268: 
-</span><span class="">  269: # ---------------------------------------------------------------------------
-</span><span class="">  270: # Master dispatch table: lang -&gt; sex -&gt; hashref
-</span><span class="">  271: # ---------------------------------------------------------------------------
-</span><span class="">  272: 
-</span><span class="">  273: Readonly::Hash my %RELATIONSHIP_TABLES =&gt; (
-</span><span class="">  274: 	&#39;en&#39; =&gt; {
-</span><span class="">  275: 		$SEX_MALE   =&gt; \%EN_MALE_RELATIONSHIPS,
-</span><span class="">  276: 		$SEX_FEMALE =&gt; \%EN_FEMALE_RELATIONSHIPS,
-</span><span class="">  277: 	}, &#39;fr&#39; =&gt; {
-</span><span class="">  278: 		$SEX_MALE   =&gt; \%FR_MALE_RELATIONSHIPS,
-</span><span class="">  279: 		$SEX_FEMALE =&gt; \%FR_FEMALE_RELATIONSHIPS,
-</span><span class="">  280: 	}, &#39;de&#39; =&gt; {
-</span><span class="">  281: 		$SEX_MALE   =&gt; \%DE_MALE_RELATIONSHIPS,
-</span><span class="">  282: 		$SEX_FEMALE =&gt; \%DE_FEMALE_RELATIONSHIPS,
-</span><span class="">  283: 	},
-</span><span class="">  284: );
-</span><span class="">  285: 
-</span><span class="">  286: # ---------------------------------------------------------------------------
-</span><span class="">  287: # Constructor
-</span><span class="">  288: # ---------------------------------------------------------------------------
-</span><span class="">  289: 
-</span><span class="">  290: =head1 NAME
-</span><span class="">  291: 
-</span><span class="">  292: Genealogy::Relationship::Name - Return a genealogical relationship name from step counts
-</span><span class="">  293: 
-</span><span class="">  294: =head1 VERSION
-</span><span class="">  295: 
-</span><span class="">  296: Version 0.02
-</span><span class="">  297: 
-</span><span class="">  298: =head1 SYNOPSIS
-</span><span class="">  299: 
-</span><span class="">  300:     use Genealogy::Relationship::Name;
-</span><span class="">  301: 
-</span><span class="">  302:     my $namer = Genealogy::Relationship::Name-&gt;new();
-</span><span class="">  303: 
-</span><span class="">  304:     my $name = $namer-&gt;name(
-</span><span class="">  305:         steps_to_ancestor   =&gt; 2,
-</span><span class="">  306:         steps_from_ancestor =&gt; 3,
-</span><span class="">  307:         sex                 =&gt; &#39;F&#39;,
-</span><span class="">  308:     );
-</span><span class="">  309:     # Returns &#39;first cousin once-removed&#39;
-</span><span class="">  310: 
-</span><span class="">  311:     # With language
-</span><span class="">  312:     my $name_fr = $namer-&gt;name(
-</span><span class="">  313:         steps_to_ancestor   =&gt; 2,
-</span><span class="">  314:         steps_from_ancestor =&gt; 2,
-</span><span class="">  315:         sex                 =&gt; &#39;M&#39;,
-</span><span class="">  316:         language            =&gt; &#39;fr&#39;,
-</span><span class="">  317:     );
-</span><span class="">  318:     # Returns &#39;cousin germain&#39;
-</span><span class="">  319: 
-</span><span class="">  320: =head1 DESCRIPTION
-</span><span class="">  321: 
-</span><span class="">  322: C&lt;Genealogy::Relationship::Name&gt; maps a pair of step-counts (person A to common
-</span><span class="">  323: ancestor, common ancestor to person B) plus the sex of person B and an optional
-</span><span class="">  324: language code to a human-readable relationship name string.
-</span><span class="">  325: 
-</span><span class="">  326: The relationship tables were originally embedded in the C&lt;gedcom&gt; and C&lt;ged2site&gt;
-</span><span class="">  327: distributions inside C&lt;Gedcom::Individual::relationship_up()&gt;; this module
-</span><span class="">  328: extracts them into a reusable, installable CPAN distribution.
-</span><span class="">  329: 
-</span><span class="">  330: Supported languages: C&lt;en&gt; (English, default), C&lt;fr&gt; (French), C&lt;de&gt; (German).
-</span><span class="">  331: 
-</span><span class="">  332: =head1 METHODS
-</span><span class="">  333: 
-</span><span class="">  334: =head2 new
-</span><span class="">  335: 
-</span><span class="">  336: Constructor.  Creates and returns a blessed C&lt;Genealogy::Relationship::Name&gt;
-</span><span class="">  337: object.
-</span><span class="">  338: 
-</span><span class="">  339: =head3 PURPOSE
-</span><span class="">  340: 
-</span><span class="">  341: Initialises the object with optional configuration: a default language for
-</span><span class="">  342: subsequent C&lt;name()&gt; calls, and an optional L&lt;Log::Abstraction&gt; object to
-</span><span class="">  343: use as the error logger.  Configuration may also be loaded from an INI-style
-</span><span class="">  344: file via L&lt;Object::Configure&gt;.
-</span><span class="">  345: 
-</span><span class="">  346: =head3 ARGUMENTS
-</span><span class="">  347: 
-</span><span class="">  348: =over 4
-</span><span class="">  349: 
-</span><span class="">  350: =item C&lt;language&gt; (string, optional)
-</span><span class="">  351: 
-</span><span class="">  352: Default BCP-47 language tag (primary subtag only) for all C&lt;name()&gt; calls
-</span><span class="">  353: on this object.  Supported values: C&lt;en&gt; (default), C&lt;fr&gt;, C&lt;de&gt;.  May be
-</span><span class="">  354: overridden per-call by passing C&lt;language&gt; to C&lt;name()&gt;.
-</span><span class="">  355: 
-</span><span class="">  356: =item C&lt;logger&gt;
-</span><span class="">  357: 
-</span><span class="">  358: A pre-constructed loggining object.  When a required argument is
-</span><span class="">  359: passed as C&lt;undef&gt; to C&lt;name()&gt;, the error is reported via
-</span><span class="">  360: C&lt;&lt; $logger-&gt;error($msg) &gt;&gt; rather than C&lt;croak&gt;.  This allows
-</span><span class="">  361: programs to route errors through their own
-</span><span class="">  362: infrastructure with full C&lt;ctx&gt; context.
-</span><span class="">  363: 
-</span><span class="">  364: See L&lt;Log::Abstraction&gt; and the L&lt;/CONFIGURATION&gt; section for the
-</span><span class="">  365: recommended construction pattern.
-</span><span class="">  366: 
-</span><span class="">  367: =item C&lt;config_file&gt; (string, optional)
-</span><span class="">  368: 
-</span><span class="">  369: Path to an INI-style configuration file processed by L&lt;Object::Configure&gt;.
-</span><span class="">  370: Any keys it sets may be overridden by arguments passed directly to C&lt;new()&gt;.
-</span><span class="">  371: 
-</span><span class="">  372: =back
-</span><span class="">  373: 
-</span><span class="">  374: =head3 RETURNS
-</span><span class="">  375: 
-</span><span class="">  376: A blessed C&lt;Genealogy::Relationship::Name&gt; object.
-</span><span class="">  377: 
-</span><span class="">  378: =head3 SIDE EFFECTS
-</span><span class="">  379: 
-</span><span class="">  380: Calls L&lt;Object::Configure&gt; C&lt;configure()&gt;, which may read from a
-</span><span class="">  381: configuration file on disk if C&lt;config_file&gt; is supplied or if a default
-</span><span class="">  382: configuration file exists for the class.
-</span><span class="">  383: 
-</span><span class="">  384: =head3 NOTES
-</span><span class="">  385: 
-</span><span class="">  386: L&lt;Object::Configure&gt; cannot handle object or coderef values (it treats
-</span><span class="">  387: unknown scalar values as configuration file paths).  The C&lt;logger&gt; key is
-</span><span class="">  388: therefore stashed before the C&lt;configure()&gt; call and restored afterward.
-</span><span class="">  389: Any future object-valued constructor arguments must follow the same pattern.
-</span><span class="">  390: 
-</span><span class="">  391: =head3 EXAMPLE
-</span><span class="">  392: 
-</span><span class="">  393:     use Genealogy::Relationship::Name;
-</span><span class="">  394:     use Log::Abstraction;
-</span><span class="">  395: 
-</span><span class="">  396:     # Minimal construction
-</span><span class="">  397:     my $namer = Genealogy::Relationship::Name-&gt;new();
-</span><span class="">  398: 
-</span><span class="">  399:     # With a default language
-</span><span class="">  400:     my $namer_fr = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;fr&#39;);
-</span><span class="">  401: 
-</span><span class="">  402:     # With a Log::Abstraction logger
-</span><span class="">  403:     my $la = Log::Abstraction-&gt;new(
-</span><span class="">  404:         logger =&gt; sub {
-</span><span class="">  405:             my $args = shift;
-</span><span class="">  406:             my $msg = $args-&gt;{ctx}
-</span><span class="">  407:                 ? $args-&gt;{ctx}-&gt;as_string() . &#39;: &#39; . join(&#39;&#39;, @{$args-&gt;{message}})
-</span><span class="">  408:                 : join(&#39;&#39;, @{$args-&gt;{message}});
-</span><span class="">  409:             complain({ message =&gt; $msg, person =&gt; $args-&gt;{ctx} });
-</span><span class="">  410:         },
-</span><span class="">  411:         ctx =&gt; $individual,
-</span><span class="">  412:     );
-</span><span class="">  413:     my $namer = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;en&#39;, logger =&gt; $la);
-</span><span class="">  414: 
-</span><span class="">  415: =head3 API SPECIFICATION
+</span><span class="">   47: 	&#39;0,5&#39; =&gt; &#39;great-great-great-grandson&#39;,
+</span><span class="">   48: 	&#39;0,6&#39; =&gt; &#39;great-great-great-great-grandson&#39;,
+</span><span class="">   49: 	&#39;0,7&#39; =&gt; &#39;great-great-great-great-great-grandson&#39;,
+</span><span class="">   50: 	&#39;0,8&#39; =&gt; &#39;great-great-great-great-great-great-grandson&#39;,
+</span><span class="">   51: 	&#39;0,9&#39; =&gt; &#39;great-great-great-great-great-great-great-grandson&#39;,
+</span><span class="">   52: 	&#39;0,10&#39; =&gt; &#39;great-great-great-great-great-great-great-great-grandson&#39;,
+</span><span class="">   53: 	&#39;1,0&#39; =&gt; &#39;father&#39;,
+</span><span class="">   54: 	&#39;1,1&#39; =&gt; &#39;brother&#39;,
+</span><span class="">   55: 	&#39;1,2&#39; =&gt; &#39;nephew&#39;,
+</span><span class="">   56: 	&#39;1,3&#39; =&gt; &#39;great-nephew&#39;,
+</span><span class="">   57: 	&#39;1,4&#39; =&gt; &#39;great-great-nephew&#39;,
+</span><span class="">   58: 	&#39;1,5&#39; =&gt; &#39;great-great-great-nephew&#39;,
+</span><span class="">   59: 	&#39;1,6&#39; =&gt; &#39;great-great-great-great-nephew&#39;,
+</span><span class="">   60: 	&#39;1,7&#39; =&gt; &#39;great-great-great-great-great-nephew&#39;,
+</span><span class="">   61: 	&#39;1,8&#39; =&gt; &#39;great-great-great-great-great-great-nephew&#39;,
+</span><span class="">   62: 	&#39;1,9&#39; =&gt; &#39;great-great-great-great-great-great-great-nephew&#39;,
+</span><span class="">   63: 	&#39;1,10&#39; =&gt; &#39;great-great-great-great-great-great-great-great-nephew&#39;,
+</span><span class="">   64: 	&#39;2,0&#39; =&gt; &#39;grandfather&#39;,
+</span><span class="">   65: 	&#39;2,1&#39; =&gt; &#39;uncle&#39;,
+</span><span class="">   66: 	&#39;2,2&#39; =&gt; &#39;first cousin&#39;,
+</span><span class="">   67: 	&#39;2,3&#39; =&gt; &#39;first cousin once-removed&#39;,
+</span><span class="">   68: 	&#39;2,4&#39; =&gt; &#39;first cousin twice-removed&#39;,
+</span><span class="">   69: 	&#39;2,5&#39; =&gt; &#39;first cousin three-times-removed&#39;,
+</span><span class="">   70: 	&#39;2,6&#39; =&gt; &#39;first cousin four-times-removed&#39;,
+</span><span class="">   71: 	&#39;2,7&#39; =&gt; &#39;first cousin five-times-removed&#39;,
+</span><span class="">   72: 	&#39;2,8&#39; =&gt; &#39;first cousin six-times-removed&#39;,
+</span><span class="">   73: 	&#39;2,9&#39; =&gt; &#39;first cousin seven-times-removed&#39;,
+</span><span class="">   74: 	&#39;2,10&#39; =&gt; &#39;first cousin eight-times-removed&#39;,
+</span><span class="">   75: 	&#39;3,0&#39; =&gt; &#39;great-grandfather&#39;,
+</span><span class="">   76: 	&#39;3,1&#39; =&gt; &#39;great-uncle&#39;,
+</span><span class="">   77: 	&#39;3,2&#39; =&gt; &#39;first cousin once-removed&#39;,
+</span><span class="">   78: 	&#39;3,3&#39; =&gt; &#39;second cousin&#39;,
+</span><span class="">   79: 	&#39;3,4&#39; =&gt; &#39;second cousin once-removed&#39;,
+</span><span class="">   80: 	&#39;3,5&#39; =&gt; &#39;second cousin twice-removed&#39;,
+</span><span class="">   81: 	&#39;3,6&#39; =&gt; &#39;second cousin three-times-removed&#39;,
+</span><span class="">   82: 	&#39;3,7&#39; =&gt; &#39;second cousin four-times-removed&#39;,
+</span><span class="">   83: 	&#39;3,8&#39; =&gt; &#39;second cousin five-times-removed&#39;,
+</span><span class="">   84: 	&#39;3,9&#39; =&gt; &#39;second cousin six-times-removed&#39;,
+</span><span class="">   85: 	&#39;3,10&#39; =&gt; &#39;second cousin seven-times-removed&#39;,
+</span><span class="">   86: 	&#39;4,0&#39; =&gt; &#39;great-great-grandfather&#39;,
+</span><span class="">   87: 	&#39;4,1&#39; =&gt; &#39;great-great-uncle&#39;,
+</span><span class="">   88: 	&#39;4,2&#39; =&gt; &#39;first cousin twice-removed&#39;,
+</span><span class="">   89: 	&#39;4,3&#39; =&gt; &#39;second cousin once-removed&#39;,
+</span><span class="">   90: 	&#39;4,4&#39; =&gt; &#39;third cousin&#39;,
+</span><span class="">   91: 	&#39;4,5&#39; =&gt; &#39;third cousin once-removed&#39;,
+</span><span class="">   92: 	&#39;4,6&#39; =&gt; &#39;third cousin twice-removed&#39;,
+</span><span class="">   93: 	&#39;4,7&#39; =&gt; &#39;third cousin three-times-removed&#39;,
+</span><span class="">   94: 	&#39;4,8&#39; =&gt; &#39;third cousin four-times-removed&#39;,
+</span><span class="">   95: 	&#39;4,9&#39; =&gt; &#39;third cousin five-times-removed&#39;,
+</span><span class="">   96: 	&#39;4,10&#39; =&gt; &#39;third cousin six-times-removed&#39;,
+</span><span class="">   97: 	&#39;5,0&#39; =&gt; &#39;great-great-great-grandfather&#39;,
+</span><span class="">   98: 	&#39;5,1&#39; =&gt; &#39;great-great-great-uncle&#39;,
+</span><span class="">   99: 	&#39;5,2&#39; =&gt; &#39;first cousin three-times-removed&#39;,
+</span><span class="">  100: 	&#39;5,3&#39; =&gt; &#39;second cousin twice-removed&#39;,
+</span><span class="">  101: 	&#39;5,4&#39; =&gt; &#39;third cousin once-removed&#39;,
+</span><span class="">  102: 	&#39;5,5&#39; =&gt; &#39;fourth cousin&#39;,
+</span><span class="">  103: 	&#39;5,6&#39; =&gt; &#39;fourth cousin once-removed&#39;,
+</span><span class="">  104: 	&#39;5,7&#39; =&gt; &#39;fourth cousin twice-removed&#39;,
+</span><span class="">  105: 	&#39;5,8&#39; =&gt; &#39;fourth cousin three-times-removed&#39;,
+</span><span class="">  106: 	&#39;5,9&#39; =&gt; &#39;fourth cousin four-times-removed&#39;,
+</span><span class="">  107: 	&#39;5,10&#39; =&gt; &#39;fourth cousin five-times-removed&#39;,
+</span><span class="">  108: 	&#39;6,0&#39; =&gt; &#39;great-great-great-great-grandfather&#39;,
+</span><span class="">  109: 	&#39;6,1&#39; =&gt; &#39;great-great-great-great-uncle&#39;,
+</span><span class="">  110: 	&#39;6,2&#39; =&gt; &#39;first cousin four-times-removed&#39;,
+</span><span class="">  111: 	&#39;6,3&#39; =&gt; &#39;second cousin three-times-removed&#39;,
+</span><span class="">  112: 	&#39;6,4&#39; =&gt; &#39;third cousin twice-removed&#39;,
+</span><span class="">  113: 	&#39;6,5&#39; =&gt; &#39;fourth cousin once-removed&#39;,
+</span><span class="">  114: 	&#39;6,6&#39; =&gt; &#39;fifth cousin&#39;,
+</span><span class="">  115: 	&#39;6,7&#39; =&gt; &#39;fifth cousin once-removed&#39;,
+</span><span class="">  116: 	&#39;6,8&#39; =&gt; &#39;fifth cousin twice-removed&#39;,
+</span><span class="">  117: 	&#39;6,9&#39; =&gt; &#39;fifth cousin three-times-removed&#39;,
+</span><span class="">  118: 	&#39;6,10&#39; =&gt; &#39;fifth cousin four-times-removed&#39;,
+</span><span class="">  119: 	&#39;7,0&#39; =&gt; &#39;great-great-great-great-great-grandfather&#39;,
+</span><span class="">  120: 	&#39;7,1&#39; =&gt; &#39;great-great-great-great-great-uncle&#39;,
+</span><span class="">  121: 	&#39;7,2&#39; =&gt; &#39;first cousin five-times-removed&#39;,
+</span><span class="">  122: 	&#39;7,3&#39; =&gt; &#39;second cousin four-times-removed&#39;,
+</span><span class="">  123: 	&#39;7,4&#39; =&gt; &#39;third cousin three-times-removed&#39;,
+</span><span class="">  124: 	&#39;7,5&#39; =&gt; &#39;fourth cousin twice-removed&#39;,
+</span><span class="">  125: 	&#39;7,6&#39; =&gt; &#39;fifth cousin once-removed&#39;,
+</span><span class="">  126: 	&#39;7,7&#39; =&gt; &#39;sixth cousin&#39;,
+</span><span class="">  127: 	&#39;7,8&#39; =&gt; &#39;sixth cousin once-removed&#39;,
+</span><span class="">  128: 	&#39;7,9&#39; =&gt; &#39;sixth cousin twice-removed&#39;,
+</span><span class="">  129: 	&#39;7,10&#39; =&gt; &#39;sixth cousin three-times-removed&#39;,
+</span><span class="">  130: 	&#39;8,0&#39; =&gt; &#39;great-great-great-great-great-great-grandfather&#39;,
+</span><span class="">  131: 	&#39;8,1&#39; =&gt; &#39;great-great-great-great-great-great-uncle&#39;,
+</span><span class="">  132: 	&#39;8,2&#39; =&gt; &#39;first cousin six-times-removed&#39;,
+</span><span class="">  133: 	&#39;8,3&#39; =&gt; &#39;second cousin five-times-removed&#39;,
+</span><span class="">  134: 	&#39;8,4&#39; =&gt; &#39;third cousin four-times-removed&#39;,
+</span><span class="">  135: 	&#39;8,5&#39; =&gt; &#39;fourth cousin three-times-removed&#39;,
+</span><span class="">  136: 	&#39;8,6&#39; =&gt; &#39;fifth cousin twice-removed&#39;,
+</span><span class="">  137: 	&#39;8,7&#39; =&gt; &#39;sixth cousin once-removed&#39;,
+</span><span class="">  138: 	&#39;8,8&#39; =&gt; &#39;seventh cousin&#39;,
+</span><span class="">  139: 	&#39;8,9&#39; =&gt; &#39;seventh cousin once-removed&#39;,
+</span><span class="">  140: 	&#39;8,10&#39; =&gt; &#39;seventh cousin twice-removed&#39;,
+</span><span class="">  141: 	&#39;9,0&#39; =&gt; &#39;great-great-great-great-great-great-great-grandfather&#39;,
+</span><span class="">  142: 	&#39;9,1&#39; =&gt; &#39;great-great-great-great-great-great-great-uncle&#39;,
+</span><span class="">  143: 	&#39;9,2&#39; =&gt; &#39;first cousin seven-times-removed&#39;,
+</span><span class="">  144: 	&#39;9,3&#39; =&gt; &#39;second cousin six-times-removed&#39;,
+</span><span class="">  145: 	&#39;9,4&#39; =&gt; &#39;third cousin five-times-removed&#39;,
+</span><span class="">  146: 	&#39;9,5&#39; =&gt; &#39;fourth cousin four-times-removed&#39;,
+</span><span class="">  147: 	&#39;9,6&#39; =&gt; &#39;fifth cousin three-times-removed&#39;,
+</span><span class="">  148: 	&#39;9,7&#39; =&gt; &#39;sixth cousin twice-removed&#39;,
+</span><span class="">  149: 	&#39;9,8&#39; =&gt; &#39;seventh cousin once-removed&#39;,
+</span><span class="">  150: 	&#39;9,9&#39; =&gt; &#39;eighth cousin&#39;,
+</span><span class="">  151: 	&#39;9,10&#39; =&gt; &#39;eighth cousin once-removed&#39;,
+</span><span class="">  152: 	&#39;10,0&#39; =&gt; &#39;great-great-great-great-great-great-great-great-grandfather&#39;,
+</span><span class="">  153: 	&#39;10,1&#39; =&gt; &#39;great-great-great-great-great-great-great-great-uncle&#39;,
+</span><span class="">  154: 	&#39;10,2&#39; =&gt; &#39;first cousin eight-times-removed&#39;,
+</span><span class="">  155: 	&#39;10,3&#39; =&gt; &#39;second cousin seven-times-removed&#39;,
+</span><span class="">  156: 	&#39;10,4&#39; =&gt; &#39;third cousin six-times-removed&#39;,
+</span><span class="">  157: 	&#39;10,5&#39; =&gt; &#39;fourth cousin five-times-removed&#39;,
+</span><span class="">  158: 	&#39;10,6&#39; =&gt; &#39;fifth cousin four-times-removed&#39;,
+</span><span class="">  159: 	&#39;10,7&#39; =&gt; &#39;sixth cousin three-times-removed&#39;,
+</span><span class="">  160: 	&#39;10,8&#39; =&gt; &#39;seventh cousin twice-removed&#39;,
+</span><span class="">  161: 	&#39;10,9&#39; =&gt; &#39;eighth cousin once-removed&#39;,
+</span><span class="">  162: 	&#39;10,10&#39; =&gt; &#39;ninth cousin&#39;,
+</span><span class="">  163: );
+</span><span class="">  164: 
+</span><span class="">  165: Readonly::Hash my %EN_FEMALE_RELATIONSHIPS =&gt; (
+</span><span class="">  166: 	&#39;0,0&#39; =&gt; &#39;self&#39;,
+</span><span class="">  167: 	&#39;0,1&#39; =&gt; &#39;daughter&#39;,
+</span><span class="">  168: 	&#39;0,2&#39; =&gt; &#39;granddaughter&#39;,
+</span><span class="">  169: 	&#39;0,3&#39; =&gt; &#39;great-granddaughter&#39;,
+</span><span class="">  170: 	&#39;0,4&#39; =&gt; &#39;great-great-granddaughter&#39;,
+</span><span class="">  171: 	&#39;0,5&#39; =&gt; &#39;great-great-great-granddaughter&#39;,
+</span><span class="">  172: 	&#39;0,6&#39; =&gt; &#39;great-great-great-great-granddaughter&#39;,
+</span><span class="">  173: 	&#39;0,7&#39; =&gt; &#39;great-great-great-great-great-granddaughter&#39;,
+</span><span class="">  174: 	&#39;0,8&#39; =&gt; &#39;great-great-great-great-great-great-granddaughter&#39;,
+</span><span class="">  175: 	&#39;0,9&#39; =&gt; &#39;great-great-great-great-great-great-great-granddaughter&#39;,
+</span><span class="">  176: 	&#39;0,10&#39; =&gt; &#39;great-great-great-great-great-great-great-great-granddaughter&#39;,
+</span><span class="">  177: 	&#39;1,0&#39; =&gt; &#39;mother&#39;,
+</span><span class="">  178: 	&#39;1,1&#39; =&gt; &#39;sister&#39;,
+</span><span class="">  179: 	&#39;1,2&#39; =&gt; &#39;niece&#39;,
+</span><span class="">  180: 	&#39;1,3&#39; =&gt; &#39;great-niece&#39;,
+</span><span class="">  181: 	&#39;1,4&#39; =&gt; &#39;great-great-niece&#39;,
+</span><span class="">  182: 	&#39;1,5&#39; =&gt; &#39;great-great-great-niece&#39;,
+</span><span class="">  183: 	&#39;1,6&#39; =&gt; &#39;great-great-great-great-niece&#39;,
+</span><span class="">  184: 	&#39;1,7&#39; =&gt; &#39;great-great-great-great-great-niece&#39;,
+</span><span class="">  185: 	&#39;1,8&#39; =&gt; &#39;great-great-great-great-great-great-niece&#39;,
+</span><span class="">  186: 	&#39;1,9&#39; =&gt; &#39;great-great-great-great-great-great-great-niece&#39;,
+</span><span class="">  187: 	&#39;1,10&#39; =&gt; &#39;great-great-great-great-great-great-great-great-niece&#39;,
+</span><span class="">  188: 	&#39;2,0&#39; =&gt; &#39;grandmother&#39;,
+</span><span class="">  189: 	&#39;2,1&#39; =&gt; &#39;aunt&#39;,
+</span><span class="">  190: 	&#39;2,2&#39; =&gt; &#39;first cousin&#39;,
+</span><span class="">  191: 	&#39;2,3&#39; =&gt; &#39;first cousin once-removed&#39;,
+</span><span class="">  192: 	&#39;2,4&#39; =&gt; &#39;first cousin twice-removed&#39;,
+</span><span class="">  193: 	&#39;2,5&#39; =&gt; &#39;first cousin three-times-removed&#39;,
+</span><span class="">  194: 	&#39;2,6&#39; =&gt; &#39;first cousin four-times-removed&#39;,
+</span><span class="">  195: 	&#39;2,7&#39; =&gt; &#39;first cousin five-times-removed&#39;,
+</span><span class="">  196: 	&#39;2,8&#39; =&gt; &#39;first cousin six-times-removed&#39;,
+</span><span class="">  197: 	&#39;2,9&#39; =&gt; &#39;first cousin seven-times-removed&#39;,
+</span><span class="">  198: 	&#39;2,10&#39; =&gt; &#39;first cousin eight-times-removed&#39;,
+</span><span class="">  199: 	&#39;3,0&#39; =&gt; &#39;great-grandmother&#39;,
+</span><span class="">  200: 	&#39;3,1&#39; =&gt; &#39;great-aunt&#39;,
+</span><span class="">  201: 	&#39;3,2&#39; =&gt; &#39;first cousin once-removed&#39;,
+</span><span class="">  202: 	&#39;3,3&#39; =&gt; &#39;second cousin&#39;,
+</span><span class="">  203: 	&#39;3,4&#39; =&gt; &#39;second cousin once-removed&#39;,
+</span><span class="">  204: 	&#39;3,5&#39; =&gt; &#39;second cousin twice-removed&#39;,
+</span><span class="">  205: 	&#39;3,6&#39; =&gt; &#39;second cousin three-times-removed&#39;,
+</span><span class="">  206: 	&#39;3,7&#39; =&gt; &#39;second cousin four-times-removed&#39;,
+</span><span class="">  207: 	&#39;3,8&#39; =&gt; &#39;second cousin five-times-removed&#39;,
+</span><span class="">  208: 	&#39;3,9&#39; =&gt; &#39;second cousin six-times-removed&#39;,
+</span><span class="">  209: 	&#39;3,10&#39; =&gt; &#39;second cousin seven-times-removed&#39;,
+</span><span class="">  210: 	&#39;4,0&#39; =&gt; &#39;great-great-grandmother&#39;,
+</span><span class="">  211: 	&#39;4,1&#39; =&gt; &#39;great-great-aunt&#39;,
+</span><span class="">  212: 	&#39;4,2&#39; =&gt; &#39;first cousin twice-removed&#39;,
+</span><span class="">  213: 	&#39;4,3&#39; =&gt; &#39;second cousin once-removed&#39;,
+</span><span class="">  214: 	&#39;4,4&#39; =&gt; &#39;third cousin&#39;,
+</span><span class="">  215: 	&#39;4,5&#39; =&gt; &#39;third cousin once-removed&#39;,
+</span><span class="">  216: 	&#39;4,6&#39; =&gt; &#39;third cousin twice-removed&#39;,
+</span><span class="">  217: 	&#39;4,7&#39; =&gt; &#39;third cousin three-times-removed&#39;,
+</span><span class="">  218: 	&#39;4,8&#39; =&gt; &#39;third cousin four-times-removed&#39;,
+</span><span class="">  219: 	&#39;4,9&#39; =&gt; &#39;third cousin five-times-removed&#39;,
+</span><span class="">  220: 	&#39;4,10&#39; =&gt; &#39;third cousin six-times-removed&#39;,
+</span><span class="">  221: 	&#39;5,0&#39; =&gt; &#39;great-great-great-grandmother&#39;,
+</span><span class="">  222: 	&#39;5,1&#39; =&gt; &#39;great-great-great-aunt&#39;,
+</span><span class="">  223: 	&#39;5,2&#39; =&gt; &#39;first cousin three-times-removed&#39;,
+</span><span class="">  224: 	&#39;5,3&#39; =&gt; &#39;second cousin twice-removed&#39;,
+</span><span class="">  225: 	&#39;5,4&#39; =&gt; &#39;third cousin once-removed&#39;,
+</span><span class="">  226: 	&#39;5,5&#39; =&gt; &#39;fourth cousin&#39;,
+</span><span class="">  227: 	&#39;5,6&#39; =&gt; &#39;fourth cousin once-removed&#39;,
+</span><span class="">  228: 	&#39;5,7&#39; =&gt; &#39;fourth cousin twice-removed&#39;,
+</span><span class="">  229: 	&#39;5,8&#39; =&gt; &#39;fourth cousin three-times-removed&#39;,
+</span><span class="">  230: 	&#39;5,9&#39; =&gt; &#39;fourth cousin four-times-removed&#39;,
+</span><span class="">  231: 	&#39;5,10&#39; =&gt; &#39;fourth cousin five-times-removed&#39;,
+</span><span class="">  232: 	&#39;6,0&#39; =&gt; &#39;great-great-great-great-grandmother&#39;,
+</span><span class="">  233: 	&#39;6,1&#39; =&gt; &#39;great-great-great-great-aunt&#39;,
+</span><span class="">  234: 	&#39;6,2&#39; =&gt; &#39;first cousin four-times-removed&#39;,
+</span><span class="">  235: 	&#39;6,3&#39; =&gt; &#39;second cousin three-times-removed&#39;,
+</span><span class="">  236: 	&#39;6,4&#39; =&gt; &#39;third cousin twice-removed&#39;,
+</span><span class="">  237: 	&#39;6,5&#39; =&gt; &#39;fourth cousin once-removed&#39;,
+</span><span class="">  238: 	&#39;6,6&#39; =&gt; &#39;fifth cousin&#39;,
+</span><span class="">  239: 	&#39;6,7&#39; =&gt; &#39;fifth cousin once-removed&#39;,
+</span><span class="">  240: 	&#39;6,8&#39; =&gt; &#39;fifth cousin twice-removed&#39;,
+</span><span class="">  241: 	&#39;6,9&#39; =&gt; &#39;fifth cousin three-times-removed&#39;,
+</span><span class="">  242: 	&#39;6,10&#39; =&gt; &#39;fifth cousin four-times-removed&#39;,
+</span><span class="">  243: 	&#39;7,0&#39; =&gt; &#39;great-great-great-great-great-grandmother&#39;,
+</span><span class="">  244: 	&#39;7,1&#39; =&gt; &#39;great-great-great-great-great-aunt&#39;,
+</span><span class="">  245: 	&#39;7,2&#39; =&gt; &#39;first cousin five-times-removed&#39;,
+</span><span class="">  246: 	&#39;7,3&#39; =&gt; &#39;second cousin four-times-removed&#39;,
+</span><span class="">  247: 	&#39;7,4&#39; =&gt; &#39;third cousin three-times-removed&#39;,
+</span><span class="">  248: 	&#39;7,5&#39; =&gt; &#39;fourth cousin twice-removed&#39;,
+</span><span class="">  249: 	&#39;7,6&#39; =&gt; &#39;fifth cousin once-removed&#39;,
+</span><span class="">  250: 	&#39;7,7&#39; =&gt; &#39;sixth cousin&#39;,
+</span><span class="">  251: 	&#39;7,8&#39; =&gt; &#39;sixth cousin once-removed&#39;,
+</span><span class="">  252: 	&#39;7,9&#39; =&gt; &#39;sixth cousin twice-removed&#39;,
+</span><span class="">  253: 	&#39;7,10&#39; =&gt; &#39;sixth cousin three-times-removed&#39;,
+</span><span class="">  254: 	&#39;8,0&#39; =&gt; &#39;great-great-great-great-great-great-grandmother&#39;,
+</span><span class="">  255: 	&#39;8,1&#39; =&gt; &#39;great-great-great-great-great-great-aunt&#39;,
+</span><span class="">  256: 	&#39;8,2&#39; =&gt; &#39;first cousin six-times-removed&#39;,
+</span><span class="">  257: 	&#39;8,3&#39; =&gt; &#39;second cousin five-times-removed&#39;,
+</span><span class="">  258: 	&#39;8,4&#39; =&gt; &#39;third cousin four-times-removed&#39;,
+</span><span class="">  259: 	&#39;8,5&#39; =&gt; &#39;fourth cousin three-times-removed&#39;,
+</span><span class="">  260: 	&#39;8,6&#39; =&gt; &#39;fifth cousin twice-removed&#39;,
+</span><span class="">  261: 	&#39;8,7&#39; =&gt; &#39;sixth cousin once-removed&#39;,
+</span><span class="">  262: 	&#39;8,8&#39; =&gt; &#39;seventh cousin&#39;,
+</span><span class="">  263: 	&#39;8,9&#39; =&gt; &#39;seventh cousin once-removed&#39;,
+</span><span class="">  264: 	&#39;8,10&#39; =&gt; &#39;seventh cousin twice-removed&#39;,
+</span><span class="">  265: 	&#39;9,0&#39; =&gt; &#39;great-great-great-great-great-great-great-grandmother&#39;,
+</span><span class="">  266: 	&#39;9,1&#39; =&gt; &#39;great-great-great-great-great-great-great-aunt&#39;,
+</span><span class="">  267: 	&#39;9,2&#39; =&gt; &#39;first cousin seven-times-removed&#39;,
+</span><span class="">  268: 	&#39;9,3&#39; =&gt; &#39;second cousin six-times-removed&#39;,
+</span><span class="">  269: 	&#39;9,4&#39; =&gt; &#39;third cousin five-times-removed&#39;,
+</span><span class="">  270: 	&#39;9,5&#39; =&gt; &#39;fourth cousin four-times-removed&#39;,
+</span><span class="">  271: 	&#39;9,6&#39; =&gt; &#39;fifth cousin three-times-removed&#39;,
+</span><span class="">  272: 	&#39;9,7&#39; =&gt; &#39;sixth cousin twice-removed&#39;,
+</span><span class="">  273: 	&#39;9,8&#39; =&gt; &#39;seventh cousin once-removed&#39;,
+</span><span class="">  274: 	&#39;9,9&#39; =&gt; &#39;eighth cousin&#39;,
+</span><span class="">  275: 	&#39;9,10&#39; =&gt; &#39;eighth cousin once-removed&#39;,
+</span><span class="">  276: 	&#39;10,0&#39; =&gt; &#39;great-great-great-great-great-great-great-great-grandmother&#39;,
+</span><span class="">  277: 	&#39;10,1&#39; =&gt; &#39;great-great-great-great-great-great-great-great-aunt&#39;,
+</span><span class="">  278: 	&#39;10,2&#39; =&gt; &#39;first cousin eight-times-removed&#39;,
+</span><span class="">  279: 	&#39;10,3&#39; =&gt; &#39;second cousin seven-times-removed&#39;,
+</span><span class="">  280: 	&#39;10,4&#39; =&gt; &#39;third cousin six-times-removed&#39;,
+</span><span class="">  281: 	&#39;10,5&#39; =&gt; &#39;fourth cousin five-times-removed&#39;,
+</span><span class="">  282: 	&#39;10,6&#39; =&gt; &#39;fifth cousin four-times-removed&#39;,
+</span><span class="">  283: 	&#39;10,7&#39; =&gt; &#39;sixth cousin three-times-removed&#39;,
+</span><span class="">  284: 	&#39;10,8&#39; =&gt; &#39;seventh cousin twice-removed&#39;,
+</span><span class="">  285: 	&#39;10,9&#39; =&gt; &#39;eighth cousin once-removed&#39;,
+</span><span class="">  286: 	&#39;10,10&#39; =&gt; &#39;ninth cousin&#39;,
+</span><span class="">  287: );
+</span><span class="">  288: 
+</span><span class="">  289: # ---------------------------------------------------------------------------
+</span><span class="">  290: # German relationship tables
+</span><span class="">  291: # ---------------------------------------------------------------------------
+</span><span class="">  292: 
+</span><span class="">  293: Readonly::Hash my %FR_MALE_RELATIONSHIPS =&gt; (
+</span><span class="">  294: 	&#39;0,0&#39; =&gt; &#39;soi-meme&#39;,
+</span><span class="">  295: 	&#39;0,1&#39; =&gt; &#39;fils&#39;,
+</span><span class="">  296: 	&#39;0,2&#39; =&gt; &#39;petit-fils&#39;,
+</span><span class="">  297: 	&#39;0,3&#39; =&gt; &#39;arriere-petit-fils&#39;,
+</span><span class="">  298: 	&#39;0,4&#39; =&gt; &#39;arriere-arriere-petit-fils&#39;,
+</span><span class="">  299: 	&#39;0,5&#39; =&gt; &#39;arriere-arriere-arriere-petit-fils&#39;,
+</span><span class="">  300: 	&#39;0,6&#39; =&gt; &#39;arriere-arriere-arriere-arriere-petit-fils&#39;,
+</span><span class="">  301: 	&#39;0,7&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-petit-fils&#39;,
+</span><span class="">  302: 	&#39;0,8&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-petit-fils&#39;,
+</span><span class="">  303: 	&#39;0,9&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-petit-fils&#39;,
+</span><span class="">  304: 	&#39;0,10&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-arriere-petit-fils&#39;,
+</span><span class="">  305: 	&#39;1,0&#39; =&gt; &#39;pere&#39;,
+</span><span class="">  306: 	&#39;1,1&#39; =&gt; &#39;frere&#39;,
+</span><span class="">  307: 	&#39;1,2&#39; =&gt; &#39;neveu&#39;,
+</span><span class="">  308: 	&#39;1,3&#39; =&gt; &#39;grand-neveu&#39;,
+</span><span class="">  309: 	&#39;1,4&#39; =&gt; &#39;arriere-grand-neveu&#39;,
+</span><span class="">  310: 	&#39;1,5&#39; =&gt; &#39;arriere-arriere-grand-neveu&#39;,
+</span><span class="">  311: 	&#39;1,6&#39; =&gt; &#39;arriere-arriere-arriere-grand-neveu&#39;,
+</span><span class="">  312: 	&#39;1,7&#39; =&gt; &#39;arriere-arriere-arriere-arriere-grand-neveu&#39;,
+</span><span class="">  313: 	&#39;1,8&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-grand-neveu&#39;,
+</span><span class="">  314: 	&#39;1,9&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-grand-neveu&#39;,
+</span><span class="">  315: 	&#39;1,10&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-grand-neveu&#39;,
+</span><span class="">  316: 	&#39;2,0&#39; =&gt; &#39;grand-pere&#39;,
+</span><span class="">  317: 	&#39;2,1&#39; =&gt; &#39;oncle&#39;,
+</span><span class="">  318: 	&#39;2,2&#39; =&gt; &#39;cousin germain&#39;,
+</span><span class="">  319: 	&#39;2,3&#39; =&gt; &#39;cousin germain une fois eloigne&#39;,
+</span><span class="">  320: 	&#39;2,4&#39; =&gt; &#39;cousin germain deux fois eloigne&#39;,
+</span><span class="">  321: 	&#39;2,5&#39; =&gt; &#39;cousin germain trois fois eloigne&#39;,
+</span><span class="">  322: 	&#39;2,6&#39; =&gt; &#39;cousin germain quatre fois eloigne&#39;,
+</span><span class="">  323: 	&#39;2,7&#39; =&gt; &#39;cousin germain cinq fois eloigne&#39;,
+</span><span class="">  324: 	&#39;2,8&#39; =&gt; &#39;cousin germain six fois eloigne&#39;,
+</span><span class="">  325: 	&#39;2,9&#39; =&gt; &#39;cousin germain sept fois eloigne&#39;,
+</span><span class="">  326: 	&#39;2,10&#39; =&gt; &#39;cousin germain huit fois eloigne&#39;,
+</span><span class="">  327: 	&#39;3,0&#39; =&gt; &#39;arriere-grand-pere&#39;,
+</span><span class="">  328: 	&#39;3,1&#39; =&gt; &#39;grand-oncle&#39;,
+</span><span class="">  329: 	&#39;3,2&#39; =&gt; &#39;cousin germain une fois eloigne&#39;,
+</span><span class="">  330: 	&#39;3,3&#39; =&gt; &#39;cousin issu de germain&#39;,
+</span><span class="">  331: 	&#39;3,4&#39; =&gt; &#39;cousin issu de germain une fois eloigne&#39;,
+</span><span class="">  332: 	&#39;3,5&#39; =&gt; &#39;cousin issu de germain deux fois eloigne&#39;,
+</span><span class="">  333: 	&#39;3,6&#39; =&gt; &#39;cousin issu de germain trois fois eloigne&#39;,
+</span><span class="">  334: 	&#39;3,7&#39; =&gt; &#39;cousin issu de germain quatre fois eloigne&#39;,
+</span><span class="">  335: 	&#39;3,8&#39; =&gt; &#39;cousin issu de germain cinq fois eloigne&#39;,
+</span><span class="">  336: 	&#39;3,9&#39; =&gt; &#39;cousin issu de germain six fois eloigne&#39;,
+</span><span class="">  337: 	&#39;3,10&#39; =&gt; &#39;cousin issu de germain sept fois eloigne&#39;,
+</span><span class="">  338: 	&#39;4,0&#39; =&gt; &#39;arriere-arriere-grand-pere&#39;,
+</span><span class="">  339: 	&#39;4,1&#39; =&gt; &#39;arriere-grand-oncle&#39;,
+</span><span class="">  340: 	&#39;4,2&#39; =&gt; &#39;cousin germain deux fois eloigne&#39;,
+</span><span class="">  341: 	&#39;4,3&#39; =&gt; &#39;cousin issu de germain une fois eloigne&#39;,
+</span><span class="">  342: 	&#39;4,4&#39; =&gt; &#39;cousin au quatrieme degre&#39;,
+</span><span class="">  343: 	&#39;4,5&#39; =&gt; &#39;cousin au quatrieme degre une fois eloigne&#39;,
+</span><span class="">  344: 	&#39;4,6&#39; =&gt; &#39;cousin au quatrieme degre deux fois eloigne&#39;,
+</span><span class="">  345: 	&#39;4,7&#39; =&gt; &#39;cousin au quatrieme degre trois fois eloigne&#39;,
+</span><span class="">  346: 	&#39;4,8&#39; =&gt; &#39;cousin au quatrieme degre quatre fois eloigne&#39;,
+</span><span class="">  347: 	&#39;4,9&#39; =&gt; &#39;cousin au quatrieme degre cinq fois eloigne&#39;,
+</span><span class="">  348: 	&#39;4,10&#39; =&gt; &#39;cousin au quatrieme degre six fois eloigne&#39;,
+</span><span class="">  349: 	&#39;5,0&#39; =&gt; &#39;arriere-arriere-arriere-grand-pere&#39;,
+</span><span class="">  350: 	&#39;5,1&#39; =&gt; &#39;arriere-arriere-grand-oncle&#39;,
+</span><span class="">  351: 	&#39;5,2&#39; =&gt; &#39;cousin germain trois fois eloigne&#39;,
+</span><span class="">  352: 	&#39;5,3&#39; =&gt; &#39;cousin issu de germain deux fois eloigne&#39;,
+</span><span class="">  353: 	&#39;5,4&#39; =&gt; &#39;cousin au quatrieme degre une fois eloigne&#39;,
+</span><span class="">  354: 	&#39;5,5&#39; =&gt; &#39;cousin au cinquieme degre&#39;,
+</span><span class="">  355: 	&#39;5,6&#39; =&gt; &#39;cousin au cinquieme degre une fois eloigne&#39;,
+</span><span class="">  356: 	&#39;5,7&#39; =&gt; &#39;cousin au cinquieme degre deux fois eloigne&#39;,
+</span><span class="">  357: 	&#39;5,8&#39; =&gt; &#39;cousin au cinquieme degre trois fois eloigne&#39;,
+</span><span class="">  358: 	&#39;5,9&#39; =&gt; &#39;cousin au cinquieme degre quatre fois eloigne&#39;,
+</span><span class="">  359: 	&#39;5,10&#39; =&gt; &#39;cousin au cinquieme degre cinq fois eloigne&#39;,
+</span><span class="">  360: 	&#39;6,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-grand-pere&#39;,
+</span><span class="">  361: 	&#39;6,1&#39; =&gt; &#39;arriere-arriere-arriere-grand-oncle&#39;,
+</span><span class="">  362: 	&#39;6,2&#39; =&gt; &#39;cousin germain quatre fois eloigne&#39;,
+</span><span class="">  363: 	&#39;6,3&#39; =&gt; &#39;cousin issu de germain trois fois eloigne&#39;,
+</span><span class="">  364: 	&#39;6,4&#39; =&gt; &#39;cousin au quatrieme degre deux fois eloigne&#39;,
+</span><span class="">  365: 	&#39;6,5&#39; =&gt; &#39;cousin au cinquieme degre une fois eloigne&#39;,
+</span><span class="">  366: 	&#39;6,6&#39; =&gt; &#39;cousin au sixieme degre&#39;,
+</span><span class="">  367: 	&#39;6,7&#39; =&gt; &#39;cousin au sixieme degre une fois eloigne&#39;,
+</span><span class="">  368: 	&#39;6,8&#39; =&gt; &#39;cousin au sixieme degre deux fois eloigne&#39;,
+</span><span class="">  369: 	&#39;6,9&#39; =&gt; &#39;cousin au sixieme degre trois fois eloigne&#39;,
+</span><span class="">  370: 	&#39;6,10&#39; =&gt; &#39;cousin au sixieme degre quatre fois eloigne&#39;,
+</span><span class="">  371: 	&#39;7,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-grand-pere&#39;,
+</span><span class="">  372: 	&#39;7,1&#39; =&gt; &#39;arriere-arriere-arriere-arriere-grand-oncle&#39;,
+</span><span class="">  373: 	&#39;7,2&#39; =&gt; &#39;cousin germain cinq fois eloigne&#39;,
+</span><span class="">  374: 	&#39;7,3&#39; =&gt; &#39;cousin issu de germain quatre fois eloigne&#39;,
+</span><span class="">  375: 	&#39;7,4&#39; =&gt; &#39;cousin au quatrieme degre trois fois eloigne&#39;,
+</span><span class="">  376: 	&#39;7,5&#39; =&gt; &#39;cousin au cinquieme degre deux fois eloigne&#39;,
+</span><span class="">  377: 	&#39;7,6&#39; =&gt; &#39;cousin au sixieme degre une fois eloigne&#39;,
+</span><span class="">  378: 	&#39;7,7&#39; =&gt; &#39;cousin au septieme degre&#39;,
+</span><span class="">  379: 	&#39;7,8&#39; =&gt; &#39;cousin au septieme degre une fois eloigne&#39;,
+</span><span class="">  380: 	&#39;7,9&#39; =&gt; &#39;cousin au septieme degre deux fois eloigne&#39;,
+</span><span class="">  381: 	&#39;7,10&#39; =&gt; &#39;cousin au septieme degre trois fois eloigne&#39;,
+</span><span class="">  382: 	&#39;8,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-grand-pere&#39;,
+</span><span class="">  383: 	&#39;8,1&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-grand-oncle&#39;,
+</span><span class="">  384: 	&#39;8,2&#39; =&gt; &#39;cousin germain six fois eloigne&#39;,
+</span><span class="">  385: 	&#39;8,3&#39; =&gt; &#39;cousin issu de germain cinq fois eloigne&#39;,
+</span><span class="">  386: 	&#39;8,4&#39; =&gt; &#39;cousin au quatrieme degre quatre fois eloigne&#39;,
+</span><span class="">  387: 	&#39;8,5&#39; =&gt; &#39;cousin au cinquieme degre trois fois eloigne&#39;,
+</span><span class="">  388: 	&#39;8,6&#39; =&gt; &#39;cousin au sixieme degre deux fois eloigne&#39;,
+</span><span class="">  389: 	&#39;8,7&#39; =&gt; &#39;cousin au septieme degre une fois eloigne&#39;,
+</span><span class="">  390: 	&#39;8,8&#39; =&gt; &#39;cousin au huitieme degre&#39;,
+</span><span class="">  391: 	&#39;8,9&#39; =&gt; &#39;cousin au huitieme degre une fois eloigne&#39;,
+</span><span class="">  392: 	&#39;8,10&#39; =&gt; &#39;cousin au huitieme degre deux fois eloigne&#39;,
+</span><span class="">  393: 	&#39;9,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-grand-pere&#39;,
+</span><span class="">  394: 	&#39;9,1&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-grand-oncle&#39;,
+</span><span class="">  395: 	&#39;9,2&#39; =&gt; &#39;cousin germain sept fois eloigne&#39;,
+</span><span class="">  396: 	&#39;9,3&#39; =&gt; &#39;cousin issu de germain six fois eloigne&#39;,
+</span><span class="">  397: 	&#39;9,4&#39; =&gt; &#39;cousin au quatrieme degre cinq fois eloigne&#39;,
+</span><span class="">  398: 	&#39;9,5&#39; =&gt; &#39;cousin au cinquieme degre quatre fois eloigne&#39;,
+</span><span class="">  399: 	&#39;9,6&#39; =&gt; &#39;cousin au sixieme degre trois fois eloigne&#39;,
+</span><span class="">  400: 	&#39;9,7&#39; =&gt; &#39;cousin au septieme degre deux fois eloigne&#39;,
+</span><span class="">  401: 	&#39;9,8&#39; =&gt; &#39;cousin au huitieme degre une fois eloigne&#39;,
+</span><span class="">  402: 	&#39;9,9&#39; =&gt; &#39;cousin au neuvieme degre&#39;,
+</span><span class="">  403: 	&#39;9,10&#39; =&gt; &#39;cousin au neuvieme degre une fois eloigne&#39;,
+</span><span class="">  404: 	&#39;10,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-arriere-grand-pere&#39;,
+</span><span class="">  405: 	&#39;10,1&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-grand-oncle&#39;,
+</span><span class="">  406: 	&#39;10,2&#39; =&gt; &#39;cousin germain huit fois eloigne&#39;,
+</span><span class="">  407: 	&#39;10,3&#39; =&gt; &#39;cousin issu de germain sept fois eloigne&#39;,
+</span><span class="">  408: 	&#39;10,4&#39; =&gt; &#39;cousin au quatrieme degre six fois eloigne&#39;,
+</span><span class="">  409: 	&#39;10,5&#39; =&gt; &#39;cousin au cinquieme degre cinq fois eloigne&#39;,
+</span><span class="">  410: 	&#39;10,6&#39; =&gt; &#39;cousin au sixieme degre quatre fois eloigne&#39;,
+</span><span class="">  411: 	&#39;10,7&#39; =&gt; &#39;cousin au septieme degre trois fois eloigne&#39;,
+</span><span class="">  412: 	&#39;10,8&#39; =&gt; &#39;cousin au huitieme degre deux fois eloigne&#39;,
+</span><span class="">  413: 	&#39;10,9&#39; =&gt; &#39;cousin au neuvieme degre une fois eloigne&#39;,
+</span><span class="">  414: 	&#39;10,10&#39; =&gt; &#39;cousin au dixieme degre&#39;,
+</span><span class="">  415: );
 </span><span class="">  416: 
-</span><span class="">  417: =head4 Input
-</span><span class="">  418: 
-</span><span class="">  419:     {
-</span><span class="">  420:         language =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|fr|de)/, optional =&gt; 1 },
-</span><span class="">  421:         logger   =&gt; { type =&gt; &#39;object&#39;, optional =&gt; 1 },
-</span><span class="">  422:     }
-</span><span class="">  423: 
-</span><span class="">  424: =head4 Output
-</span><span class="">  425: 
-</span><span class="">  426:     {
-</span><span class="">  427:         type  =&gt; &#39;object&#39;,
-</span><span class="">  428:         class =&gt; &#39;Genealogy::Relationship::Name&#39;,
-</span><span class="">  429:     }
-</span><span class="">  430: 
-</span><span class="">  431: =head3 FORMAL SPECIFICATION
-</span><span class="">  432: 
-</span><span class="">  433:     new ________________________________________________________
-</span><span class="">  434:     [In]  class    : String                  (class name or object)
-</span><span class="">  435:           language : {en, fr, de}?           (optional default language)
-</span><span class="">  436:           logger   : Log::Abstraction?       (optional error logger)
-</span><span class="">  437:     [Out] self     : Genealogy::Relationship::Name
-</span><span class="">  438: 
-</span><span class="">  439:     Let params == get_params(args)
-</span><span class="">  440:     Let params&#39; == configure(class, params \ {logger})
-</span><span class="">  441:                    union {logger -&gt; params.logger}  if logger in dom params
-</span><span class="">  442:     self == bless(params&#39;, class)
-</span><span class="">  443: 
-</span><span class="">  444:     post: self.language == params.language  if language in dom params
-</span><span class="">  445:           self.logger   == params.logger    if logger   in dom params
-</span><span class="">  446:           ref(self)     == &#39;Genealogy::Relationship::Name&#39;
-</span><span class="">  447: 
-</span><span class="">  448: =cut
-</span><span class="">  449: 
-</span><span class="">  450: sub new {
-</span><span class="">  451: 	# Create and return a blessed object
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">452 → 460 → 466</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">452 → 460 → 0</span></span>  452: 	my $class = shift;
-</span><span class="">  453: 
-</span><span class="">  454: 	# Handle hash or hashref arguments
-</span><span class="">  455: 	my $params = Params::Get::get_params(undef, \@_);
-</span><span class="">  456: 
-</span><span class="">  457: 	# Stash keys that are coderefs or objects before passing to Object::Configure,
-</span><span class="">  458: 	# which cannot handle them (it treats unknown scalar values as config file paths)
-</span><span class="">  459: 	my %stash;
-</span><span class="">  460: 	for my $key (qw(logger)) {
-</span><span class="">  461: 		next unless exists $params-&gt;{$key};
-</span><span class="">  462: 		$stash{$key} = delete $params-&gt;{$key};
-</span><span class="">  463: 	}
-</span><span class="">  464: 
-</span><span class="">  465: 	# Load the configuration from a config file, if provided
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">466 → 473 → 0</span></span>  466: 	$params = Object::Configure::configure($class, $params);
-</span><span class="">  467: 
-</span><span class="">  468: 	# Restore the stashed coderefs and objects after configure()
-</span><span class="">  469: 	@{$params}{keys %stash} = values %stash;
-</span><span class="">  470: 
-</span><span class="">  471: 	# Bless and return the object; logger/ctx/level keys from params
-</span><span class="">  472: 	# are stored directly and accessed via $self-&gt;{logger} etc.
-</span><span class="">  473: 	return bless {
-</span><span class="">  474: 		# Store any constructor-time config for Object::Configure compatibility
-</span><span class="">  475: 		%{$params},
-</span><span class="">  476: 	}, ref($class) || $class;
-</span><span class="">  477: }
-</span><span class="">  478: 
-</span><span class="">  479: # ---------------------------------------------------------------------------
-</span><span class="">  480: # Public method: name()
-</span><span class="">  481: # ---------------------------------------------------------------------------
-</span><span class="">  482: 
-</span><span class="">  483: =head2 name
-</span><span class="">  484: 
-</span><span class="">  485: Returns the name of the relationship between person A and person B.
-</span><span class="">  486: 
-</span><span class="">  487: =head3 PURPOSE
-</span><span class="">  488: 
-</span><span class="">  489: Given the number of steps from person A up to the nearest common ancestor
-</span><span class="">  490: (C&lt;steps_to_ancestor&gt;) and the number of steps from that ancestor down to
-</span><span class="">  491: person B (C&lt;steps_from_ancestor&gt;), plus the sex of person B and a language
-</span><span class="">  492: code, returns a localised relationship-name string.
-</span><span class="">  493: 
-</span><span class="">  494: =head3 ARGUMENTS
-</span><span class="">  495: 
-</span><span class="">  496: =over 4
-</span><span class="">  497: 
-</span><span class="">  498: =item C&lt;steps_to_ancestor&gt; (integer, required)
-</span><span class="">  499: 
-</span><span class="">  500: Number of generational steps from person A up to the common ancestor.
-</span><span class="">  501: Must be a non-negative integer.  Zero means person A I&lt;is&gt; the ancestor.
-</span><span class="">  502: 
-</span><span class="">  503: =item C&lt;steps_from_ancestor&gt; (integer, required)
-</span><span class="">  504: 
-</span><span class="">  505: Number of generational steps from the common ancestor down to person B.
-</span><span class="">  506: Must be a non-negative integer.
-</span><span class="">  507: 
-</span><span class="">  508: =item C&lt;sex&gt; (string, required)
-</span><span class="">  509: 
-</span><span class="">  510: Sex of person B.  Must be C&lt;&#39;M&#39;&gt; (male) or C&lt;&#39;F&#39;&gt; (female).
-</span><span class="">  511: 
-</span><span class="">  512: =item C&lt;language&gt; (string, optional)
-</span><span class="">  513: 
-</span><span class="">  514: BCP-47-style language tag (only the primary subtag is used).
-</span><span class="">  515: Supported values: C&lt;en&gt; (default), C&lt;fr&gt;, C&lt;de&gt;.
-</span><span class="">  516: 
-</span><span class="">  517: =item C&lt;person&gt; (object, optional)
-</span><span class="">  518: 
-</span><span class="">  519: An optional person object (e.g. a C&lt;Gedcom::Individual&gt; instance) passed
-</span><span class="">  520: through to the error handler when an error occurs.  Takes priority over the
-</span><span class="">  521: C&lt;ctx&gt; set at construction time.  The handler receives it as C&lt;ctx&gt; (logger
-</span><span class="">  522: path) or C&lt;person&gt; (on_error path), matching the C&lt;complain()&gt; interface
-</span><span class="">  523: in C&lt;gedcom&gt;/C&lt;ged2site&gt;.
-</span><span class="">  524: 
-</span><span class="">  525: =back
-</span><span class="">  526: 
-</span><span class="">  527: =head3 RETURNS
-</span><span class="">  528: 
-</span><span class="">  529: A string containing the relationship name, or C&lt;undef&gt; if the combination
-</span><span class="">  530: is not found in the lookup table.
-</span><span class="">  531: 
-</span><span class="">  532: =head3 EXAMPLE
-</span><span class="">  533: 
-</span><span class="">  534:     my $namer = Genealogy::Relationship::Name-&gt;new();
-</span><span class="">  535: 
-</span><span class="">  536:     # Person A is the grandparent (2 steps up) of the common ancestor,
-</span><span class="">  537:     # and person B is 3 steps below the ancestor; B is female =&gt; first cousin once-removed
-</span><span class="">  538:     my $rel = $namer-&gt;name(
-</span><span class="">  539:         steps_to_ancestor   =&gt; 2,
-</span><span class="">  540:         steps_from_ancestor =&gt; 3,
-</span><span class="">  541:         sex                 =&gt; &#39;F&#39;,
-</span><span class="">  542:     );
-</span><span class="">  543: 
-</span><span class="">  544: =head3 API SPECIFICATION
-</span><span class="">  545: 
-</span><span class="">  546: =head4 Input
-</span><span class="">  547: 
-</span><span class="">  548:     {
-</span><span class="">  549: 	steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  550: 	steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  551: 	sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
-</span><span class="">  552: 	language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/, optional =&gt; 1 },
-</span><span class="">  553: 	# person is extracted before validate_strict to avoid PVS inferring constraints
-</span><span class="">  554:     }
-</span><span class="">  555: 
-</span><span class="">  556: =head4 Output
-</span><span class="">  557: 
-</span><span class="">  558:     {
-</span><span class="">  559:         type     =&gt; &#39;string&#39;,
-</span><span class="">  560:         optional =&gt; 1,     # undef when the combination is not tabulated
-</span><span class="">  561:     }
-</span><span class="">  562: 
-</span><span class="">  563: =head3 FORMAL SPECIFICATION
-</span><span class="">  564: 
-</span><span class="">  565:     name ______________________________________________________
-</span><span class="">  566:     [In]  steps_to_ancestor   : N0
-</span><span class="">  567:           steps_from_ancestor : N0
-</span><span class="">  568:           sex                 : {M, F}
-</span><span class="">  569:           language            : {en, fr, de}?  (default en)
-</span><span class="">  570:           person              : Object?
-</span><span class="">  571:     [Out] result              : String | undef
-</span><span class="">  572: 
-</span><span class="">  573:     Let key == steps_to_ancestor ++ &quot;,&quot; ++ steps_from_ancestor
-</span><span class="">  574:     Let table == RELATIONSHIP_TABLES(language)(sex)
-</span><span class="">  575:     result == table(key)  if key in dom table
-</span><span class="">  576:            == undef       otherwise
-</span><span class="">  577: 
-</span><span class="">  578: =cut
-</span><span class="">  579: 
-</span><span class="">  580: sub name {
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">581 → 597 → 607</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">581 → 597 → 0</span></span>  581: 	my $self = shift;
-</span><span class="">  582: 
-</span><span class="">  583: 	# Validate and extract the remaining parameters; capture the return value
-</span><span class="">  584: 	my $args = Params::Validate::Strict::validate_strict(
-</span><span class="">  585: 		args   =&gt; Params::Get::get_params(undef, \@_) || {},
-</span><span class="">  586: 		schema =&gt; {
-</span><span class="">  587: 			steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  588: 			steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
-</span><span class="">  589: 			sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
-</span><span class="">  590: 			language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/,
-</span><span class="">  591: 			                         optional =&gt; 1 },
-</span><span class="">  592: 			person              =&gt; { type =&gt; &#39;object&#39;, optional =&gt; 1 },
-</span><span class="">  593: 		}
-</span><span class="">  594: 	);
-</span><span class="">  595: 
-</span><span class="">  596: 	# Extract individual parameters; undef means arg was not given, so croak
-</span><span class="">  597: 	foreach my $arg(&#39;steps_to_ancestor&#39;, &#39;steps_from_ancestor&#39;, &#39;sex&#39;) {
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  598: 		if(!defined($args-&gt;{$arg})) {
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_598_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch.">  599: 			if(my $logger = $self-&gt;{logger}) {
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
-					<ul>
-				<li><b>COND_INV_599_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
-</li></ul></details>
-<span class="">  600: 				$logger-&gt;error(&quot;$arg not given&quot;);
-</span><span class="">  601: 			} else {
-</span><span class="">  602: 				croak(&quot;$arg not given&quot;);
-</span><span class="">  603: 			}
-</span><span class="">  604: 		}
-</span><span class="">  605: 	}
-</span><span class="">  606: 
-</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">607 → 627 → 0</span></span>  607: 	my $steps1 = $args-&gt;{steps_to_ancestor} // croak(&#39;steps_to_ancestor not given&#39;);
-</span><span class="">  608: 	my $steps2 = $args-&gt;{steps_from_ancestor} // croak(&#39;steps_from_ancestor not given&#39;);
-</span><span class="">  609: 	my $sex    = $args-&gt;{sex} // croak(&#39;sex not given&#39;);
-</span><span class="">  610: 	my $person = $args-&gt;{person};
-</span><span class="">  611: 
-</span><span class="">  612: 	# Fall back to the constructor default or hard default if no per-call language given
-</span><span class="">  613: 	my $lang = lc($args-&gt;{language} // $self-&gt;{language} // $DEFAULT_LANGUAGE);
-</span><span class="">  614: 
-</span><span class="">  615: 	# Strip any region subtag (e.g. &#39;en-GB&#39; -&gt; &#39;en&#39;) after lowercasing
-</span><span class="">  616: 	($lang) = split /-/, $lang;
-</span><span class="">  617: 
-</span><span class="">  618: 	# Build lookup key from the two-step counts
-</span><span class="">  619: 	my $key = &quot;${steps1},${steps2}&quot;;
-</span><span class="">  620: 
-</span><span class="">  621: 	# Retrieve the correct gender-specific table for the chosen language
-</span><span class="">  622: 	my $table = $RELATIONSHIP_TABLES{$lang}{$sex};
-</span><span class="">  623: 
-</span><span class="">  624: 	# Look up and return; undef when the combination is not tabulated
-</span><span class="">  625: 	my $result = $table-&gt;{$key};
-</span><span class="">  626: 
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  627: 	return $result;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_627_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_627_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  628: }
-</span><span class="">  629: 
-</span><span class="">  630: # ---------------------------------------------------------------------------
-</span><span class="">  631: # Public method: supported_languages()
-</span><span class="">  632: # ---------------------------------------------------------------------------
-</span><span class="">  633: 
-</span><span class="">  634: =head2 supported_languages
-</span><span class="">  635: 
-</span><span class="">  636: Returns a sorted list of the language codes that the module supports.
-</span><span class="">  637: 
-</span><span class="">  638: =head3 PURPOSE
-</span><span class="">  639: 
-</span><span class="">  640: Allows calling code to enumerate the languages available for C&lt;name()&gt;
-</span><span class="">  641: without hard-coding them.
-</span><span class="">  642: 
-</span><span class="">  643: =head3 ARGUMENTS
-</span><span class="">  644: 
-</span><span class="">  645: None.
-</span><span class="">  646: 
-</span><span class="">  647: =head3 RETURNS
-</span><span class="">  648: 
-</span><span class="">  649: A list (or array-ref in scalar context) of language code strings,
-</span><span class="">  650: currently C&lt;(&#39;de&#39;, &#39;en&#39;, &#39;fr&#39;)&gt;.
-</span><span class="">  651: 
-</span><span class="">  652: =head3 EXAMPLE
-</span><span class="">  653: 
-</span><span class="">  654:     my @langs = $namer-&gt;supported_languages();
-</span><span class="">  655:     # ( &#39;de&#39;, &#39;en&#39;, &#39;fr&#39; )
-</span><span class="">  656: 
-</span><span class="">  657: =head3 API SPECIFICATION
-</span><span class="">  658: 
-</span><span class="">  659: =head4 Input
-</span><span class="">  660: 
-</span><span class="">  661:     {}   # no arguments
-</span><span class="">  662: 
-</span><span class="">  663: =head4 Output
-</span><span class="">  664: 
-</span><span class="">  665:     {
-</span><span class="">  666:         type =&gt; ARRAYREF,   # sorted list of language codes
-</span><span class="">  667:     }
+</span><span class="">  417: Readonly::Hash my %FR_FEMALE_RELATIONSHIPS =&gt; (
+</span><span class="">  418: 	&#39;0,0&#39; =&gt; &#39;soi-meme&#39;,
+</span><span class="">  419: 	&#39;0,1&#39; =&gt; &#39;fille&#39;,
+</span><span class="">  420: 	&#39;0,2&#39; =&gt; &#39;petite-fille&#39;,
+</span><span class="">  421: 	&#39;0,3&#39; =&gt; &#39;arriere-petite-fille&#39;,
+</span><span class="">  422: 	&#39;0,4&#39; =&gt; &#39;arriere-arriere-petite-fille&#39;,
+</span><span class="">  423: 	&#39;0,5&#39; =&gt; &#39;arriere-arriere-arriere-petite-fille&#39;,
+</span><span class="">  424: 	&#39;0,6&#39; =&gt; &#39;arriere-arriere-arriere-arriere-petite-fille&#39;,
+</span><span class="">  425: 	&#39;0,7&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-petite-fille&#39;,
+</span><span class="">  426: 	&#39;0,8&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-petite-fille&#39;,
+</span><span class="">  427: 	&#39;0,9&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-petite-fille&#39;,
+</span><span class="">  428: 	&#39;0,10&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-arriere-petite-fille&#39;,
+</span><span class="">  429: 	&#39;1,0&#39; =&gt; &#39;mere&#39;,
+</span><span class="">  430: 	&#39;1,1&#39; =&gt; &#39;soeur&#39;,
+</span><span class="">  431: 	&#39;1,2&#39; =&gt; &#39;niece&#39;,
+</span><span class="">  432: 	&#39;1,3&#39; =&gt; &#39;grand-niece&#39;,
+</span><span class="">  433: 	&#39;1,4&#39; =&gt; &#39;arriere-grand-niece&#39;,
+</span><span class="">  434: 	&#39;1,5&#39; =&gt; &#39;arriere-arriere-grand-niece&#39;,
+</span><span class="">  435: 	&#39;1,6&#39; =&gt; &#39;arriere-arriere-arriere-grand-niece&#39;,
+</span><span class="">  436: 	&#39;1,7&#39; =&gt; &#39;arriere-arriere-arriere-arriere-grand-niece&#39;,
+</span><span class="">  437: 	&#39;1,8&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-grand-niece&#39;,
+</span><span class="">  438: 	&#39;1,9&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-grand-niece&#39;,
+</span><span class="">  439: 	&#39;1,10&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-grand-niece&#39;,
+</span><span class="">  440: 	&#39;2,0&#39; =&gt; &#39;grand-mere&#39;,
+</span><span class="">  441: 	&#39;2,1&#39; =&gt; &#39;tante&#39;,
+</span><span class="">  442: 	&#39;2,2&#39; =&gt; &#39;cousine germaine&#39;,
+</span><span class="">  443: 	&#39;2,3&#39; =&gt; &#39;cousine germaine une fois eloignee&#39;,
+</span><span class="">  444: 	&#39;2,4&#39; =&gt; &#39;cousine germaine deux fois eloignee&#39;,
+</span><span class="">  445: 	&#39;2,5&#39; =&gt; &#39;cousine germaine trois fois eloignee&#39;,
+</span><span class="">  446: 	&#39;2,6&#39; =&gt; &#39;cousine germaine quatre fois eloignee&#39;,
+</span><span class="">  447: 	&#39;2,7&#39; =&gt; &#39;cousine germaine cinq fois eloignee&#39;,
+</span><span class="">  448: 	&#39;2,8&#39; =&gt; &#39;cousine germaine six fois eloignee&#39;,
+</span><span class="">  449: 	&#39;2,9&#39; =&gt; &#39;cousine germaine sept fois eloignee&#39;,
+</span><span class="">  450: 	&#39;2,10&#39; =&gt; &#39;cousine germaine huit fois eloignee&#39;,
+</span><span class="">  451: 	&#39;3,0&#39; =&gt; &#39;arriere-grand-mere&#39;,
+</span><span class="">  452: 	&#39;3,1&#39; =&gt; &#39;grand-tante&#39;,
+</span><span class="">  453: 	&#39;3,2&#39; =&gt; &#39;cousine germaine une fois eloignee&#39;,
+</span><span class="">  454: 	&#39;3,3&#39; =&gt; &#39;cousine issue de germaine&#39;,
+</span><span class="">  455: 	&#39;3,4&#39; =&gt; &#39;cousine issue de germaine une fois eloignee&#39;,
+</span><span class="">  456: 	&#39;3,5&#39; =&gt; &#39;cousine issue de germaine deux fois eloignee&#39;,
+</span><span class="">  457: 	&#39;3,6&#39; =&gt; &#39;cousine issue de germaine trois fois eloignee&#39;,
+</span><span class="">  458: 	&#39;3,7&#39; =&gt; &#39;cousine issue de germaine quatre fois eloignee&#39;,
+</span><span class="">  459: 	&#39;3,8&#39; =&gt; &#39;cousine issue de germaine cinq fois eloignee&#39;,
+</span><span class="">  460: 	&#39;3,9&#39; =&gt; &#39;cousine issue de germaine six fois eloignee&#39;,
+</span><span class="">  461: 	&#39;3,10&#39; =&gt; &#39;cousine issue de germaine sept fois eloignee&#39;,
+</span><span class="">  462: 	&#39;4,0&#39; =&gt; &#39;arriere-arriere-grand-mere&#39;,
+</span><span class="">  463: 	&#39;4,1&#39; =&gt; &#39;arriere-grand-tante&#39;,
+</span><span class="">  464: 	&#39;4,2&#39; =&gt; &#39;cousine germaine deux fois eloignee&#39;,
+</span><span class="">  465: 	&#39;4,3&#39; =&gt; &#39;cousine issue de germaine une fois eloignee&#39;,
+</span><span class="">  466: 	&#39;4,4&#39; =&gt; &#39;cousine au quatrieme degre&#39;,
+</span><span class="">  467: 	&#39;4,5&#39; =&gt; &#39;cousine au quatrieme degre une fois eloignee&#39;,
+</span><span class="">  468: 	&#39;4,6&#39; =&gt; &#39;cousine au quatrieme degre deux fois eloignee&#39;,
+</span><span class="">  469: 	&#39;4,7&#39; =&gt; &#39;cousine au quatrieme degre trois fois eloignee&#39;,
+</span><span class="">  470: 	&#39;4,8&#39; =&gt; &#39;cousine au quatrieme degre quatre fois eloignee&#39;,
+</span><span class="">  471: 	&#39;4,9&#39; =&gt; &#39;cousine au quatrieme degre cinq fois eloignee&#39;,
+</span><span class="">  472: 	&#39;4,10&#39; =&gt; &#39;cousine au quatrieme degre six fois eloignee&#39;,
+</span><span class="">  473: 	&#39;5,0&#39; =&gt; &#39;arriere-arriere-arriere-grand-mere&#39;,
+</span><span class="">  474: 	&#39;5,1&#39; =&gt; &#39;arriere-arriere-grand-tante&#39;,
+</span><span class="">  475: 	&#39;5,2&#39; =&gt; &#39;cousine germaine trois fois eloignee&#39;,
+</span><span class="">  476: 	&#39;5,3&#39; =&gt; &#39;cousine issue de germaine deux fois eloignee&#39;,
+</span><span class="">  477: 	&#39;5,4&#39; =&gt; &#39;cousine au quatrieme degre une fois eloignee&#39;,
+</span><span class="">  478: 	&#39;5,5&#39; =&gt; &#39;cousine au cinquieme degre&#39;,
+</span><span class="">  479: 	&#39;5,6&#39; =&gt; &#39;cousine au cinquieme degre une fois eloignee&#39;,
+</span><span class="">  480: 	&#39;5,7&#39; =&gt; &#39;cousine au cinquieme degre deux fois eloignee&#39;,
+</span><span class="">  481: 	&#39;5,8&#39; =&gt; &#39;cousine au cinquieme degre trois fois eloignee&#39;,
+</span><span class="">  482: 	&#39;5,9&#39; =&gt; &#39;cousine au cinquieme degre quatre fois eloignee&#39;,
+</span><span class="">  483: 	&#39;5,10&#39; =&gt; &#39;cousine au cinquieme degre cinq fois eloignee&#39;,
+</span><span class="">  484: 	&#39;6,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-grand-mere&#39;,
+</span><span class="">  485: 	&#39;6,1&#39; =&gt; &#39;arriere-arriere-arriere-grand-tante&#39;,
+</span><span class="">  486: 	&#39;6,2&#39; =&gt; &#39;cousine germaine quatre fois eloignee&#39;,
+</span><span class="">  487: 	&#39;6,3&#39; =&gt; &#39;cousine issue de germaine trois fois eloignee&#39;,
+</span><span class="">  488: 	&#39;6,4&#39; =&gt; &#39;cousine au quatrieme degre deux fois eloignee&#39;,
+</span><span class="">  489: 	&#39;6,5&#39; =&gt; &#39;cousine au cinquieme degre une fois eloignee&#39;,
+</span><span class="">  490: 	&#39;6,6&#39; =&gt; &#39;cousine au sixieme degre&#39;,
+</span><span class="">  491: 	&#39;6,7&#39; =&gt; &#39;cousine au sixieme degre une fois eloignee&#39;,
+</span><span class="">  492: 	&#39;6,8&#39; =&gt; &#39;cousine au sixieme degre deux fois eloignee&#39;,
+</span><span class="">  493: 	&#39;6,9&#39; =&gt; &#39;cousine au sixieme degre trois fois eloignee&#39;,
+</span><span class="">  494: 	&#39;6,10&#39; =&gt; &#39;cousine au sixieme degre quatre fois eloignee&#39;,
+</span><span class="">  495: 	&#39;7,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-grand-mere&#39;,
+</span><span class="">  496: 	&#39;7,1&#39; =&gt; &#39;arriere-arriere-arriere-arriere-grand-tante&#39;,
+</span><span class="">  497: 	&#39;7,2&#39; =&gt; &#39;cousine germaine cinq fois eloignee&#39;,
+</span><span class="">  498: 	&#39;7,3&#39; =&gt; &#39;cousine issue de germaine quatre fois eloignee&#39;,
+</span><span class="">  499: 	&#39;7,4&#39; =&gt; &#39;cousine au quatrieme degre trois fois eloignee&#39;,
+</span><span class="">  500: 	&#39;7,5&#39; =&gt; &#39;cousine au cinquieme degre deux fois eloignee&#39;,
+</span><span class="">  501: 	&#39;7,6&#39; =&gt; &#39;cousine au sixieme degre une fois eloignee&#39;,
+</span><span class="">  502: 	&#39;7,7&#39; =&gt; &#39;cousine au septieme degre&#39;,
+</span><span class="">  503: 	&#39;7,8&#39; =&gt; &#39;cousine au septieme degre une fois eloignee&#39;,
+</span><span class="">  504: 	&#39;7,9&#39; =&gt; &#39;cousine au septieme degre deux fois eloignee&#39;,
+</span><span class="">  505: 	&#39;7,10&#39; =&gt; &#39;cousine au septieme degre trois fois eloignee&#39;,
+</span><span class="">  506: 	&#39;8,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-grand-mere&#39;,
+</span><span class="">  507: 	&#39;8,1&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-grand-tante&#39;,
+</span><span class="">  508: 	&#39;8,2&#39; =&gt; &#39;cousine germaine six fois eloignee&#39;,
+</span><span class="">  509: 	&#39;8,3&#39; =&gt; &#39;cousine issue de germaine cinq fois eloignee&#39;,
+</span><span class="">  510: 	&#39;8,4&#39; =&gt; &#39;cousine au quatrieme degre quatre fois eloignee&#39;,
+</span><span class="">  511: 	&#39;8,5&#39; =&gt; &#39;cousine au cinquieme degre trois fois eloignee&#39;,
+</span><span class="">  512: 	&#39;8,6&#39; =&gt; &#39;cousine au sixieme degre deux fois eloignee&#39;,
+</span><span class="">  513: 	&#39;8,7&#39; =&gt; &#39;cousine au septieme degre une fois eloignee&#39;,
+</span><span class="">  514: 	&#39;8,8&#39; =&gt; &#39;cousine au huitieme degre&#39;,
+</span><span class="">  515: 	&#39;8,9&#39; =&gt; &#39;cousine au huitieme degre une fois eloignee&#39;,
+</span><span class="">  516: 	&#39;8,10&#39; =&gt; &#39;cousine au huitieme degre deux fois eloignee&#39;,
+</span><span class="">  517: 	&#39;9,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-grand-mere&#39;,
+</span><span class="">  518: 	&#39;9,1&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-grand-tante&#39;,
+</span><span class="">  519: 	&#39;9,2&#39; =&gt; &#39;cousine germaine sept fois eloignee&#39;,
+</span><span class="">  520: 	&#39;9,3&#39; =&gt; &#39;cousine issue de germaine six fois eloignee&#39;,
+</span><span class="">  521: 	&#39;9,4&#39; =&gt; &#39;cousine au quatrieme degre cinq fois eloignee&#39;,
+</span><span class="">  522: 	&#39;9,5&#39; =&gt; &#39;cousine au cinquieme degre quatre fois eloignee&#39;,
+</span><span class="">  523: 	&#39;9,6&#39; =&gt; &#39;cousine au sixieme degre trois fois eloignee&#39;,
+</span><span class="">  524: 	&#39;9,7&#39; =&gt; &#39;cousine au septieme degre deux fois eloignee&#39;,
+</span><span class="">  525: 	&#39;9,8&#39; =&gt; &#39;cousine au huitieme degre une fois eloignee&#39;,
+</span><span class="">  526: 	&#39;9,9&#39; =&gt; &#39;cousine au neuvieme degre&#39;,
+</span><span class="">  527: 	&#39;9,10&#39; =&gt; &#39;cousine au neuvieme degre une fois eloignee&#39;,
+</span><span class="">  528: 	&#39;10,0&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-arriere-grand-mere&#39;,
+</span><span class="">  529: 	&#39;10,1&#39; =&gt; &#39;arriere-arriere-arriere-arriere-arriere-arriere-arriere-grand-tante&#39;,
+</span><span class="">  530: 	&#39;10,2&#39; =&gt; &#39;cousine germaine huit fois eloignee&#39;,
+</span><span class="">  531: 	&#39;10,3&#39; =&gt; &#39;cousine issue de germaine sept fois eloignee&#39;,
+</span><span class="">  532: 	&#39;10,4&#39; =&gt; &#39;cousine au quatrieme degre six fois eloignee&#39;,
+</span><span class="">  533: 	&#39;10,5&#39; =&gt; &#39;cousine au cinquieme degre cinq fois eloignee&#39;,
+</span><span class="">  534: 	&#39;10,6&#39; =&gt; &#39;cousine au sixieme degre quatre fois eloignee&#39;,
+</span><span class="">  535: 	&#39;10,7&#39; =&gt; &#39;cousine au septieme degre trois fois eloignee&#39;,
+</span><span class="">  536: 	&#39;10,8&#39; =&gt; &#39;cousine au huitieme degre deux fois eloignee&#39;,
+</span><span class="">  537: 	&#39;10,9&#39; =&gt; &#39;cousine au neuvieme degre une fois eloignee&#39;,
+</span><span class="">  538: 	&#39;10,10&#39; =&gt; &#39;cousine au dixieme degre&#39;,
+</span><span class="">  539: );
+</span><span class="">  540: 
+</span><span class="">  541: # ---------------------------------------------------------------------------
+</span><span class="">  542: # German relationship tables
+</span><span class="">  543: # ---------------------------------------------------------------------------
+</span><span class="">  544: 
+</span><span class="">  545: Readonly::Hash my %DE_MALE_RELATIONSHIPS =&gt; (
+</span><span class="">  546: 	&#39;0,0&#39; =&gt; &#39;sich selbst&#39;,
+</span><span class="">  547: 	&#39;0,1&#39; =&gt; &#39;Sohn&#39;,
+</span><span class="">  548: 	&#39;0,2&#39; =&gt; &#39;Enkel&#39;,
+</span><span class="">  549: 	&#39;0,3&#39; =&gt; &#39;Urenkel&#39;,
+</span><span class="">  550: 	&#39;0,4&#39; =&gt; &#39;Ururenkel&#39;,
+</span><span class="">  551: 	&#39;0,5&#39; =&gt; &#39;Urururenkel&#39;,
+</span><span class="">  552: 	&#39;0,6&#39; =&gt; &#39;Ururururenkel&#39;,
+</span><span class="">  553: 	&#39;0,7&#39; =&gt; &#39;Urururururenkel&#39;,
+</span><span class="">  554: 	&#39;0,8&#39; =&gt; &#39;Ururururururenkel&#39;,
+</span><span class="">  555: 	&#39;0,9&#39; =&gt; &#39;Urururururururenkel&#39;,
+</span><span class="">  556: 	&#39;0,10&#39; =&gt; &#39;Ururururururururenkel&#39;,
+</span><span class="">  557: 	&#39;1,0&#39; =&gt; &#39;Vater&#39;,
+</span><span class="">  558: 	&#39;1,1&#39; =&gt; &#39;Bruder&#39;,
+</span><span class="">  559: 	&#39;1,2&#39; =&gt; &#39;Neffe&#39;,
+</span><span class="">  560: 	&#39;1,3&#39; =&gt; &#39;Grossneffe&#39;,
+</span><span class="">  561: 	&#39;1,4&#39; =&gt; &#39;Urgrossneffe&#39;,
+</span><span class="">  562: 	&#39;1,5&#39; =&gt; &#39;Ururgrossneffe&#39;,
+</span><span class="">  563: 	&#39;1,6&#39; =&gt; &#39;Urururgrossneffe&#39;,
+</span><span class="">  564: 	&#39;1,7&#39; =&gt; &#39;Ururururgrossneffe&#39;,
+</span><span class="">  565: 	&#39;1,8&#39; =&gt; &#39;Urururururgrossneffe&#39;,
+</span><span class="">  566: 	&#39;1,9&#39; =&gt; &#39;Ururururururgrossneffe&#39;,
+</span><span class="">  567: 	&#39;1,10&#39; =&gt; &#39;Urururururururgrossneffe&#39;,
+</span><span class="">  568: 	&#39;2,0&#39; =&gt; &#39;Grossvater&#39;,
+</span><span class="">  569: 	&#39;2,1&#39; =&gt; &#39;Onkel&#39;,
+</span><span class="">  570: 	&#39;2,2&#39; =&gt; &#39;Cousin&#39;,
+</span><span class="">  571: 	&#39;2,3&#39; =&gt; &#39;Cousin einmal entfernt&#39;,
+</span><span class="">  572: 	&#39;2,4&#39; =&gt; &#39;Cousin zweimal entfernt&#39;,
+</span><span class="">  573: 	&#39;2,5&#39; =&gt; &#39;Cousin dreimal entfernt&#39;,
+</span><span class="">  574: 	&#39;2,6&#39; =&gt; &#39;Cousin viermal entfernt&#39;,
+</span><span class="">  575: 	&#39;2,7&#39; =&gt; &#39;Cousin fuenfmal entfernt&#39;,
+</span><span class="">  576: 	&#39;2,8&#39; =&gt; &#39;Cousin sechsmal entfernt&#39;,
+</span><span class="">  577: 	&#39;2,9&#39; =&gt; &#39;Cousin siebenmal entfernt&#39;,
+</span><span class="">  578: 	&#39;2,10&#39; =&gt; &#39;Cousin achtmal entfernt&#39;,
+</span><span class="">  579: 	&#39;3,0&#39; =&gt; &#39;Urgrossvater&#39;,
+</span><span class="">  580: 	&#39;3,1&#39; =&gt; &#39;Grossonkel&#39;,
+</span><span class="">  581: 	&#39;3,2&#39; =&gt; &#39;Cousin einmal entfernt&#39;,
+</span><span class="">  582: 	&#39;3,3&#39; =&gt; &#39;Cousin zweiten Grades&#39;,
+</span><span class="">  583: 	&#39;3,4&#39; =&gt; &#39;Cousin zweiten Grades einmal entfernt&#39;,
+</span><span class="">  584: 	&#39;3,5&#39; =&gt; &#39;Cousin zweiten Grades zweimal entfernt&#39;,
+</span><span class="">  585: 	&#39;3,6&#39; =&gt; &#39;Cousin zweiten Grades dreimal entfernt&#39;,
+</span><span class="">  586: 	&#39;3,7&#39; =&gt; &#39;Cousin zweiten Grades viermal entfernt&#39;,
+</span><span class="">  587: 	&#39;3,8&#39; =&gt; &#39;Cousin zweiten Grades fuenfmal entfernt&#39;,
+</span><span class="">  588: 	&#39;3,9&#39; =&gt; &#39;Cousin zweiten Grades sechsmal entfernt&#39;,
+</span><span class="">  589: 	&#39;3,10&#39; =&gt; &#39;Cousin zweiten Grades siebenmal entfernt&#39;,
+</span><span class="">  590: 	&#39;4,0&#39; =&gt; &#39;Ururgrossvater&#39;,
+</span><span class="">  591: 	&#39;4,1&#39; =&gt; &#39;Urgrossonkel&#39;,
+</span><span class="">  592: 	&#39;4,2&#39; =&gt; &#39;Cousin zweimal entfernt&#39;,
+</span><span class="">  593: 	&#39;4,3&#39; =&gt; &#39;Cousin zweiten Grades einmal entfernt&#39;,
+</span><span class="">  594: 	&#39;4,4&#39; =&gt; &#39;Cousin dritten Grades&#39;,
+</span><span class="">  595: 	&#39;4,5&#39; =&gt; &#39;Cousin dritten Grades einmal entfernt&#39;,
+</span><span class="">  596: 	&#39;4,6&#39; =&gt; &#39;Cousin dritten Grades zweimal entfernt&#39;,
+</span><span class="">  597: 	&#39;4,7&#39; =&gt; &#39;Cousin dritten Grades dreimal entfernt&#39;,
+</span><span class="">  598: 	&#39;4,8&#39; =&gt; &#39;Cousin dritten Grades viermal entfernt&#39;,
+</span><span class="">  599: 	&#39;4,9&#39; =&gt; &#39;Cousin dritten Grades fuenfmal entfernt&#39;,
+</span><span class="">  600: 	&#39;4,10&#39; =&gt; &#39;Cousin dritten Grades sechsmal entfernt&#39;,
+</span><span class="">  601: 	&#39;5,0&#39; =&gt; &#39;Urururgrossvater&#39;,
+</span><span class="">  602: 	&#39;5,1&#39; =&gt; &#39;Ururgrossonkel&#39;,
+</span><span class="">  603: 	&#39;5,2&#39; =&gt; &#39;Cousin dreimal entfernt&#39;,
+</span><span class="">  604: 	&#39;5,3&#39; =&gt; &#39;Cousin zweiten Grades zweimal entfernt&#39;,
+</span><span class="">  605: 	&#39;5,4&#39; =&gt; &#39;Cousin dritten Grades einmal entfernt&#39;,
+</span><span class="">  606: 	&#39;5,5&#39; =&gt; &#39;Cousin vierten Grades&#39;,
+</span><span class="">  607: 	&#39;5,6&#39; =&gt; &#39;Cousin vierten Grades einmal entfernt&#39;,
+</span><span class="">  608: 	&#39;5,7&#39; =&gt; &#39;Cousin vierten Grades zweimal entfernt&#39;,
+</span><span class="">  609: 	&#39;5,8&#39; =&gt; &#39;Cousin vierten Grades dreimal entfernt&#39;,
+</span><span class="">  610: 	&#39;5,9&#39; =&gt; &#39;Cousin vierten Grades viermal entfernt&#39;,
+</span><span class="">  611: 	&#39;5,10&#39; =&gt; &#39;Cousin vierten Grades fuenfmal entfernt&#39;,
+</span><span class="">  612: 	&#39;6,0&#39; =&gt; &#39;Ururururgrossvater&#39;,
+</span><span class="">  613: 	&#39;6,1&#39; =&gt; &#39;Urururgrossonkel&#39;,
+</span><span class="">  614: 	&#39;6,2&#39; =&gt; &#39;Cousin viermal entfernt&#39;,
+</span><span class="">  615: 	&#39;6,3&#39; =&gt; &#39;Cousin zweiten Grades dreimal entfernt&#39;,
+</span><span class="">  616: 	&#39;6,4&#39; =&gt; &#39;Cousin dritten Grades zweimal entfernt&#39;,
+</span><span class="">  617: 	&#39;6,5&#39; =&gt; &#39;Cousin vierten Grades einmal entfernt&#39;,
+</span><span class="">  618: 	&#39;6,6&#39; =&gt; &#39;Cousin fuenften Grades&#39;,
+</span><span class="">  619: 	&#39;6,7&#39; =&gt; &#39;Cousin fuenften Grades einmal entfernt&#39;,
+</span><span class="">  620: 	&#39;6,8&#39; =&gt; &#39;Cousin fuenften Grades zweimal entfernt&#39;,
+</span><span class="">  621: 	&#39;6,9&#39; =&gt; &#39;Cousin fuenften Grades dreimal entfernt&#39;,
+</span><span class="">  622: 	&#39;6,10&#39; =&gt; &#39;Cousin fuenften Grades viermal entfernt&#39;,
+</span><span class="">  623: 	&#39;7,0&#39; =&gt; &#39;Urururururgrossvater&#39;,
+</span><span class="">  624: 	&#39;7,1&#39; =&gt; &#39;Ururururgrossonkel&#39;,
+</span><span class="">  625: 	&#39;7,2&#39; =&gt; &#39;Cousin fuenfmal entfernt&#39;,
+</span><span class="">  626: 	&#39;7,3&#39; =&gt; &#39;Cousin zweiten Grades viermal entfernt&#39;,
+</span><span class="">  627: 	&#39;7,4&#39; =&gt; &#39;Cousin dritten Grades dreimal entfernt&#39;,
+</span><span class="">  628: 	&#39;7,5&#39; =&gt; &#39;Cousin vierten Grades zweimal entfernt&#39;,
+</span><span class="">  629: 	&#39;7,6&#39; =&gt; &#39;Cousin fuenften Grades einmal entfernt&#39;,
+</span><span class="">  630: 	&#39;7,7&#39; =&gt; &#39;Cousin sechsten Grades&#39;,
+</span><span class="">  631: 	&#39;7,8&#39; =&gt; &#39;Cousin sechsten Grades einmal entfernt&#39;,
+</span><span class="">  632: 	&#39;7,9&#39; =&gt; &#39;Cousin sechsten Grades zweimal entfernt&#39;,
+</span><span class="">  633: 	&#39;7,10&#39; =&gt; &#39;Cousin sechsten Grades dreimal entfernt&#39;,
+</span><span class="">  634: 	&#39;8,0&#39; =&gt; &#39;Ururururururgrossvater&#39;,
+</span><span class="">  635: 	&#39;8,1&#39; =&gt; &#39;Urururururgrossonkel&#39;,
+</span><span class="">  636: 	&#39;8,2&#39; =&gt; &#39;Cousin sechsmal entfernt&#39;,
+</span><span class="">  637: 	&#39;8,3&#39; =&gt; &#39;Cousin zweiten Grades fuenfmal entfernt&#39;,
+</span><span class="">  638: 	&#39;8,4&#39; =&gt; &#39;Cousin dritten Grades viermal entfernt&#39;,
+</span><span class="">  639: 	&#39;8,5&#39; =&gt; &#39;Cousin vierten Grades dreimal entfernt&#39;,
+</span><span class="">  640: 	&#39;8,6&#39; =&gt; &#39;Cousin fuenften Grades zweimal entfernt&#39;,
+</span><span class="">  641: 	&#39;8,7&#39; =&gt; &#39;Cousin sechsten Grades einmal entfernt&#39;,
+</span><span class="">  642: 	&#39;8,8&#39; =&gt; &#39;Cousin siebten Grades&#39;,
+</span><span class="">  643: 	&#39;8,9&#39; =&gt; &#39;Cousin siebten Grades einmal entfernt&#39;,
+</span><span class="">  644: 	&#39;8,10&#39; =&gt; &#39;Cousin siebten Grades zweimal entfernt&#39;,
+</span><span class="">  645: 	&#39;9,0&#39; =&gt; &#39;Urururururururgrossvater&#39;,
+</span><span class="">  646: 	&#39;9,1&#39; =&gt; &#39;Ururururururgrossonkel&#39;,
+</span><span class="">  647: 	&#39;9,2&#39; =&gt; &#39;Cousin siebenmal entfernt&#39;,
+</span><span class="">  648: 	&#39;9,3&#39; =&gt; &#39;Cousin zweiten Grades sechsmal entfernt&#39;,
+</span><span class="">  649: 	&#39;9,4&#39; =&gt; &#39;Cousin dritten Grades fuenfmal entfernt&#39;,
+</span><span class="">  650: 	&#39;9,5&#39; =&gt; &#39;Cousin vierten Grades viermal entfernt&#39;,
+</span><span class="">  651: 	&#39;9,6&#39; =&gt; &#39;Cousin fuenften Grades dreimal entfernt&#39;,
+</span><span class="">  652: 	&#39;9,7&#39; =&gt; &#39;Cousin sechsten Grades zweimal entfernt&#39;,
+</span><span class="">  653: 	&#39;9,8&#39; =&gt; &#39;Cousin siebten Grades einmal entfernt&#39;,
+</span><span class="">  654: 	&#39;9,9&#39; =&gt; &#39;Cousin achten Grades&#39;,
+</span><span class="">  655: 	&#39;9,10&#39; =&gt; &#39;Cousin achten Grades einmal entfernt&#39;,
+</span><span class="">  656: 	&#39;10,0&#39; =&gt; &#39;Ururururururururgrossvater&#39;,
+</span><span class="">  657: 	&#39;10,1&#39; =&gt; &#39;Urururururururgrossonkel&#39;,
+</span><span class="">  658: 	&#39;10,2&#39; =&gt; &#39;Cousin achtmal entfernt&#39;,
+</span><span class="">  659: 	&#39;10,3&#39; =&gt; &#39;Cousin zweiten Grades siebenmal entfernt&#39;,
+</span><span class="">  660: 	&#39;10,4&#39; =&gt; &#39;Cousin dritten Grades sechsmal entfernt&#39;,
+</span><span class="">  661: 	&#39;10,5&#39; =&gt; &#39;Cousin vierten Grades fuenfmal entfernt&#39;,
+</span><span class="">  662: 	&#39;10,6&#39; =&gt; &#39;Cousin fuenften Grades viermal entfernt&#39;,
+</span><span class="">  663: 	&#39;10,7&#39; =&gt; &#39;Cousin sechsten Grades dreimal entfernt&#39;,
+</span><span class="">  664: 	&#39;10,8&#39; =&gt; &#39;Cousin siebten Grades zweimal entfernt&#39;,
+</span><span class="">  665: 	&#39;10,9&#39; =&gt; &#39;Cousin achten Grades einmal entfernt&#39;,
+</span><span class="">  666: 	&#39;10,10&#39; =&gt; &#39;Cousin neunten Grades&#39;,
+</span><span class="">  667: );
 </span><span class="">  668: 
-</span><span class="">  669: =head3 FORMAL SPECIFICATION
-</span><span class="">  670: 
-</span><span class="">  671:     supported_languages ______________________________________
-</span><span class="">  672:     [In]  (none)
-</span><span class="">  673:     [Out] result : seq String
-</span><span class="">  674: 
-</span><span class="">  675:     result == sort(dom RELATIONSHIP_TABLES)
-</span><span class="">  676: 
-</span><span class="">  677: =cut
-</span><span class="">  678: 
-</span><span class="">  679: sub supported_languages {
-</span><span class="">  680: 	# Return the sorted set of keys from the master dispatch table
-</span><span class="">  681: 	my @langs = sort keys %RELATIONSHIP_TABLES;
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths.">  682: 	return wantarray ? @langs : \@langs;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_682_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_682_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  683: }
-</span><span class="">  684: 
-</span><span class="">  685: # ---------------------------------------------------------------------------
-</span><span class="">  686: # Public method: known_sexes()
-</span><span class="">  687: # ---------------------------------------------------------------------------
-</span><span class="">  688: 
-</span><span class="">  689: =head2 known_sexes
-</span><span class="">  690: 
-</span><span class="">  691: Returns the list of sex codes accepted by C&lt;name()&gt;.
-</span><span class="">  692: 
-</span><span class="">  693: =head3 PURPOSE
-</span><span class="">  694: 
-</span><span class="">  695: Documents and exposes the set of valid C&lt;sex&gt; values so that callers can
-</span><span class="">  696: validate their own input without duplicating knowledge.
-</span><span class="">  697: 
-</span><span class="">  698: =head3 ARGUMENTS
-</span><span class="">  699: 
-</span><span class="">  700: None.
-</span><span class="">  701: 
-</span><span class="">  702: =head3 RETURNS
-</span><span class="">  703: 
-</span><span class="">  704: A list (or array-ref in scalar context) of valid sex code strings: C&lt;(&#39;F&#39;, &#39;M&#39;)&gt;.
-</span><span class="">  705: 
-</span><span class="">  706: =head3 SIDE EFFECTS
-</span><span class="">  707: 
-</span><span class="">  708: None.
-</span><span class="">  709: 
-</span><span class="">  710: =head3 EXAMPLE
-</span><span class="">  711: 
-</span><span class="">  712:     my @sexes = $namer-&gt;known_sexes();
-</span><span class="">  713:     # ( &#39;F&#39;, &#39;M&#39; )
-</span><span class="">  714: 
-</span><span class="">  715: =head3 API SPECIFICATION
-</span><span class="">  716: 
-</span><span class="">  717: =head4 Input
-</span><span class="">  718: 
-</span><span class="">  719:     {}   # no arguments
-</span><span class="">  720: 
-</span><span class="">  721: =head4 Output
-</span><span class="">  722: 
-</span><span class="">  723:     {
-</span><span class="">  724:         type =&gt; ARRAYREF,
-</span><span class="">  725:     }
-</span><span class="">  726: 
-</span><span class="">  727: =head3 FORMAL SPECIFICATION
-</span><span class="">  728: 
-</span><span class="">  729:     known_sexes ______________________________________________
-</span><span class="">  730:     [In]  (none)
-</span><span class="">  731:     [Out] result : seq String
-</span><span class="">  732: 
-</span><span class="">  733:     result == sort { $SEX_FEMALE, $SEX_MALE }
-</span><span class="">  734: 
-</span><span class="">  735: =cut
-</span><span class="">  736: 
-</span><span class="">  737: sub known_sexes {
-</span><span class="">  738: 	# Return the two valid sex codes in sorted order
-</span><span class="">  739: 	my @sexes = sort($SEX_FEMALE, $SEX_MALE);
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values.">  740: 	return wantarray ? @sexes : \@sexes;
-</span>
-					<details class="mutant-details">
-					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
-					<ul>
-				<li><b>BOOL_NEGATE_740_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Boolean branch test suggestion
-ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
-</pre>
-								</div>
-							</li><li><b>RETURN_UNDEF_740_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
-
-								<div class="suggested-test">
-								<div class="suggest-label">🧪 Suggested Test</div>
-								<pre># Return value assertion
-is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
-</pre>
-								</div>
-							</li></ul></details>
-<span class="">  741: }
-</span><span class="">  742: 
-</span><span class="">  743: 1;
-</span><span class="">  744: 
-</span><span class="">  745: __END__
-</span><span class="">  746: 
-</span><span class="">  747: =head1 CONFIGURATION
-</span><span class="">  748: 
-</span><span class="">  749: The constructor accepts an optional C&lt;language&gt; key which sets the default
-</span><span class="">  750: language for all subsequent calls to C&lt;name()&gt;:
-</span><span class="">  751: 
-</span><span class="">  752:     my $namer = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;fr&#39;);
-</span><span class="">  753: 
-</span><span class="">  754: This default can be overridden per-call by passing C&lt;language&gt; to C&lt;name()&gt;.
-</span><span class="">  755: The object is also compatible with C&lt;Object::Configure&gt; for runtime
-</span><span class="">  756: reconfiguration.
-</span><span class="">  757: 
-</span><span class="">  758: =head2 Error handling
-</span><span class="">  759: 
-</span><span class="">  760: Errors are dispatched through the following priority chain:
-</span><span class="">  761: 
-</span><span class="">  762: =over 4
-</span><span class="">  763: 
-</span><span class="">  764: =item 1. L&lt;Log::Abstraction&gt; object (preferred)
-</span><span class="">  765: 
-</span><span class="">  766: Construct a C&lt;Log::Abstraction&gt; object with the desired logger coderef and
-</span><span class="">  767: C&lt;ctx&gt; (typically a C&lt;Gedcom::Individual&gt;), then pass it as C&lt;logger&gt; to
-</span><span class="">  768: C&lt;new()&gt;.  On error, this module simply calls C&lt;&lt; $logger-&gt;error($msg) &gt;&gt;
-</span><span class="">  769: and Log::Abstraction handles ctx forwarding, formatting, and dispatch.
-</span><span class="">  770: 
-</span><span class="">  771:     use Log::Abstraction;
-</span><span class="">  772: 
-</span><span class="">  773:     my $logger = Log::Abstraction-&gt;new(
-</span><span class="">  774:         logger =&gt; sub {
-</span><span class="">  775:             my $args = shift;
-</span><span class="">  776:             my $msg = $args-&gt;{ctx}
-</span><span class="">  777:                 ? $args-&gt;{ctx}-&gt;as_string() . &#39;: &#39; . join(&#39;&#39;, @{$args-&gt;{message}})
-</span><span class="">  778:                 : join(&#39;&#39;, @{$args-&gt;{message}});
-</span><span class="">  779:             complain({ message =&gt; $msg, person =&gt; $args-&gt;{ctx} });
-</span><span class="">  780:         },
-</span><span class="">  781:         ctx =&gt; $individual,
-</span><span class="">  782:     );
-</span><span class="">  783: 
-</span><span class="">  784:     my $namer = Genealogy::Relationship::Name-&gt;new(logger =&gt; $logger);
-</span><span class="">  785: 
-</span><span class="">  786: =back
-</span><span class="">  787: 
-</span><span class="">  788: If any handler returns without dying (e.g. a warning-only handler in
-</span><span class="">  789: L&lt;Log::Abstraction&gt;), C&lt;name()&gt; returns C&lt;undef&gt;.
-</span><span class="">  790: 
-</span><span class="">  791: =head1 DIAGNOSTICS
+</span><span class="">  669: Readonly::Hash my %DE_FEMALE_RELATIONSHIPS =&gt; (
+</span><span class="">  670: 	&#39;0,0&#39; =&gt; &#39;sich selbst&#39;,
+</span><span class="">  671: 	&#39;0,1&#39; =&gt; &#39;Tochter&#39;,
+</span><span class="">  672: 	&#39;0,2&#39; =&gt; &#39;Enkelin&#39;,
+</span><span class="">  673: 	&#39;0,3&#39; =&gt; &#39;Urenkelin&#39;,
+</span><span class="">  674: 	&#39;0,4&#39; =&gt; &#39;Ururenkelin&#39;,
+</span><span class="">  675: 	&#39;0,5&#39; =&gt; &#39;Urururenkelin&#39;,
+</span><span class="">  676: 	&#39;0,6&#39; =&gt; &#39;Ururururenkelin&#39;,
+</span><span class="">  677: 	&#39;0,7&#39; =&gt; &#39;Urururururenkelin&#39;,
+</span><span class="">  678: 	&#39;0,8&#39; =&gt; &#39;Ururururururenkelin&#39;,
+</span><span class="">  679: 	&#39;0,9&#39; =&gt; &#39;Urururururururenkelin&#39;,
+</span><span class="">  680: 	&#39;0,10&#39; =&gt; &#39;Ururururururururenkelin&#39;,
+</span><span class="">  681: 	&#39;1,0&#39; =&gt; &#39;Mutter&#39;,
+</span><span class="">  682: 	&#39;1,1&#39; =&gt; &#39;Schwester&#39;,
+</span><span class="">  683: 	&#39;1,2&#39; =&gt; &#39;Nichte&#39;,
+</span><span class="">  684: 	&#39;1,3&#39; =&gt; &#39;Grossnichte&#39;,
+</span><span class="">  685: 	&#39;1,4&#39; =&gt; &#39;Urgrossnichte&#39;,
+</span><span class="">  686: 	&#39;1,5&#39; =&gt; &#39;Ururgrossnichte&#39;,
+</span><span class="">  687: 	&#39;1,6&#39; =&gt; &#39;Urururgrossnichte&#39;,
+</span><span class="">  688: 	&#39;1,7&#39; =&gt; &#39;Ururururgrossnichte&#39;,
+</span><span class="">  689: 	&#39;1,8&#39; =&gt; &#39;Urururururgrossnichte&#39;,
+</span><span class="">  690: 	&#39;1,9&#39; =&gt; &#39;Ururururururgrossnichte&#39;,
+</span><span class="">  691: 	&#39;1,10&#39; =&gt; &#39;Urururururururgrossnichte&#39;,
+</span><span class="">  692: 	&#39;2,0&#39; =&gt; &#39;Grossmutter&#39;,
+</span><span class="">  693: 	&#39;2,1&#39; =&gt; &#39;Tante&#39;,
+</span><span class="">  694: 	&#39;2,2&#39; =&gt; &#39;Cousine&#39;,
+</span><span class="">  695: 	&#39;2,3&#39; =&gt; &#39;Cousine einmal entfernt&#39;,
+</span><span class="">  696: 	&#39;2,4&#39; =&gt; &#39;Cousine zweimal entfernt&#39;,
+</span><span class="">  697: 	&#39;2,5&#39; =&gt; &#39;Cousine dreimal entfernt&#39;,
+</span><span class="">  698: 	&#39;2,6&#39; =&gt; &#39;Cousine viermal entfernt&#39;,
+</span><span class="">  699: 	&#39;2,7&#39; =&gt; &#39;Cousine fuenfmal entfernt&#39;,
+</span><span class="">  700: 	&#39;2,8&#39; =&gt; &#39;Cousine sechsmal entfernt&#39;,
+</span><span class="">  701: 	&#39;2,9&#39; =&gt; &#39;Cousine siebenmal entfernt&#39;,
+</span><span class="">  702: 	&#39;2,10&#39; =&gt; &#39;Cousine achtmal entfernt&#39;,
+</span><span class="">  703: 	&#39;3,0&#39; =&gt; &#39;Urgrossmutter&#39;,
+</span><span class="">  704: 	&#39;3,1&#39; =&gt; &#39;Grosstante&#39;,
+</span><span class="">  705: 	&#39;3,2&#39; =&gt; &#39;Cousine einmal entfernt&#39;,
+</span><span class="">  706: 	&#39;3,3&#39; =&gt; &#39;Cousine zweiten Grades&#39;,
+</span><span class="">  707: 	&#39;3,4&#39; =&gt; &#39;Cousine zweiten Grades einmal entfernt&#39;,
+</span><span class="">  708: 	&#39;3,5&#39; =&gt; &#39;Cousine zweiten Grades zweimal entfernt&#39;,
+</span><span class="">  709: 	&#39;3,6&#39; =&gt; &#39;Cousine zweiten Grades dreimal entfernt&#39;,
+</span><span class="">  710: 	&#39;3,7&#39; =&gt; &#39;Cousine zweiten Grades viermal entfernt&#39;,
+</span><span class="">  711: 	&#39;3,8&#39; =&gt; &#39;Cousine zweiten Grades fuenfmal entfernt&#39;,
+</span><span class="">  712: 	&#39;3,9&#39; =&gt; &#39;Cousine zweiten Grades sechsmal entfernt&#39;,
+</span><span class="">  713: 	&#39;3,10&#39; =&gt; &#39;Cousine zweiten Grades siebenmal entfernt&#39;,
+</span><span class="">  714: 	&#39;4,0&#39; =&gt; &#39;Ururgrossmutter&#39;,
+</span><span class="">  715: 	&#39;4,1&#39; =&gt; &#39;Urgrosstante&#39;,
+</span><span class="">  716: 	&#39;4,2&#39; =&gt; &#39;Cousine zweimal entfernt&#39;,
+</span><span class="">  717: 	&#39;4,3&#39; =&gt; &#39;Cousine zweiten Grades einmal entfernt&#39;,
+</span><span class="">  718: 	&#39;4,4&#39; =&gt; &#39;Cousine dritten Grades&#39;,
+</span><span class="">  719: 	&#39;4,5&#39; =&gt; &#39;Cousine dritten Grades einmal entfernt&#39;,
+</span><span class="">  720: 	&#39;4,6&#39; =&gt; &#39;Cousine dritten Grades zweimal entfernt&#39;,
+</span><span class="">  721: 	&#39;4,7&#39; =&gt; &#39;Cousine dritten Grades dreimal entfernt&#39;,
+</span><span class="">  722: 	&#39;4,8&#39; =&gt; &#39;Cousine dritten Grades viermal entfernt&#39;,
+</span><span class="">  723: 	&#39;4,9&#39; =&gt; &#39;Cousine dritten Grades fuenfmal entfernt&#39;,
+</span><span class="">  724: 	&#39;4,10&#39; =&gt; &#39;Cousine dritten Grades sechsmal entfernt&#39;,
+</span><span class="">  725: 	&#39;5,0&#39; =&gt; &#39;Urururgrossmutter&#39;,
+</span><span class="">  726: 	&#39;5,1&#39; =&gt; &#39;Ururgrosstante&#39;,
+</span><span class="">  727: 	&#39;5,2&#39; =&gt; &#39;Cousine dreimal entfernt&#39;,
+</span><span class="">  728: 	&#39;5,3&#39; =&gt; &#39;Cousine zweiten Grades zweimal entfernt&#39;,
+</span><span class="">  729: 	&#39;5,4&#39; =&gt; &#39;Cousine dritten Grades einmal entfernt&#39;,
+</span><span class="">  730: 	&#39;5,5&#39; =&gt; &#39;Cousine vierten Grades&#39;,
+</span><span class="">  731: 	&#39;5,6&#39; =&gt; &#39;Cousine vierten Grades einmal entfernt&#39;,
+</span><span class="">  732: 	&#39;5,7&#39; =&gt; &#39;Cousine vierten Grades zweimal entfernt&#39;,
+</span><span class="">  733: 	&#39;5,8&#39; =&gt; &#39;Cousine vierten Grades dreimal entfernt&#39;,
+</span><span class="">  734: 	&#39;5,9&#39; =&gt; &#39;Cousine vierten Grades viermal entfernt&#39;,
+</span><span class="">  735: 	&#39;5,10&#39; =&gt; &#39;Cousine vierten Grades fuenfmal entfernt&#39;,
+</span><span class="">  736: 	&#39;6,0&#39; =&gt; &#39;Ururururgrossmutter&#39;,
+</span><span class="">  737: 	&#39;6,1&#39; =&gt; &#39;Urururgrosstante&#39;,
+</span><span class="">  738: 	&#39;6,2&#39; =&gt; &#39;Cousine viermal entfernt&#39;,
+</span><span class="">  739: 	&#39;6,3&#39; =&gt; &#39;Cousine zweiten Grades dreimal entfernt&#39;,
+</span><span class="">  740: 	&#39;6,4&#39; =&gt; &#39;Cousine dritten Grades zweimal entfernt&#39;,
+</span><span class="">  741: 	&#39;6,5&#39; =&gt; &#39;Cousine vierten Grades einmal entfernt&#39;,
+</span><span class="">  742: 	&#39;6,6&#39; =&gt; &#39;Cousine fuenften Grades&#39;,
+</span><span class="">  743: 	&#39;6,7&#39; =&gt; &#39;Cousine fuenften Grades einmal entfernt&#39;,
+</span><span class="">  744: 	&#39;6,8&#39; =&gt; &#39;Cousine fuenften Grades zweimal entfernt&#39;,
+</span><span class="">  745: 	&#39;6,9&#39; =&gt; &#39;Cousine fuenften Grades dreimal entfernt&#39;,
+</span><span class="">  746: 	&#39;6,10&#39; =&gt; &#39;Cousine fuenften Grades viermal entfernt&#39;,
+</span><span class="">  747: 	&#39;7,0&#39; =&gt; &#39;Urururururgrossmutter&#39;,
+</span><span class="">  748: 	&#39;7,1&#39; =&gt; &#39;Ururururgrosstante&#39;,
+</span><span class="">  749: 	&#39;7,2&#39; =&gt; &#39;Cousine fuenfmal entfernt&#39;,
+</span><span class="">  750: 	&#39;7,3&#39; =&gt; &#39;Cousine zweiten Grades viermal entfernt&#39;,
+</span><span class="">  751: 	&#39;7,4&#39; =&gt; &#39;Cousine dritten Grades dreimal entfernt&#39;,
+</span><span class="">  752: 	&#39;7,5&#39; =&gt; &#39;Cousine vierten Grades zweimal entfernt&#39;,
+</span><span class="">  753: 	&#39;7,6&#39; =&gt; &#39;Cousine fuenften Grades einmal entfernt&#39;,
+</span><span class="">  754: 	&#39;7,7&#39; =&gt; &#39;Cousine sechsten Grades&#39;,
+</span><span class="">  755: 	&#39;7,8&#39; =&gt; &#39;Cousine sechsten Grades einmal entfernt&#39;,
+</span><span class="">  756: 	&#39;7,9&#39; =&gt; &#39;Cousine sechsten Grades zweimal entfernt&#39;,
+</span><span class="">  757: 	&#39;7,10&#39; =&gt; &#39;Cousine sechsten Grades dreimal entfernt&#39;,
+</span><span class="">  758: 	&#39;8,0&#39; =&gt; &#39;Ururururururgrossmutter&#39;,
+</span><span class="">  759: 	&#39;8,1&#39; =&gt; &#39;Urururururgrosstante&#39;,
+</span><span class="">  760: 	&#39;8,2&#39; =&gt; &#39;Cousine sechsmal entfernt&#39;,
+</span><span class="">  761: 	&#39;8,3&#39; =&gt; &#39;Cousine zweiten Grades fuenfmal entfernt&#39;,
+</span><span class="">  762: 	&#39;8,4&#39; =&gt; &#39;Cousine dritten Grades viermal entfernt&#39;,
+</span><span class="">  763: 	&#39;8,5&#39; =&gt; &#39;Cousine vierten Grades dreimal entfernt&#39;,
+</span><span class="">  764: 	&#39;8,6&#39; =&gt; &#39;Cousine fuenften Grades zweimal entfernt&#39;,
+</span><span class="">  765: 	&#39;8,7&#39; =&gt; &#39;Cousine sechsten Grades einmal entfernt&#39;,
+</span><span class="">  766: 	&#39;8,8&#39; =&gt; &#39;Cousine siebten Grades&#39;,
+</span><span class="">  767: 	&#39;8,9&#39; =&gt; &#39;Cousine siebten Grades einmal entfernt&#39;,
+</span><span class="">  768: 	&#39;8,10&#39; =&gt; &#39;Cousine siebten Grades zweimal entfernt&#39;,
+</span><span class="">  769: 	&#39;9,0&#39; =&gt; &#39;Urururururururgrossmutter&#39;,
+</span><span class="">  770: 	&#39;9,1&#39; =&gt; &#39;Ururururururgrosstante&#39;,
+</span><span class="">  771: 	&#39;9,2&#39; =&gt; &#39;Cousine siebenmal entfernt&#39;,
+</span><span class="">  772: 	&#39;9,3&#39; =&gt; &#39;Cousine zweiten Grades sechsmal entfernt&#39;,
+</span><span class="">  773: 	&#39;9,4&#39; =&gt; &#39;Cousine dritten Grades fuenfmal entfernt&#39;,
+</span><span class="">  774: 	&#39;9,5&#39; =&gt; &#39;Cousine vierten Grades viermal entfernt&#39;,
+</span><span class="">  775: 	&#39;9,6&#39; =&gt; &#39;Cousine fuenften Grades dreimal entfernt&#39;,
+</span><span class="">  776: 	&#39;9,7&#39; =&gt; &#39;Cousine sechsten Grades zweimal entfernt&#39;,
+</span><span class="">  777: 	&#39;9,8&#39; =&gt; &#39;Cousine siebten Grades einmal entfernt&#39;,
+</span><span class="">  778: 	&#39;9,9&#39; =&gt; &#39;Cousine achten Grades&#39;,
+</span><span class="">  779: 	&#39;9,10&#39; =&gt; &#39;Cousine achten Grades einmal entfernt&#39;,
+</span><span class="">  780: 	&#39;10,0&#39; =&gt; &#39;Ururururururururgrossmutter&#39;,
+</span><span class="">  781: 	&#39;10,1&#39; =&gt; &#39;Urururururururgrosstante&#39;,
+</span><span class="">  782: 	&#39;10,2&#39; =&gt; &#39;Cousine achtmal entfernt&#39;,
+</span><span class="">  783: 	&#39;10,3&#39; =&gt; &#39;Cousine zweiten Grades siebenmal entfernt&#39;,
+</span><span class="">  784: 	&#39;10,4&#39; =&gt; &#39;Cousine dritten Grades sechsmal entfernt&#39;,
+</span><span class="">  785: 	&#39;10,5&#39; =&gt; &#39;Cousine vierten Grades fuenfmal entfernt&#39;,
+</span><span class="">  786: 	&#39;10,6&#39; =&gt; &#39;Cousine fuenften Grades viermal entfernt&#39;,
+</span><span class="">  787: 	&#39;10,7&#39; =&gt; &#39;Cousine sechsten Grades dreimal entfernt&#39;,
+</span><span class="">  788: 	&#39;10,8&#39; =&gt; &#39;Cousine siebten Grades zweimal entfernt&#39;,
+</span><span class="">  789: 	&#39;10,9&#39; =&gt; &#39;Cousine achten Grades einmal entfernt&#39;,
+</span><span class="">  790: 	&#39;10,10&#39; =&gt; &#39;Cousine neunten Grades&#39;,
+</span><span class="">  791: );
 </span><span class="">  792: 
-</span><span class="">  793: =over 4
-</span><span class="">  794: 
-</span><span class="">  795: =item steps_to_ancestor not given
+</span><span class="">  793: # ---------------------------------------------------------------------------
+</span><span class="">  794: # Master dispatch table: lang -&gt; sex -&gt; hashref
+</span><span class="">  795: # ---------------------------------------------------------------------------
 </span><span class="">  796: 
-</span><span class="">  797: C&lt;steps_to_ancestor&gt; was passed as C&lt;undef&gt;. Passing C&lt;undef&gt; explicitly is
-</span><span class="">  798: distinct from omitting the argument; use a defined non-negative integer.
-</span><span class="">  799: 
-</span><span class="">  800: =item steps_from_ancestor not given
-</span><span class="">  801: 
-</span><span class="">  802: As above, for C&lt;steps_from_ancestor&gt;.
-</span><span class="">  803: 
-</span><span class="">  804: =item sex not given
-</span><span class="">  805: 
-</span><span class="">  806: C&lt;sex&gt; was passed as C&lt;undef&gt;. Supply C&lt;&#39;M&#39;&gt; or C&lt;&#39;F&#39;&gt;.
-</span><span class="">  807: 
-</span><span class="">  808: =back
+</span><span class="">  797: Readonly::Hash my %RELATIONSHIP_TABLES =&gt; (
+</span><span class="">  798: 	&#39;en&#39; =&gt; {
+</span><span class="">  799: 		$SEX_MALE   =&gt; \%EN_MALE_RELATIONSHIPS,
+</span><span class="">  800: 		$SEX_FEMALE =&gt; \%EN_FEMALE_RELATIONSHIPS,
+</span><span class="">  801: 	}, &#39;fr&#39; =&gt; {
+</span><span class="">  802: 		$SEX_MALE   =&gt; \%FR_MALE_RELATIONSHIPS,
+</span><span class="">  803: 		$SEX_FEMALE =&gt; \%FR_FEMALE_RELATIONSHIPS,
+</span><span class="">  804: 	}, &#39;de&#39; =&gt; {
+</span><span class="">  805: 		$SEX_MALE   =&gt; \%DE_MALE_RELATIONSHIPS,
+</span><span class="">  806: 		$SEX_FEMALE =&gt; \%DE_FEMALE_RELATIONSHIPS,
+</span><span class="">  807: 	},
+</span><span class="">  808: );
 </span><span class="">  809: 
-</span><span class="">  810: =head1 DEPENDENCIES
-</span><span class="">  811: 
-</span><span class="">  812: L&lt;Carp&gt;, L&lt;Object::Configure&gt;
+</span><span class="">  810: # ---------------------------------------------------------------------------
+</span><span class="">  811: # Constructor
+</span><span class="">  812: # ---------------------------------------------------------------------------
 </span><span class="">  813: 
-</span><span class="">  814: Optionally L&lt;Log::Abstraction&gt; (E&lt;gt&gt;= 0.28) for the C&lt;logger&gt;/C&lt;ctx&gt; error
-</span><span class="">  815: dispatch path.
-</span><span class="">  816: L&lt;Params::Get&gt;, L&lt;Params::Validate::Strict&gt;, L&lt;Readonly&gt;
+</span><span class="">  814: =head1 NAME
+</span><span class="">  815: 
+</span><span class="">  816: Genealogy::Relationship::Name - Return a genealogical relationship name from step counts
 </span><span class="">  817: 
-</span><span class="">  818: =head1 BUGS AND LIMITATIONS
+</span><span class="">  818: =head1 VERSION
 </span><span class="">  819: 
-</span><span class="">  820: The lookup tables currently cover steps 0-6 in both directions.  Relationships
-</span><span class="">  821: further removed (seventh cousin, etc.) return C&lt;undef&gt;.  Pull requests adding
-</span><span class="">  822: deeper tables are welcome.
+</span><span class="">  820: Version 0.02
+</span><span class="">  821: 
+</span><span class="">  822: =head1 SYNOPSIS
 </span><span class="">  823: 
-</span><span class="">  824: =head1 TODO
+</span><span class="">  824:     use Genealogy::Relationship::Name;
 </span><span class="">  825: 
-</span><span class="">  826: =over 4
+</span><span class="">  826:     my $namer = Genealogy::Relationship::Name-&gt;new();
 </span><span class="">  827: 
-</span><span class="">  828: =item * Extract and integrate the Latin relationship handling code currently
-</span><span class="">  829: embedded in the C&lt;gedcom&gt; and C&lt;ged2site&gt; programs, adding C&lt;la&gt; as a
-</span><span class="">  830: supported language alongside C&lt;en&gt;, C&lt;fr&gt;, and C&lt;de&gt;.
-</span><span class="">  831: 
-</span><span class="">  832: =back
-</span><span class="">  833: 
-</span><span class="">  834: =head1 SEE ALSO
-</span><span class="">  835: 
-</span><span class="">  836: =over 4
-</span><span class="">  837: 
-</span><span class="">  838: =item * L&lt;Configure an Object at Runtime|Object::Configure&gt;
-</span><span class="">  839: 
-</span><span class="">  840: =item * L&lt;Test Dashboard|https://nigelhorne.github.io/Genealogy-Relationship-Name/coverage/&gt;
-</span><span class="">  841: 
-</span><span class="">  842: =item * L&lt;Gedcom::Individual&gt;, L&lt;Genealogy::Relationship&gt;
+</span><span class="">  828:     my $name = $namer-&gt;name(
+</span><span class="">  829:         steps_to_ancestor   =&gt; 2,
+</span><span class="">  830:         steps_from_ancestor =&gt; 3,
+</span><span class="">  831:         sex                 =&gt; &#39;F&#39;,
+</span><span class="">  832:     );
+</span><span class="">  833:     # Returns &#39;first cousin once-removed&#39;
+</span><span class="">  834: 
+</span><span class="">  835:     # With language
+</span><span class="">  836:     my $name_fr = $namer-&gt;name(
+</span><span class="">  837:         steps_to_ancestor   =&gt; 2,
+</span><span class="">  838:         steps_from_ancestor =&gt; 2,
+</span><span class="">  839:         sex                 =&gt; &#39;M&#39;,
+</span><span class="">  840:         language            =&gt; &#39;fr&#39;,
+</span><span class="">  841:     );
+</span><span class="">  842:     # Returns &#39;cousin germain&#39;
 </span><span class="">  843: 
-</span><span class="">  844: =back
+</span><span class="">  844: =head1 DESCRIPTION
 </span><span class="">  845: 
-</span><span class="">  846: =head1 AUTHOR
-</span><span class="">  847: 
-</span><span class="">  848: Nigel Horne C&lt;&lt; &lt;njh@nigelhorne.com&gt; &gt;&gt;
+</span><span class="">  846: C&lt;Genealogy::Relationship::Name&gt; maps a pair of step-counts (person A to common
+</span><span class="">  847: ancestor, common ancestor to person B) plus the sex of person B and an optional
+</span><span class="">  848: language code to a human-readable relationship name string.
 </span><span class="">  849: 
-</span><span class="">  850: =head1 REPOSITORY
-</span><span class="">  851: 
-</span><span class="">  852: L&lt;https://github.com/nigelhorne/Genealogy-Relationship-Name&gt;
+</span><span class="">  850: The relationship tables were originally embedded in the C&lt;gedcom&gt; and C&lt;ged2site&gt;
+</span><span class="">  851: distributions inside C&lt;Gedcom::Individual::relationship_up()&gt;; this module
+</span><span class="">  852: extracts them into a reusable, installable CPAN distribution.
 </span><span class="">  853: 
-</span><span class="">  854: =head1 SUPPORT
+</span><span class="">  854: Supported languages: C&lt;en&gt; (English, default), C&lt;fr&gt; (French), C&lt;de&gt; (German).
 </span><span class="">  855: 
-</span><span class="">  856: This module is provided as-is without any warranty.
+</span><span class="">  856: =head1 METHODS
 </span><span class="">  857: 
-</span><span class="">  858: Please report any bugs or feature requests to C&lt;bug-genealogy-relationship-name at rt.cpan.org&gt;,
-</span><span class="">  859: or through the web interface at
-</span><span class="">  860: L&lt;http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name&gt;.
-</span><span class="">  861: I will be notified, and then you&#39;ll
-</span><span class="">  862: automatically be notified of progress on your bug as I make changes.
-</span><span class="">  863: 
-</span><span class="">  864: You can find documentation for this module with the perldoc command.
-</span><span class="">  865: 
-</span><span class="">  866:     perldoc Genealogy::Relationship::Name
-</span><span class="">  867: 
-</span><span class="">  868: You can also look for information at:
+</span><span class="">  858: =head2 new
+</span><span class="">  859: 
+</span><span class="">  860: Constructor.  Creates and returns a blessed C&lt;Genealogy::Relationship::Name&gt;
+</span><span class="">  861: object.
+</span><span class="">  862: 
+</span><span class="">  863: =head3 PURPOSE
+</span><span class="">  864: 
+</span><span class="">  865: Initialises the object with optional configuration: a default language for
+</span><span class="">  866: subsequent C&lt;name()&gt; calls, and an optional L&lt;Log::Abstraction&gt; object to
+</span><span class="">  867: use as the error logger.  Configuration may also be loaded from an INI-style
+</span><span class="">  868: file via L&lt;Object::Configure&gt;.
 </span><span class="">  869: 
-</span><span class="">  870: =over 4
+</span><span class="">  870: =head3 ARGUMENTS
 </span><span class="">  871: 
-</span><span class="">  872: =item * MetaCPAN
+</span><span class="">  872: =over 4
 </span><span class="">  873: 
-</span><span class="">  874: L&lt;https://metacpan.org/dist/Genealogy-Relationship-Name&gt;
+</span><span class="">  874: =item C&lt;language&gt; (string, optional)
 </span><span class="">  875: 
-</span><span class="">  876: =item * RT: CPAN&#39;s request tracker
-</span><span class="">  877: 
-</span><span class="">  878: L&lt;https://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-Relationship-Name&gt;
+</span><span class="">  876: Default BCP-47 language tag (primary subtag only) for all C&lt;name()&gt; calls
+</span><span class="">  877: on this object.  Supported values: C&lt;en&gt; (default), C&lt;fr&gt;, C&lt;de&gt;.  May be
+</span><span class="">  878: overridden per-call by passing C&lt;language&gt; to C&lt;name()&gt;.
 </span><span class="">  879: 
-</span><span class="">  880: =item * CPAN Testers&#39; Matrix
+</span><span class="">  880: =item C&lt;logger&gt;
 </span><span class="">  881: 
-</span><span class="">  882: L&lt;http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name&gt;
-</span><span class="">  883: 
-</span><span class="">  884: =item * CPAN Testers Dependencies
-</span><span class="">  885: 
-</span><span class="">  886: L&lt;http://deps.cpantesters.org/?module=Genealogy::Relationship::Name&gt;
+</span><span class="">  882: A pre-constructed loggining object.  When a required argument is
+</span><span class="">  883: passed as C&lt;undef&gt; to C&lt;name()&gt;, the error is reported via
+</span><span class="">  884: C&lt;&lt; $logger-&gt;error($msg) &gt;&gt; rather than C&lt;croak&gt;.  This allows
+</span><span class="">  885: programs to route errors through their own
+</span><span class="">  886: infrastructure with full C&lt;ctx&gt; context.
 </span><span class="">  887: 
-</span><span class="">  888: =back
-</span><span class="">  889: 
-</span><span class="">  890: =head1 LICENCE AND COPYRIGHT
-</span><span class="">  891: 
-</span><span class="">  892: Copyright 2026 Nigel Horne.
-</span><span class="">  893: 
-</span><span class="">  894: Usage is subject to the GPL2 licence terms.
-</span><span class="">  895: If you use it,
-</span><span class="">  896: please let me know.
+</span><span class="">  888: See L&lt;Log::Abstraction&gt; and the L&lt;/CONFIGURATION&gt; section for the
+</span><span class="">  889: recommended construction pattern.
+</span><span class="">  890: 
+</span><span class="">  891: =item C&lt;config_file&gt; (string, optional)
+</span><span class="">  892: 
+</span><span class="">  893: Path to an INI-style configuration file processed by L&lt;Object::Configure&gt;.
+</span><span class="">  894: Any keys it sets may be overridden by arguments passed directly to C&lt;new()&gt;.
+</span><span class="">  895: 
+</span><span class="">  896: =back
 </span><span class="">  897: 
-</span><span class="">  898: =cut
+</span><span class="">  898: =head3 RETURNS
+</span><span class="">  899: 
+</span><span class="">  900: A blessed C&lt;Genealogy::Relationship::Name&gt; object.
+</span><span class="">  901: 
+</span><span class="">  902: =head3 SIDE EFFECTS
+</span><span class="">  903: 
+</span><span class="">  904: Calls L&lt;Object::Configure&gt; C&lt;configure()&gt;, which may read from a
+</span><span class="">  905: configuration file on disk if C&lt;config_file&gt; is supplied or if a default
+</span><span class="">  906: configuration file exists for the class.
+</span><span class="">  907: 
+</span><span class="">  908: =head3 NOTES
+</span><span class="">  909: 
+</span><span class="">  910: L&lt;Object::Configure&gt; cannot handle object or coderef values (it treats
+</span><span class="">  911: unknown scalar values as configuration file paths).  The C&lt;logger&gt; key is
+</span><span class="">  912: therefore stashed before the C&lt;configure()&gt; call and restored afterward.
+</span><span class="">  913: Any future object-valued constructor arguments must follow the same pattern.
+</span><span class="">  914: 
+</span><span class="">  915: =head3 EXAMPLE
+</span><span class="">  916: 
+</span><span class="">  917:     use Genealogy::Relationship::Name;
+</span><span class="">  918:     use Log::Abstraction;
+</span><span class="">  919: 
+</span><span class="">  920:     # Minimal construction
+</span><span class="">  921:     my $namer = Genealogy::Relationship::Name-&gt;new();
+</span><span class="">  922: 
+</span><span class="">  923:     # With a default language
+</span><span class="">  924:     my $namer_fr = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;fr&#39;);
+</span><span class="">  925: 
+</span><span class="">  926:     # With a Log::Abstraction logger
+</span><span class="">  927:     my $la = Log::Abstraction-&gt;new(
+</span><span class="">  928:         logger =&gt; sub {
+</span><span class="">  929:             my $args = shift;
+</span><span class="">  930:             my $msg = $args-&gt;{ctx}
+</span><span class="">  931:                 ? $args-&gt;{ctx}-&gt;as_string() . &#39;: &#39; . join(&#39;&#39;, @{$args-&gt;{message}})
+</span><span class="">  932:                 : join(&#39;&#39;, @{$args-&gt;{message}});
+</span><span class="">  933:             complain({ message =&gt; $msg, person =&gt; $args-&gt;{ctx} });
+</span><span class="">  934:         },
+</span><span class="">  935:         ctx =&gt; $individual,
+</span><span class="">  936:     );
+</span><span class="">  937:     my $namer = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;en&#39;, logger =&gt; $la);
+</span><span class="">  938: 
+</span><span class="">  939: =head3 API SPECIFICATION
+</span><span class="">  940: 
+</span><span class="">  941: =head4 Input
+</span><span class="">  942: 
+</span><span class="">  943:     {
+</span><span class="">  944:         language =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|fr|de)/, optional =&gt; 1 },
+</span><span class="">  945:         logger   =&gt; { type =&gt; &#39;object&#39;, optional =&gt; 1 },
+</span><span class="">  946:     }
+</span><span class="">  947: 
+</span><span class="">  948: =head4 Output
+</span><span class="">  949: 
+</span><span class="">  950:     {
+</span><span class="">  951:         type  =&gt; &#39;object&#39;,
+</span><span class="">  952:         class =&gt; &#39;Genealogy::Relationship::Name&#39;,
+</span><span class="">  953:     }
+</span><span class="">  954: 
+</span><span class="">  955: =head3 FORMAL SPECIFICATION
+</span><span class="">  956: 
+</span><span class="">  957:     new ________________________________________________________
+</span><span class="">  958:     [In]  class    : String                  (class name or object)
+</span><span class="">  959:           language : {en, fr, de}?           (optional default language)
+</span><span class="">  960:           logger   : Log::Abstraction?       (optional error logger)
+</span><span class="">  961:     [Out] self     : Genealogy::Relationship::Name
+</span><span class="">  962: 
+</span><span class="">  963:     Let params == get_params(args)
+</span><span class="">  964:     Let params&#39; == configure(class, params \ {logger})
+</span><span class="">  965:                    union {logger -&gt; params.logger}  if logger in dom params
+</span><span class="">  966:     self == bless(params&#39;, class)
+</span><span class="">  967: 
+</span><span class="">  968:     post: self.language == params.language  if language in dom params
+</span><span class="">  969:           self.logger   == params.logger    if logger   in dom params
+</span><span class="">  970:           ref(self)     == &#39;Genealogy::Relationship::Name&#39;
+</span><span class="">  971: 
+</span><span class="">  972: =cut
+</span><span class="">  973: 
+</span><span class="">  974: sub new {
+</span><span class="">  975: 	# Create and return a blessed object
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">976 → 984 → 990</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">976 → 984 → 0</span></span>  976: 	my $class = shift;
+</span><span class="">  977: 
+</span><span class="">  978: 	# Handle hash or hashref arguments
+</span><span class="">  979: 	my $params = Params::Get::get_params(undef, \@_);
+</span><span class="">  980: 
+</span><span class="">  981: 	# Stash keys that are coderefs or objects before passing to Object::Configure,
+</span><span class="">  982: 	# which cannot handle them (it treats unknown scalar values as config file paths)
+</span><span class="">  983: 	my %stash;
+</span><span class="">  984: 	for my $key (qw(logger)) {
+</span><span class="">  985: 		next unless exists $params-&gt;{$key};
+</span><span class="">  986: 		$stash{$key} = delete $params-&gt;{$key};
+</span><span class="">  987: 	}
+</span><span class="">  988: 
+</span><span class="">  989: 	# Load the configuration from a config file, if provided
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">990 → 997 → 0</span></span>  990: 	$params = Object::Configure::configure($class, $params);
+</span><span class="">  991: 
+</span><span class="">  992: 	# Restore the stashed coderefs and objects after configure()
+</span><span class="">  993: 	@{$params}{keys %stash} = values %stash;
+</span><span class="">  994: 
+</span><span class="">  995: 	# Bless and return the object; logger/ctx/level keys from params
+</span><span class="">  996: 	# are stored directly and accessed via $self-&gt;{logger} etc.
+</span><span class="">  997: 	return bless {
+</span><span class="">  998: 		# Store any constructor-time config for Object::Configure compatibility
+</span><span class="">  999: 		%{$params},
+</span><span class=""> 1000: 	}, ref($class) || $class;
+</span><span class=""> 1001: }
+</span><span class=""> 1002: 
+</span><span class=""> 1003: # ---------------------------------------------------------------------------
+</span><span class=""> 1004: # Public method: name()
+</span><span class=""> 1005: # ---------------------------------------------------------------------------
+</span><span class=""> 1006: 
+</span><span class=""> 1007: =head2 name
+</span><span class=""> 1008: 
+</span><span class=""> 1009: Returns the name of the relationship between person A and person B.
+</span><span class=""> 1010: 
+</span><span class=""> 1011: =head3 PURPOSE
+</span><span class=""> 1012: 
+</span><span class=""> 1013: Given the number of steps from person A up to the nearest common ancestor
+</span><span class=""> 1014: (C&lt;steps_to_ancestor&gt;) and the number of steps from that ancestor down to
+</span><span class=""> 1015: person B (C&lt;steps_from_ancestor&gt;), plus the sex of person B and a language
+</span><span class=""> 1016: code, returns a localised relationship-name string.
+</span><span class=""> 1017: 
+</span><span class=""> 1018: =head3 ARGUMENTS
+</span><span class=""> 1019: 
+</span><span class=""> 1020: =over 4
+</span><span class=""> 1021: 
+</span><span class=""> 1022: =item C&lt;steps_to_ancestor&gt; (integer, required)
+</span><span class=""> 1023: 
+</span><span class=""> 1024: Number of generational steps from person A up to the common ancestor.
+</span><span class=""> 1025: Must be a non-negative integer.  Zero means person A I&lt;is&gt; the ancestor.
+</span><span class=""> 1026: 
+</span><span class=""> 1027: =item C&lt;steps_from_ancestor&gt; (integer, required)
+</span><span class=""> 1028: 
+</span><span class=""> 1029: Number of generational steps from the common ancestor down to person B.
+</span><span class=""> 1030: Must be a non-negative integer.
+</span><span class=""> 1031: 
+</span><span class=""> 1032: =item C&lt;sex&gt; (string, required)
+</span><span class=""> 1033: 
+</span><span class=""> 1034: Sex of person B.  Must be C&lt;&#39;M&#39;&gt; (male) or C&lt;&#39;F&#39;&gt; (female).
+</span><span class=""> 1035: 
+</span><span class=""> 1036: =item C&lt;language&gt; (string, optional)
+</span><span class=""> 1037: 
+</span><span class=""> 1038: BCP-47-style language tag (only the primary subtag is used).
+</span><span class=""> 1039: Supported values: C&lt;en&gt; (default), C&lt;fr&gt;, C&lt;de&gt;.
+</span><span class=""> 1040: 
+</span><span class=""> 1041: =item C&lt;person&gt; (object, optional)
+</span><span class=""> 1042: 
+</span><span class=""> 1043: An optional person object (e.g. a C&lt;Gedcom::Individual&gt; instance) passed
+</span><span class=""> 1044: through to the error handler when an error occurs.  Takes priority over the
+</span><span class=""> 1045: C&lt;ctx&gt; set at construction time.  The handler receives it as C&lt;ctx&gt; (logger
+</span><span class=""> 1046: path) or C&lt;person&gt; (on_error path), matching the C&lt;complain()&gt; interface
+</span><span class=""> 1047: in C&lt;gedcom&gt;/C&lt;ged2site&gt;.
+</span><span class=""> 1048: 
+</span><span class=""> 1049: =back
+</span><span class=""> 1050: 
+</span><span class=""> 1051: =head3 RETURNS
+</span><span class=""> 1052: 
+</span><span class=""> 1053: A string containing the relationship name, or C&lt;undef&gt; if the combination
+</span><span class=""> 1054: is not found in the lookup table.
+</span><span class=""> 1055: 
+</span><span class=""> 1056: =head3 EXAMPLE
+</span><span class=""> 1057: 
+</span><span class=""> 1058:     my $namer = Genealogy::Relationship::Name-&gt;new();
+</span><span class=""> 1059: 
+</span><span class=""> 1060:     # Person A is the grandparent (2 steps up) of the common ancestor,
+</span><span class=""> 1061:     # and person B is 3 steps below the ancestor; B is female =&gt; first cousin once-removed
+</span><span class=""> 1062:     my $rel = $namer-&gt;name(
+</span><span class=""> 1063:         steps_to_ancestor   =&gt; 2,
+</span><span class=""> 1064:         steps_from_ancestor =&gt; 3,
+</span><span class=""> 1065:         sex                 =&gt; &#39;F&#39;,
+</span><span class=""> 1066:     );
+</span><span class=""> 1067: 
+</span><span class=""> 1068: =head3 API SPECIFICATION
+</span><span class=""> 1069: 
+</span><span class=""> 1070: =head4 Input
+</span><span class=""> 1071: 
+</span><span class=""> 1072:     {
+</span><span class=""> 1073: 	steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class=""> 1074: 	steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class=""> 1075: 	sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
+</span><span class=""> 1076: 	language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/, optional =&gt; 1 },
+</span><span class=""> 1077: 	# person is extracted before validate_strict to avoid PVS inferring constraints
+</span><span class=""> 1078:     }
+</span><span class=""> 1079: 
+</span><span class=""> 1080: =head4 Output
+</span><span class=""> 1081: 
+</span><span class=""> 1082:     {
+</span><span class=""> 1083:         type     =&gt; &#39;string&#39;,
+</span><span class=""> 1084:         optional =&gt; 1,     # undef when the combination is not tabulated
+</span><span class=""> 1085:     }
+</span><span class=""> 1086: 
+</span><span class=""> 1087: =head3 FORMAL SPECIFICATION
+</span><span class=""> 1088: 
+</span><span class=""> 1089:     name ______________________________________________________
+</span><span class=""> 1090:     [In]  steps_to_ancestor   : N0
+</span><span class=""> 1091:           steps_from_ancestor : N0
+</span><span class=""> 1092:           sex                 : {M, F}
+</span><span class=""> 1093:           language            : {en, fr, de}?  (default en)
+</span><span class=""> 1094:           person              : Object?
+</span><span class=""> 1095:     [Out] result              : String | undef
+</span><span class=""> 1096: 
+</span><span class=""> 1097:     Let key == steps_to_ancestor ++ &quot;,&quot; ++ steps_from_ancestor
+</span><span class=""> 1098:     Let table == RELATIONSHIP_TABLES(language)(sex)
+</span><span class=""> 1099:     result == table(key)  if key in dom table
+</span><span class=""> 1100:            == undef       otherwise
+</span><span class=""> 1101: 
+</span><span class=""> 1102: =cut
+</span><span class=""> 1103: 
+</span><span class=""> 1104: sub name {
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1105 → 1121 → 1131</span></span><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1105 → 1121 → 0</span></span> 1105: 	my $self = shift;
+</span><span class=""> 1106: 
+</span><span class=""> 1107: 	# Validate and extract the remaining parameters; capture the return value
+</span><span class=""> 1108: 	my $args = Params::Validate::Strict::validate_strict(
+</span><span class=""> 1109: 		args   =&gt; Params::Get::get_params(undef, \@_) || {},
+</span><span class=""> 1110: 		schema =&gt; {
+</span><span class=""> 1111: 			steps_to_ancestor   =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class=""> 1112: 			steps_from_ancestor =&gt; { type =&gt; &#39;integer&#39;, minimum =&gt; 0 },
+</span><span class=""> 1113: 			sex                 =&gt; { type =&gt; &#39;string&#39;, memberof =&gt; [&#39;M&#39;, &#39;F&#39;] },
+</span><span class=""> 1114: 			language            =&gt; { type =&gt; &#39;string&#39;, regex =&gt; qr/^(?:en|de|fr)/,
+</span><span class=""> 1115: 			                         optional =&gt; 1 },
+</span><span class=""> 1116: 			person              =&gt; { type =&gt; &#39;object&#39;, optional =&gt; 1 },
+</span><span class=""> 1117: 		}
+</span><span class=""> 1118: 	);
+</span><span class=""> 1119: 
+</span><span class=""> 1120: 	# Extract individual parameters; undef means arg was not given, so croak
+</span><span class=""> 1121: 	foreach my $arg(&#39;steps_to_ancestor&#39;, &#39;steps_from_ancestor&#39;, &#39;sex&#39;) {
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch."> 1122: 		if(!defined($args-&gt;{$arg})) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_1122_3: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch."> 1123: 			if(my $logger = $self-&gt;{logger}) {
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
+					<ul>
+				<li><b>COND_INV_1123_4: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+</li></ul></details>
+<span class=""> 1124: 				$logger-&gt;error(&quot;$arg not given&quot;);
+</span><span class=""> 1125: 			} else {
+</span><span class=""> 1126: 				croak(&quot;$arg not given&quot;);
+</span><span class=""> 1127: 			}
+</span><span class=""> 1128: 		}
+</span><span class=""> 1129: 	}
+</span><span class=""> 1130: 
+</span><span class=""><span class="lcsaj-tip"><span class="lcsaj-dot">●</span><span class="lcsaj-tip-text">1131 → 1151 → 0</span></span> 1131: 	my $steps1 = $args-&gt;{steps_to_ancestor} // croak(&#39;steps_to_ancestor not given&#39;);
+</span><span class=""> 1132: 	my $steps2 = $args-&gt;{steps_from_ancestor} // croak(&#39;steps_from_ancestor not given&#39;);
+</span><span class=""> 1133: 	my $sex    = $args-&gt;{sex} // croak(&#39;sex not given&#39;);
+</span><span class=""> 1134: 	my $person = $args-&gt;{person};
+</span><span class=""> 1135: 
+</span><span class=""> 1136: 	# Fall back to the constructor default or hard default if no per-call language given
+</span><span class=""> 1137: 	my $lang = lc($args-&gt;{language} // $self-&gt;{language} // $DEFAULT_LANGUAGE);
+</span><span class=""> 1138: 
+</span><span class=""> 1139: 	# Strip any region subtag (e.g. &#39;en-GB&#39; -&gt; &#39;en&#39;) after lowercasing
+</span><span class=""> 1140: 	($lang) = split /-/, $lang;
+</span><span class=""> 1141: 
+</span><span class=""> 1142: 	# Build lookup key from the two-step counts
+</span><span class=""> 1143: 	my $key = &quot;${steps1},${steps2}&quot;;
+</span><span class=""> 1144: 
+</span><span class=""> 1145: 	# Retrieve the correct gender-specific table for the chosen language
+</span><span class=""> 1146: 	my $table = $RELATIONSHIP_TABLES{$lang}{$sex};
+</span><span class=""> 1147: 
+</span><span class=""> 1148: 	# Look up and return; undef when the combination is not tabulated
+</span><span class=""> 1149: 	my $result = $table-&gt;{$key};
+</span><span class=""> 1150: 
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths."> 1151: 	return $result;
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_1151_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_1151_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class=""> 1152: }
+</span><span class=""> 1153: 
+</span><span class=""> 1154: # ---------------------------------------------------------------------------
+</span><span class=""> 1155: # Public method: supported_languages()
+</span><span class=""> 1156: # ---------------------------------------------------------------------------
+</span><span class=""> 1157: 
+</span><span class=""> 1158: =head2 supported_languages
+</span><span class=""> 1159: 
+</span><span class=""> 1160: Returns a sorted list of the language codes that the module supports.
+</span><span class=""> 1161: 
+</span><span class=""> 1162: =head3 PURPOSE
+</span><span class=""> 1163: 
+</span><span class=""> 1164: Allows calling code to enumerate the languages available for C&lt;name()&gt;
+</span><span class=""> 1165: without hard-coding them.
+</span><span class=""> 1166: 
+</span><span class=""> 1167: =head3 ARGUMENTS
+</span><span class=""> 1168: 
+</span><span class=""> 1169: None.
+</span><span class=""> 1170: 
+</span><span class=""> 1171: =head3 RETURNS
+</span><span class=""> 1172: 
+</span><span class=""> 1173: A list (or array-ref in scalar context) of language code strings,
+</span><span class=""> 1174: currently C&lt;(&#39;de&#39;, &#39;en&#39;, &#39;fr&#39;)&gt;.
+</span><span class=""> 1175: 
+</span><span class=""> 1176: =head3 EXAMPLE
+</span><span class=""> 1177: 
+</span><span class=""> 1178:     my @langs = $namer-&gt;supported_languages();
+</span><span class=""> 1179:     # ( &#39;de&#39;, &#39;en&#39;, &#39;fr&#39; )
+</span><span class=""> 1180: 
+</span><span class=""> 1181: =head3 API SPECIFICATION
+</span><span class=""> 1182: 
+</span><span class=""> 1183: =head4 Input
+</span><span class=""> 1184: 
+</span><span class=""> 1185:     {}   # no arguments
+</span><span class=""> 1186: 
+</span><span class=""> 1187: =head4 Output
+</span><span class=""> 1188: 
+</span><span class=""> 1189:     {
+</span><span class=""> 1190:         type =&gt; ARRAYREF,   # sorted list of language codes
+</span><span class=""> 1191:     }
+</span><span class=""> 1192: 
+</span><span class=""> 1193: =head3 FORMAL SPECIFICATION
+</span><span class=""> 1194: 
+</span><span class=""> 1195:     supported_languages ______________________________________
+</span><span class=""> 1196:     [In]  (none)
+</span><span class=""> 1197:     [Out] result : seq String
+</span><span class=""> 1198: 
+</span><span class=""> 1199:     result == sort(dom RELATIONSHIP_TABLES)
+</span><span class=""> 1200: 
+</span><span class=""> 1201: =cut
+</span><span class=""> 1202: 
+</span><span class=""> 1203: sub supported_languages {
+</span><span class=""> 1204: 	# Return the sorted set of keys from the master dispatch table
+</span><span class=""> 1205: 	my @langs = sort keys %RELATIONSHIP_TABLES;
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values."> 1206: 	return wantarray ? @langs : \@langs;
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_1206_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_1206_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class=""> 1207: }
+</span><span class=""> 1208: 
+</span><span class=""> 1209: # ---------------------------------------------------------------------------
+</span><span class=""> 1210: # Public method: known_sexes()
+</span><span class=""> 1211: # ---------------------------------------------------------------------------
+</span><span class=""> 1212: 
+</span><span class=""> 1213: =head2 known_sexes
+</span><span class=""> 1214: 
+</span><span class=""> 1215: Returns the list of sex codes accepted by C&lt;name()&gt;.
+</span><span class=""> 1216: 
+</span><span class=""> 1217: =head3 PURPOSE
+</span><span class=""> 1218: 
+</span><span class=""> 1219: Documents and exposes the set of valid C&lt;sex&gt; values so that callers can
+</span><span class=""> 1220: validate their own input without duplicating knowledge.
+</span><span class=""> 1221: 
+</span><span class=""> 1222: =head3 ARGUMENTS
+</span><span class=""> 1223: 
+</span><span class=""> 1224: None.
+</span><span class=""> 1225: 
+</span><span class=""> 1226: =head3 RETURNS
+</span><span class=""> 1227: 
+</span><span class=""> 1228: A list (or array-ref in scalar context) of valid sex code strings: C&lt;(&#39;F&#39;, &#39;M&#39;)&gt;.
+</span><span class=""> 1229: 
+</span><span class=""> 1230: =head3 SIDE EFFECTS
+</span><span class=""> 1231: 
+</span><span class=""> 1232: None.
+</span><span class=""> 1233: 
+</span><span class=""> 1234: =head3 EXAMPLE
+</span><span class=""> 1235: 
+</span><span class=""> 1236:     my @sexes = $namer-&gt;known_sexes();
+</span><span class=""> 1237:     # ( &#39;F&#39;, &#39;M&#39; )
+</span><span class=""> 1238: 
+</span><span class=""> 1239: =head3 API SPECIFICATION
+</span><span class=""> 1240: 
+</span><span class=""> 1241: =head4 Input
+</span><span class=""> 1242: 
+</span><span class=""> 1243:     {}   # no arguments
+</span><span class=""> 1244: 
+</span><span class=""> 1245: =head4 Output
+</span><span class=""> 1246: 
+</span><span class=""> 1247:     {
+</span><span class=""> 1248:         type =&gt; ARRAYREF,
+</span><span class=""> 1249:     }
+</span><span class=""> 1250: 
+</span><span class=""> 1251: =head3 FORMAL SPECIFICATION
+</span><span class=""> 1252: 
+</span><span class=""> 1253:     known_sexes ______________________________________________
+</span><span class=""> 1254:     [In]  (none)
+</span><span class=""> 1255:     [Out] result : seq String
+</span><span class=""> 1256: 
+</span><span class=""> 1257:     result == sort { $SEX_FEMALE, $SEX_MALE }
+</span><span class=""> 1258: 
+</span><span class=""> 1259: =cut
+</span><span class=""> 1260: 
+</span><span class=""> 1261: sub known_sexes {
+</span><span class=""> 1262: 	# Return the two valid sex codes in sorted order
+</span><span class=""> 1263: 	my @sexes = sort($SEX_FEMALE, $SEX_MALE);
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths."> 1264: 	return wantarray ? @sexes : \@sexes;
+</span>
+					<details class="mutant-details">
+					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
+					<ul>
+				<li><b>BOOL_NEGATE_1264_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Boolean branch test suggestion
+ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
+</pre>
+								</div>
+							</li><li><b>RETURN_UNDEF_1264_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+
+								<div class="suggested-test">
+								<div class="suggest-label">🧪 Suggested Test</div>
+								<pre># Return value assertion
+is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
+</pre>
+								</div>
+							</li></ul></details>
+<span class=""> 1265: }
+</span><span class=""> 1266: 
+</span><span class=""> 1267: 1;
+</span><span class=""> 1268: 
+</span><span class=""> 1269: __END__
+</span><span class=""> 1270: 
+</span><span class=""> 1271: =head1 CONFIGURATION
+</span><span class=""> 1272: 
+</span><span class=""> 1273: The constructor accepts an optional C&lt;language&gt; key which sets the default
+</span><span class=""> 1274: language for all subsequent calls to C&lt;name()&gt;:
+</span><span class=""> 1275: 
+</span><span class=""> 1276:     my $namer = Genealogy::Relationship::Name-&gt;new(language =&gt; &#39;fr&#39;);
+</span><span class=""> 1277: 
+</span><span class=""> 1278: This default can be overridden per-call by passing C&lt;language&gt; to C&lt;name()&gt;.
+</span><span class=""> 1279: The object is also compatible with C&lt;Object::Configure&gt; for runtime
+</span><span class=""> 1280: reconfiguration.
+</span><span class=""> 1281: 
+</span><span class=""> 1282: =head2 Error handling
+</span><span class=""> 1283: 
+</span><span class=""> 1284: Errors are dispatched through the following priority chain:
+</span><span class=""> 1285: 
+</span><span class=""> 1286: =over 4
+</span><span class=""> 1287: 
+</span><span class=""> 1288: =item 1. L&lt;Log::Abstraction&gt; object (preferred)
+</span><span class=""> 1289: 
+</span><span class=""> 1290: Construct a C&lt;Log::Abstraction&gt; object with the desired logger coderef and
+</span><span class=""> 1291: C&lt;ctx&gt; (typically a C&lt;Gedcom::Individual&gt;), then pass it as C&lt;logger&gt; to
+</span><span class=""> 1292: C&lt;new()&gt;.  On error, this module simply calls C&lt;&lt; $logger-&gt;error($msg) &gt;&gt;
+</span><span class=""> 1293: and Log::Abstraction handles ctx forwarding, formatting, and dispatch.
+</span><span class=""> 1294: 
+</span><span class=""> 1295:     use Log::Abstraction;
+</span><span class=""> 1296: 
+</span><span class=""> 1297:     my $logger = Log::Abstraction-&gt;new(
+</span><span class=""> 1298:         logger =&gt; sub {
+</span><span class=""> 1299:             my $args = shift;
+</span><span class=""> 1300:             my $msg = $args-&gt;{ctx}
+</span><span class=""> 1301:                 ? $args-&gt;{ctx}-&gt;as_string() . &#39;: &#39; . join(&#39;&#39;, @{$args-&gt;{message}})
+</span><span class=""> 1302:                 : join(&#39;&#39;, @{$args-&gt;{message}});
+</span><span class=""> 1303:             complain({ message =&gt; $msg, person =&gt; $args-&gt;{ctx} });
+</span><span class=""> 1304:         },
+</span><span class=""> 1305:         ctx =&gt; $individual,
+</span><span class=""> 1306:     );
+</span><span class=""> 1307: 
+</span><span class=""> 1308:     my $namer = Genealogy::Relationship::Name-&gt;new(logger =&gt; $logger);
+</span><span class=""> 1309: 
+</span><span class=""> 1310: =back
+</span><span class=""> 1311: 
+</span><span class=""> 1312: If any handler returns without dying (e.g. a warning-only handler in
+</span><span class=""> 1313: L&lt;Log::Abstraction&gt;), C&lt;name()&gt; returns C&lt;undef&gt;.
+</span><span class=""> 1314: 
+</span><span class=""> 1315: =head1 DIAGNOSTICS
+</span><span class=""> 1316: 
+</span><span class=""> 1317: =over 4
+</span><span class=""> 1318: 
+</span><span class=""> 1319: =item steps_to_ancestor not given
+</span><span class=""> 1320: 
+</span><span class=""> 1321: C&lt;steps_to_ancestor&gt; was passed as C&lt;undef&gt;. Passing C&lt;undef&gt; explicitly is
+</span><span class=""> 1322: distinct from omitting the argument; use a defined non-negative integer.
+</span><span class=""> 1323: 
+</span><span class=""> 1324: =item steps_from_ancestor not given
+</span><span class=""> 1325: 
+</span><span class=""> 1326: As above, for C&lt;steps_from_ancestor&gt;.
+</span><span class=""> 1327: 
+</span><span class=""> 1328: =item sex not given
+</span><span class=""> 1329: 
+</span><span class=""> 1330: C&lt;sex&gt; was passed as C&lt;undef&gt;. Supply C&lt;&#39;M&#39;&gt; or C&lt;&#39;F&#39;&gt;.
+</span><span class=""> 1331: 
+</span><span class=""> 1332: =back
+</span><span class=""> 1333: 
+</span><span class=""> 1334: =head1 DEPENDENCIES
+</span><span class=""> 1335: 
+</span><span class=""> 1336: L&lt;Carp&gt;, L&lt;Object::Configure&gt;
+</span><span class=""> 1337: 
+</span><span class=""> 1338: Optionally L&lt;Log::Abstraction&gt; (E&lt;gt&gt;= 0.28) for the C&lt;logger&gt;/C&lt;ctx&gt; error
+</span><span class=""> 1339: dispatch path.
+</span><span class=""> 1340: L&lt;Params::Get&gt;, L&lt;Params::Validate::Strict&gt;, L&lt;Readonly&gt;
+</span><span class=""> 1341: 
+</span><span class=""> 1342: =head1 BUGS AND LIMITATIONS
+</span><span class=""> 1343: 
+</span><span class=""> 1344: The lookup tables currently cover steps 0-6 in both directions.  Relationships
+</span><span class=""> 1345: further removed (seventh cousin, etc.) return C&lt;undef&gt;.  Pull requests adding
+</span><span class=""> 1346: deeper tables are welcome.
+</span><span class=""> 1347: 
+</span><span class=""> 1348: =head1 TODO
+</span><span class=""> 1349: 
+</span><span class=""> 1350: =over 4
+</span><span class=""> 1351: 
+</span><span class=""> 1352: =item * Extract and integrate the Latin relationship handling code currently
+</span><span class=""> 1353: embedded in the C&lt;gedcom&gt; and C&lt;ged2site&gt; programs, adding C&lt;la&gt; as a
+</span><span class=""> 1354: supported language alongside C&lt;en&gt;, C&lt;fr&gt;, and C&lt;de&gt;.
+</span><span class=""> 1355: 
+</span><span class=""> 1356: =back
+</span><span class=""> 1357: 
+</span><span class=""> 1358: =head1 SEE ALSO
+</span><span class=""> 1359: 
+</span><span class=""> 1360: =over 4
+</span><span class=""> 1361: 
+</span><span class=""> 1362: =item * L&lt;Configure an Object at Runtime|Object::Configure&gt;
+</span><span class=""> 1363: 
+</span><span class=""> 1364: =item * L&lt;Test Dashboard|https://nigelhorne.github.io/Genealogy-Relationship-Name/coverage/&gt;
+</span><span class=""> 1365: 
+</span><span class=""> 1366: =item * L&lt;Gedcom::Individual&gt;, L&lt;Genealogy::Relationship&gt;
+</span><span class=""> 1367: 
+</span><span class=""> 1368: =back
+</span><span class=""> 1369: 
+</span><span class=""> 1370: =head1 AUTHOR
+</span><span class=""> 1371: 
+</span><span class=""> 1372: Nigel Horne C&lt;&lt; &lt;njh@nigelhorne.com&gt; &gt;&gt;
+</span><span class=""> 1373: 
+</span><span class=""> 1374: =head1 REPOSITORY
+</span><span class=""> 1375: 
+</span><span class=""> 1376: L&lt;https://github.com/nigelhorne/Genealogy-Relationship-Name&gt;
+</span><span class=""> 1377: 
+</span><span class=""> 1378: =head1 SUPPORT
+</span><span class=""> 1379: 
+</span><span class=""> 1380: This module is provided as-is without any warranty.
+</span><span class=""> 1381: 
+</span><span class=""> 1382: Please report any bugs or feature requests to C&lt;bug-genealogy-relationship-name at rt.cpan.org&gt;,
+</span><span class=""> 1383: or through the web interface at
+</span><span class=""> 1384: L&lt;http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Genealogy-Relationship-Name&gt;.
+</span><span class=""> 1385: I will be notified, and then you&#39;ll
+</span><span class=""> 1386: automatically be notified of progress on your bug as I make changes.
+</span><span class=""> 1387: 
+</span><span class=""> 1388: You can find documentation for this module with the perldoc command.
+</span><span class=""> 1389: 
+</span><span class=""> 1390:     perldoc Genealogy::Relationship::Name
+</span><span class=""> 1391: 
+</span><span class=""> 1392: You can also look for information at:
+</span><span class=""> 1393: 
+</span><span class=""> 1394: =over 4
+</span><span class=""> 1395: 
+</span><span class=""> 1396: =item * MetaCPAN
+</span><span class=""> 1397: 
+</span><span class=""> 1398: L&lt;https://metacpan.org/dist/Genealogy-Relationship-Name&gt;
+</span><span class=""> 1399: 
+</span><span class=""> 1400: =item * RT: CPAN&#39;s request tracker
+</span><span class=""> 1401: 
+</span><span class=""> 1402: L&lt;https://rt.cpan.org/NoAuth/Bugs.html?Dist=Genealogy-Relationship-Name&gt;
+</span><span class=""> 1403: 
+</span><span class=""> 1404: =item * CPAN Testers&#39; Matrix
+</span><span class=""> 1405: 
+</span><span class=""> 1406: L&lt;http://matrix.cpantesters.org/?dist=Genealogy-Relationship-Name&gt;
+</span><span class=""> 1407: 
+</span><span class=""> 1408: =item * CPAN Testers Dependencies
+</span><span class=""> 1409: 
+</span><span class=""> 1410: L&lt;http://deps.cpantesters.org/?module=Genealogy::Relationship::Name&gt;
+</span><span class=""> 1411: 
+</span><span class=""> 1412: =back
+</span><span class=""> 1413: 
+</span><span class=""> 1414: =head1 LICENCE AND COPYRIGHT
+</span><span class=""> 1415: 
+</span><span class=""> 1416: Copyright 2026 Nigel Horne.
+</span><span class=""> 1417: 
+</span><span class=""> 1418: Usage is subject to the GPL2 licence terms.
+</span><span class=""> 1419: If you use it,
+</span><span class=""> 1420: please let me know.
+</span><span class=""> 1421: 
+</span><span class=""> 1422: =cut
 </span></pre>
 
 <script>
