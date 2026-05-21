@@ -219,13 +219,13 @@ subtest 'wantarray branch: supported_languages() list vs scalar' => sub {
 
 	# List context
 	my @list = $namer->supported_languages();
-	ok(scalar @list == 6, 'List context: 6 items');
+	ok(scalar @list == 7, 'List context: 7 items');
 	ok(ref(\@list) eq 'ARRAY', 'List context: got list');
 
 	# Scalar context
 	my $ref = $namer->supported_languages();
 	isa_ok($ref, 'ARRAY', 'Scalar context: got ARRAY ref');
-	is(scalar @{$ref}, 6, 'Scalar context: ref has 6 items');
+	is(scalar @{$ref}, 7, 'Scalar context: ref has 7 items');
 };
 
 # =========================================================================

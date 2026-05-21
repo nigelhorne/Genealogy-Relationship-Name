@@ -111,8 +111,8 @@ subtest 'supported_languages() list context: defined, truthy, correct content' =
 
 	# Exact content assertions kill value-substitution mutants
 	ok(defined $langs[0], 'First language is defined');
-	is(scalar @langs, 6, 'Exactly six supported languages');
-	is_deeply([sort @langs], [qw(de en es fa fr la)], 'Languages are de, en, fr, la, es, fa');
+	is(scalar @langs, 7, 'Exactly seven supported languages');
+	is_deeply([sort @langs], [qw(de de_ch en es fa fr la)], 'Languages are de, de_ch, en, fr, la, es, fa');
 };
 
 subtest 'supported_languages() scalar context: defined arrayref with content' => sub {
@@ -129,8 +129,8 @@ subtest 'supported_languages() scalar context: defined arrayref with content' =>
 	isa_ok($ref, 'ARRAY');
 
 	# Exact content
-	is(scalar @{$ref}, 6, 'Arrayref has 6 elements');
-	is_deeply([sort @{$ref}], [qw(de en es fa fr la)], 'Arrayref content is de, en, fr, la, es, fa');
+	is(scalar @{$ref}, 7, 'Arrayref has 7 elements');
+	is_deeply([sort @{$ref}], [qw(de de_ch en es fa fr la)], 'Arrayref content is de, de_ch, en, fr, la, es, fa');
 };
 
 # =========================================================================

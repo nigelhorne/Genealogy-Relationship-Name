@@ -23,7 +23,7 @@ our $VERSION = '0.02';
 # ---------------------------------------------------------------------------
 
 # Supported language codes
-Readonly::Array my @SUPPORTED_LANGUAGES => qw(en fr de);
+Readonly::Array my @SUPPORTED_LANGUAGES => qw(de de_ch en es fa fr la);
 
 # Default language when none supplied
 Readonly::Scalar my $DEFAULT_LANGUAGE => 'en';
@@ -558,6 +558,259 @@ Readonly::Hash my %DE_MALE_RELATIONSHIPS => (
 	'1,0' => 'Vater',
 	'1,1' => 'Bruder',
 	'1,2' => 'Neffe',
+	'1,3' => 'Gro\N{U+00DF}neffe',
+	'1,4' => 'Urgrossneffe',
+	'1,5' => 'Ururgrossneffe',
+	'1,6' => 'Urururgrossneffe',
+	'1,7' => 'Ururururgrossneffe',
+	'1,8' => 'Urururururgrossneffe',
+	'1,9' => 'Ururururururgrossneffe',
+	'1,10' => 'Urururururururgrossneffe',
+	'2,0' => 'Gro\N{U+00DF}vater',
+	'2,1' => 'Onkel',
+	'2,2' => 'Cousin',
+	'2,3' => 'Cousin einmal entfernt',
+	'2,4' => 'Cousin zweimal entfernt',
+	'2,5' => 'Cousin dreimal entfernt',
+	'2,6' => 'Cousin viermal entfernt',
+	'2,7' => 'Cousin fuenfmal entfernt',
+	'2,8' => 'Cousin sechsmal entfernt',
+	'2,9' => 'Cousin siebenmal entfernt',
+	'2,10' => 'Cousin achtmal entfernt',
+	'3,0' => 'Urgrossvater',
+	'3,1' => 'Gro\N{U+00DF}onkel',
+	'3,2' => 'Cousin einmal entfernt',
+	'3,3' => 'Cousin zweiten Grades',
+	'3,4' => 'Cousin zweiten Grades einmal entfernt',
+	'3,5' => 'Cousin zweiten Grades zweimal entfernt',
+	'3,6' => 'Cousin zweiten Grades dreimal entfernt',
+	'3,7' => 'Cousin zweiten Grades viermal entfernt',
+	'3,8' => 'Cousin zweiten Grades fuenfmal entfernt',
+	'3,9' => 'Cousin zweiten Grades sechsmal entfernt',
+	'3,10' => 'Cousin zweiten Grades siebenmal entfernt',
+	'4,0' => 'Ururgrossvater',
+	'4,1' => 'Urgrossonkel',
+	'4,2' => 'Cousin zweimal entfernt',
+	'4,3' => 'Cousin zweiten Grades einmal entfernt',
+	'4,4' => 'Cousin dritten Grades',
+	'4,5' => 'Cousin dritten Grades einmal entfernt',
+	'4,6' => 'Cousin dritten Grades zweimal entfernt',
+	'4,7' => 'Cousin dritten Grades dreimal entfernt',
+	'4,8' => 'Cousin dritten Grades viermal entfernt',
+	'4,9' => 'Cousin dritten Grades fuenfmal entfernt',
+	'4,10' => 'Cousin dritten Grades sechsmal entfernt',
+	'5,0' => 'Urururgrossvater',
+	'5,1' => 'Ururgrossonkel',
+	'5,2' => 'Cousin dreimal entfernt',
+	'5,3' => 'Cousin zweiten Grades zweimal entfernt',
+	'5,4' => 'Cousin dritten Grades einmal entfernt',
+	'5,5' => 'Cousin vierten Grades',
+	'5,6' => 'Cousin vierten Grades einmal entfernt',
+	'5,7' => 'Cousin vierten Grades zweimal entfernt',
+	'5,8' => 'Cousin vierten Grades dreimal entfernt',
+	'5,9' => 'Cousin vierten Grades viermal entfernt',
+	'5,10' => 'Cousin vierten Grades fuenfmal entfernt',
+	'6,0' => 'Ururururgrossvater',
+	'6,1' => 'Urururgrossonkel',
+	'6,2' => 'Cousin viermal entfernt',
+	'6,3' => 'Cousin zweiten Grades dreimal entfernt',
+	'6,4' => 'Cousin dritten Grades zweimal entfernt',
+	'6,5' => 'Cousin vierten Grades einmal entfernt',
+	'6,6' => 'Cousin fuenften Grades',
+	'6,7' => 'Cousin fuenften Grades einmal entfernt',
+	'6,8' => 'Cousin fuenften Grades zweimal entfernt',
+	'6,9' => 'Cousin fuenften Grades dreimal entfernt',
+	'6,10' => 'Cousin fuenften Grades viermal entfernt',
+	'7,0' => 'Urururururgrossvater',
+	'7,1' => 'Ururururgrossonkel',
+	'7,2' => 'Cousin fuenfmal entfernt',
+	'7,3' => 'Cousin zweiten Grades viermal entfernt',
+	'7,4' => 'Cousin dritten Grades dreimal entfernt',
+	'7,5' => 'Cousin vierten Grades zweimal entfernt',
+	'7,6' => 'Cousin fuenften Grades einmal entfernt',
+	'7,7' => 'Cousin sechsten Grades',
+	'7,8' => 'Cousin sechsten Grades einmal entfernt',
+	'7,9' => 'Cousin sechsten Grades zweimal entfernt',
+	'7,10' => 'Cousin sechsten Grades dreimal entfernt',
+	'8,0' => 'Ururururururgrossvater',
+	'8,1' => 'Urururururgrossonkel',
+	'8,2' => 'Cousin sechsmal entfernt',
+	'8,3' => 'Cousin zweiten Grades fuenfmal entfernt',
+	'8,4' => 'Cousin dritten Grades viermal entfernt',
+	'8,5' => 'Cousin vierten Grades dreimal entfernt',
+	'8,6' => 'Cousin fuenften Grades zweimal entfernt',
+	'8,7' => 'Cousin sechsten Grades einmal entfernt',
+	'8,8' => 'Cousin siebten Grades',
+	'8,9' => 'Cousin siebten Grades einmal entfernt',
+	'8,10' => 'Cousin siebten Grades zweimal entfernt',
+	'9,0' => 'Urururururururgrossvater',
+	'9,1' => 'Ururururururgrossonkel',
+	'9,2' => 'Cousin siebenmal entfernt',
+	'9,3' => 'Cousin zweiten Grades sechsmal entfernt',
+	'9,4' => 'Cousin dritten Grades fuenfmal entfernt',
+	'9,5' => 'Cousin vierten Grades viermal entfernt',
+	'9,6' => 'Cousin fuenften Grades dreimal entfernt',
+	'9,7' => 'Cousin sechsten Grades zweimal entfernt',
+	'9,8' => 'Cousin siebten Grades einmal entfernt',
+	'9,9' => 'Cousin achten Grades',
+	'9,10' => 'Cousin achten Grades einmal entfernt',
+	'10,0' => 'Ururururururururgrossvater',
+	'10,1' => 'Urururururururgrossonkel',
+	'10,2' => 'Cousin achtmal entfernt',
+	'10,3' => 'Cousin zweiten Grades siebenmal entfernt',
+	'10,4' => 'Cousin dritten Grades sechsmal entfernt',
+	'10,5' => 'Cousin vierten Grades fuenfmal entfernt',
+	'10,6' => 'Cousin fuenften Grades viermal entfernt',
+	'10,7' => 'Cousin sechsten Grades dreimal entfernt',
+	'10,8' => 'Cousin siebten Grades zweimal entfernt',
+	'10,9' => 'Cousin achten Grades einmal entfernt',
+	'10,10' => 'Cousin neunten Grades',
+);
+
+Readonly::Hash my %DE_FEMALE_RELATIONSHIPS => (
+	'0,0' => 'sich selbst',
+	'0,1' => 'Tochter',
+	'0,2' => 'Enkelin',
+	'0,3' => 'Urenkelin',
+	'0,4' => 'Ururenkelin',
+	'0,5' => 'Urururenkelin',
+	'0,6' => 'Ururururenkelin',
+	'0,7' => 'Urururururenkelin',
+	'0,8' => 'Ururururururenkelin',
+	'0,9' => 'Urururururururenkelin',
+	'0,10' => 'Ururururururururenkelin',
+	'1,0' => 'Mutter',
+	'1,1' => 'Schwester',
+	'1,2' => 'Nichte',
+	'1,3' => 'Gro\N{U+00DF}nichte',
+	'1,4' => 'Urgrossnichte',
+	'1,5' => 'Ururgrossnichte',
+	'1,6' => 'Urururgrossnichte',
+	'1,7' => 'Ururururgrossnichte',
+	'1,8' => 'Urururururgrossnichte',
+	'1,9' => 'Ururururururgrossnichte',
+	'1,10' => 'Urururururururgrossnichte',
+	'2,0' => 'Gro\N{U+00DF}mutter',
+	'2,1' => 'Tante',
+	'2,2' => 'Cousine',
+	'2,3' => 'Cousine einmal entfernt',
+	'2,4' => 'Cousine zweimal entfernt',
+	'2,5' => 'Cousine dreimal entfernt',
+	'2,6' => 'Cousine viermal entfernt',
+	'2,7' => 'Cousine fuenfmal entfernt',
+	'2,8' => 'Cousine sechsmal entfernt',
+	'2,9' => 'Cousine siebenmal entfernt',
+	'2,10' => 'Cousine achtmal entfernt',
+	'3,0' => 'Urgrossmutter',
+	'3,1' => 'Gro\N{U+00DF}tante',
+	'3,2' => 'Cousine einmal entfernt',
+	'3,3' => 'Cousine zweiten Grades',
+	'3,4' => 'Cousine zweiten Grades einmal entfernt',
+	'3,5' => 'Cousine zweiten Grades zweimal entfernt',
+	'3,6' => 'Cousine zweiten Grades dreimal entfernt',
+	'3,7' => 'Cousine zweiten Grades viermal entfernt',
+	'3,8' => 'Cousine zweiten Grades fuenfmal entfernt',
+	'3,9' => 'Cousine zweiten Grades sechsmal entfernt',
+	'3,10' => 'Cousine zweiten Grades siebenmal entfernt',
+	'4,0' => 'Ururgrossmutter',
+	'4,1' => 'Urgrosstante',
+	'4,2' => 'Cousine zweimal entfernt',
+	'4,3' => 'Cousine zweiten Grades einmal entfernt',
+	'4,4' => 'Cousine dritten Grades',
+	'4,5' => 'Cousine dritten Grades einmal entfernt',
+	'4,6' => 'Cousine dritten Grades zweimal entfernt',
+	'4,7' => 'Cousine dritten Grades dreimal entfernt',
+	'4,8' => 'Cousine dritten Grades viermal entfernt',
+	'4,9' => 'Cousine dritten Grades fuenfmal entfernt',
+	'4,10' => 'Cousine dritten Grades sechsmal entfernt',
+	'5,0' => 'Urururgrossmutter',
+	'5,1' => 'Ururgrosstante',
+	'5,2' => 'Cousine dreimal entfernt',
+	'5,3' => 'Cousine zweiten Grades zweimal entfernt',
+	'5,4' => 'Cousine dritten Grades einmal entfernt',
+	'5,5' => 'Cousine vierten Grades',
+	'5,6' => 'Cousine vierten Grades einmal entfernt',
+	'5,7' => 'Cousine vierten Grades zweimal entfernt',
+	'5,8' => 'Cousine vierten Grades dreimal entfernt',
+	'5,9' => 'Cousine vierten Grades viermal entfernt',
+	'5,10' => 'Cousine vierten Grades fuenfmal entfernt',
+	'6,0' => 'Ururururgrossmutter',
+	'6,1' => 'Urururgrosstante',
+	'6,2' => 'Cousine viermal entfernt',
+	'6,3' => 'Cousine zweiten Grades dreimal entfernt',
+	'6,4' => 'Cousine dritten Grades zweimal entfernt',
+	'6,5' => 'Cousine vierten Grades einmal entfernt',
+	'6,6' => 'Cousine fuenften Grades',
+	'6,7' => 'Cousine fuenften Grades einmal entfernt',
+	'6,8' => 'Cousine fuenften Grades zweimal entfernt',
+	'6,9' => 'Cousine fuenften Grades dreimal entfernt',
+	'6,10' => 'Cousine fuenften Grades viermal entfernt',
+	'7,0' => 'Urururururgrossmutter',
+	'7,1' => 'Ururururgrosstante',
+	'7,2' => 'Cousine fuenfmal entfernt',
+	'7,3' => 'Cousine zweiten Grades viermal entfernt',
+	'7,4' => 'Cousine dritten Grades dreimal entfernt',
+	'7,5' => 'Cousine vierten Grades zweimal entfernt',
+	'7,6' => 'Cousine fuenften Grades einmal entfernt',
+	'7,7' => 'Cousine sechsten Grades',
+	'7,8' => 'Cousine sechsten Grades einmal entfernt',
+	'7,9' => 'Cousine sechsten Grades zweimal entfernt',
+	'7,10' => 'Cousine sechsten Grades dreimal entfernt',
+	'8,0' => 'Ururururururgrossmutter',
+	'8,1' => 'Urururururgrosstante',
+	'8,2' => 'Cousine sechsmal entfernt',
+	'8,3' => 'Cousine zweiten Grades fuenfmal entfernt',
+	'8,4' => 'Cousine dritten Grades viermal entfernt',
+	'8,5' => 'Cousine vierten Grades dreimal entfernt',
+	'8,6' => 'Cousine fuenften Grades zweimal entfernt',
+	'8,7' => 'Cousine sechsten Grades einmal entfernt',
+	'8,8' => 'Cousine siebten Grades',
+	'8,9' => 'Cousine siebten Grades einmal entfernt',
+	'8,10' => 'Cousine siebten Grades zweimal entfernt',
+	'9,0' => 'Urururururururgrossmutter',
+	'9,1' => 'Ururururururgrosstante',
+	'9,2' => 'Cousine siebenmal entfernt',
+	'9,3' => 'Cousine zweiten Grades sechsmal entfernt',
+	'9,4' => 'Cousine dritten Grades fuenfmal entfernt',
+	'9,5' => 'Cousine vierten Grades viermal entfernt',
+	'9,6' => 'Cousine fuenften Grades dreimal entfernt',
+	'9,7' => 'Cousine sechsten Grades zweimal entfernt',
+	'9,8' => 'Cousine siebten Grades einmal entfernt',
+	'9,9' => 'Cousine achten Grades',
+	'9,10' => 'Cousine achten Grades einmal entfernt',
+	'10,0' => 'Ururururururururgrossmutter',
+	'10,1' => 'Urururururururgrosstante',
+	'10,2' => 'Cousine achtmal entfernt',
+	'10,3' => 'Cousine zweiten Grades siebenmal entfernt',
+	'10,4' => 'Cousine dritten Grades sechsmal entfernt',
+	'10,5' => 'Cousine vierten Grades fuenfmal entfernt',
+	'10,6' => 'Cousine fuenften Grades viermal entfernt',
+	'10,7' => 'Cousine sechsten Grades dreimal entfernt',
+	'10,8' => 'Cousine siebten Grades zweimal entfernt',
+	'10,9' => 'Cousine achten Grades einmal entfernt',
+	'10,10' => 'Cousine neunten Grades',
+);
+
+# ---------------------------------------------------------------------------
+# Swiss German (de-CH) relationship tables
+# Uses 'ss' instead of Eszett (\N{U+00DF}); Switzerland abolished ß in 1934
+# ---------------------------------------------------------------------------
+
+Readonly::Hash my %DE_CH_MALE_RELATIONSHIPS => (
+	'0,0' => 'sich selbst',
+	'0,1' => 'Sohn',
+	'0,2' => 'Enkel',
+	'0,3' => 'Urenkel',
+	'0,4' => 'Ururenkel',
+	'0,5' => 'Urururenkel',
+	'0,6' => 'Ururururenkel',
+	'0,7' => 'Urururururenkel',
+	'0,8' => 'Ururururururenkel',
+	'0,9' => 'Urururururururenkel',
+	'0,10' => 'Ururururururururenkel',
+	'1,0' => 'Vater',
+	'1,1' => 'Bruder',
+	'1,2' => 'Neffe',
 	'1,3' => 'Grossneffe',
 	'1,4' => 'Urgrossneffe',
 	'1,5' => 'Ururgrossneffe',
@@ -667,7 +920,7 @@ Readonly::Hash my %DE_MALE_RELATIONSHIPS => (
 	'10,10' => 'Cousin neunten Grades',
 );
 
-Readonly::Hash my %DE_FEMALE_RELATIONSHIPS => (
+Readonly::Hash my %DE_CH_FEMALE_RELATIONSHIPS => (
 	'0,0' => 'sich selbst',
 	'0,1' => 'Tochter',
 	'0,2' => 'Enkelin',
@@ -1049,7 +1302,6 @@ Readonly::Hash my %ES_FEMALE_RELATIONSHIPS => (
 # Side-specific keys: "s1,s2,paternal" / "s1,s2,maternal"
 # ---------------------------------------------------------------------------
 
-
 Readonly::Hash my %FA_MALE_RELATIONSHIPS => (
 	'0,0' => '\N{U+062E}\N{U+0648}\N{U+062F}',
 	'0,1' => '\N{U+067E}\N{U+0633}\N{U+0631}',
@@ -1340,7 +1592,6 @@ Readonly::Hash my %FA_FEMALE_RELATIONSHIPS => (
 # Side-specific keys: "s1,s2,paternal" / "s1,s2,maternal"
 # ---------------------------------------------------------------------------
 
-
 Readonly::Hash my %LA_MALE_RELATIONSHIPS => (
 	'0,0' => 'ipse',
 	'0,1' => 'filius',
@@ -1427,6 +1678,9 @@ Readonly::Hash my %RELATIONSHIP_TABLES => (
 	}, 'de' => {
 		$SEX_MALE   => \%DE_MALE_RELATIONSHIPS,
 		$SEX_FEMALE => \%DE_FEMALE_RELATIONSHIPS,
+	}, 'de_ch' => {
+		$SEX_MALE   => \%DE_CH_MALE_RELATIONSHIPS,
+		$SEX_FEMALE => \%DE_CH_FEMALE_RELATIONSHIPS,
 	}, 'la' => {
 		$SEX_MALE   => \%LA_MALE_RELATIONSHIPS,
 		$SEX_FEMALE => \%LA_FEMALE_RELATIONSHIPS,
@@ -1567,7 +1821,7 @@ Any future object-valued constructor arguments must follow the same pattern.
 =head4 Input
 
     {
-        language => { type => 'string', regex => qr/^(?:en|fr|de)/, optional => 1 },
+	language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/, optional => 1 },
         logger   => { type => 'object', optional => 1 },
     }
 
@@ -1706,7 +1960,7 @@ is not found in the lookup table.
 	steps_to_ancestor   => { type => 'integer', minimum => 0 },
 	steps_from_ancestor => { type => 'integer', minimum => 0 },
 	sex                 => { type => 'string', memberof => ['M', 'F'] },
-	language            => { type => 'string', regex => qr/^(?:en|de|es|fa|fr|la)/, optional => 1 },
+        language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/, optional => 1 },
 	# person is handled before validate_strict (PVS infers constraints from objects)
 	family_side => { type => 'string', memberof => ['paternal','maternal'], optional => 1 },
     }
@@ -1747,7 +2001,7 @@ sub name {
 			steps_to_ancestor   => { type => 'integer', minimum => 0 },
 			steps_from_ancestor => { type => 'integer', minimum => 0 },
 			sex                 => { type => 'string', memberof => ['M', 'F'] },
-			language            => { type => 'string', regex => qr/^(?:en|de|es|fa|fr|la)/, optional => 1 },
+			language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/, optional => 1 },
 			person              => { type => 'object', optional => 1 },
 			family_side         => { type => 'string', memberof => ['paternal','maternal'],
 			                         optional => 1 },
@@ -1774,8 +2028,14 @@ sub name {
 	# Fall back to constructor default or hard default if no per-call language given
 	my $lang = lc($args->{language} // $self->{language} // $DEFAULT_LANGUAGE);
 
-	# Strip any region subtag (e.g. 'en-GB' -> 'en') after lowercasing
-	($lang) = split /-/, $lang;
+	# Swiss German (de-CH) maps to its own table before subtag stripping,
+	# because it uses 'ss' where standard German uses Eszett
+	if($lang eq 'de-ch') {
+		$lang = 'de_ch';
+	} else {
+		# Strip any region subtag (e.g. 'en-GB' -> 'en') after lowercasing
+		($lang) = split /-/, $lang;
+	}
 
 	# Build lookup key from the two step counts; try side-specific key first
 	# for languages that distinguish paternal/maternal (Latin, Farsi)
@@ -1813,12 +2073,12 @@ None.
 =head3 RETURNS
 
 A list (or array-ref in scalar context) of language code strings,
-currently C<('de', 'en', 'fr')>.
+currently C<('de', 'de_ch', 'en', 'es', 'fa', 'fr', 'la')>.
 
 =head3 EXAMPLE
 
     my @langs = $namer->supported_languages();
-    # ( 'de', 'en', 'fr' )
+    # ( 'de', 'de_ch', 'en', 'es', 'fa', 'fr', 'la' )
 
 =head3 API SPECIFICATION
 

@@ -8,6 +8,7 @@ Revision history for Genealogy::Relationship::Name
 	  Latin table is sparse; only step-count pairs with a classical term are tabulated
 	- Added family_side argument to name() for paternal/maternal distinction
 	  (currently used by la and fa uncle/aunt/cousin terms)
+	- Added Swiss German (de-CH) table using ss instead of Eszett
 
 	[Bug Fixes]
 	- Fixed some French translations

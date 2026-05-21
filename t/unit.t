@@ -240,7 +240,7 @@ subtest 'supported_languages() scalar context' => sub {
 	my $ref   = $namer->supported_languages();
 
 	isa_ok($ref, 'ARRAY');
-	is(scalar @{$ref}, 6, 'Arrayref contains 6 entries');
+	is(scalar @{$ref}, 7, 'Arrayref contains 7 entries');
 };
 
 # =========================================================================

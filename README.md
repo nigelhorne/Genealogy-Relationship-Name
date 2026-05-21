@@ -125,7 +125,7 @@ Any future object-valued constructor arguments must follow the same pattern.
 #### Input
 
     {
-        language => { type => 'string', regex => qr/^(?:en|fr|de)/, optional => 1 },
+        language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/, optional => 1 },
         logger   => { type => 'object', optional => 1 },
     }
 
@@ -220,7 +220,7 @@ is not found in the lookup table.
         steps_to_ancestor   => { type => 'integer', minimum => 0 },
         steps_from_ancestor => { type => 'integer', minimum => 0 },
         sex                 => { type => 'string', memberof => ['M', 'F'] },
-        language            => { type => 'string', regex => qr/^(?:en|de|es|fa|fr|la)/, optional => 1 },
+        language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/, optional => 1 },
         # person is handled before validate_strict (PVS infers constraints from objects)
         family_side => { type => 'string', memberof => ['paternal','maternal'], optional => 1 },
     }
@@ -265,12 +265,12 @@ None.
 ### RETURNS
 
 A list (or array-ref in scalar context) of language code strings,
-currently `('de', 'en', 'fr')`.
+currently `('de', 'de_ch', 'en', 'es', 'fa', 'fr', 'la')`.
 
 ### EXAMPLE
 
     my @langs = $namer->supported_languages();
-    # ( 'de', 'en', 'fr' )
+    # ( 'de', 'de_ch', 'en', 'es', 'fa', 'fr', 'la' )
 
 ### API SPECIFICATION
 

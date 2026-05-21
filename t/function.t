@@ -228,7 +228,7 @@ subtest 'supported_languages() list context' => sub {
 	my $namer = new_ok('Genealogy::Relationship::Name');
 	my @langs = $namer->supported_languages();
 
-	is(scalar @langs, 6, 'Six supported languages');
+	is(scalar @langs, 7, 'Seven supported languages');
 	ok((grep { $_ eq 'en' } @langs), 'en is in list');
 	ok((grep { $_ eq 'fr' } @langs), 'fr is in list');
 	ok((grep { $_ eq 'de' } @langs), 'de is in list');
@@ -241,7 +241,7 @@ subtest 'supported_languages() scalar context returns arrayref' => sub {
 	my $ref    = $namer->supported_languages();
 
 	ok(ref $ref eq 'ARRAY', 'Scalar context returns ARRAY ref');
-	is(scalar @{$ref}, 6, 'Arrayref has 6 elements');
+	is(scalar @{$ref}, 7, 'Arrayref has 7 elements');
 };
 
 # -------------------------------------------------------------------------
