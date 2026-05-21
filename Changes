@@ -4,6 +4,7 @@ Revision history for Genealogy::Relationship::Name
 
 	[Enhancements]
 	- Expanded all relationship tables from 0-6 to 0-10 (ninth cousin coverage)
+	- Fixed some French translations
 
 0.02	Fri May 15 20:25:51 EDT 2026
 

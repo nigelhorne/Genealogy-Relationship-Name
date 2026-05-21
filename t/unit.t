@@ -134,8 +134,8 @@ subtest 'name() French – key spot-checks' => sub {
 		[0, 1, 'F', 'fr', 'fille'],
 		[1, 0, 'M', 'fr', 'pere'],
 		[1, 0, 'F', 'fr', 'mere'],
-		[1, 1, 'M', 'fr', 'frere'],
-		[1, 1, 'F', 'fr', 'soeur'],
+		[1, 1, 'M', 'fr', "fr\N{U+00E8}re"],
+		[1, 1, 'F', 'fr', 'sœur'],
 		[2, 2, 'M', 'fr', 'cousin germain'],
 		[2, 2, 'F', 'fr', 'cousine germaine'],
 	);

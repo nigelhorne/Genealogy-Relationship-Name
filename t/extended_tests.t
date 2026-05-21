@@ -42,7 +42,7 @@ subtest 'Language source: per-call > constructor > hard default' => sub {
 	# Branch B: constructor-only → use constructor lang
 	my $namer_fr = Genealogy::Relationship::Name->new(language => 'fr');
 	is($namer_fr->name(steps_to_ancestor => 1, steps_from_ancestor => 1, sex => 'M'),
-		'frere', 'Branch B: constructor lang fr used');
+		"fr\N{U+00E8}re", 'Branch B: constructor lang fr used');
 
 	# Branch A: per-call overrides constructor
 	is($namer_fr->name(steps_to_ancestor => 1, steps_from_ancestor => 1,
