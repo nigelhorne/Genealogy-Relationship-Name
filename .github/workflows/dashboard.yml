@@ -96,7 +96,7 @@ jobs:
             echo "Running on ATG itself — using repo version"
             perl Makefile.PL && make install
           else
-            cpanm -iqn App::Test::Generator
+            cpanm -iqn App::Test::Generator@0.38
           fi
 
       - name: Generate dashboard
@@ -174,3 +174,4 @@ jobs:
           user_name: github-actions
           user_email: github-actions@github.com
           keep_files: true
+          enable_jekyll: false   # adds .nojekyll automatically, it adds nothing in prebuilt pages
