@@ -4,7 +4,11 @@ Revision history for Genealogy::Relationship::Name
 
 	[Enhancements]
 	- Expanded all relationship tables from 0-6 to 0-10 (ninth cousin coverage)
+
+	[Bug Fixes]
 	- Fixed some French translations
+	- Removed duplicate PVS entry in Makefile.PL
+		Fixes https://www.cpantesters.org/cpan/report/d9cdf8d6-51ee-11f1-87b3-361a6e8775ea
 
 0.02	Fri May 15 20:25:51 EDT 2026
 
