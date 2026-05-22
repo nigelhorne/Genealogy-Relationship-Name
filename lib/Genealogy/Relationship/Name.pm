@@ -16,7 +16,7 @@ use Params::Get;
 use Params::Validate::Strict 0.31;
 use Readonly;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 # ---------------------------------------------------------------------------
 # Constants – relationship table keys
@@ -1696,7 +1696,7 @@ Genealogy::Relationship::Name - Return a genealogical relationship name from ste
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =head1 SYNOPSIS
 

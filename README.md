@@ -4,7 +4,7 @@ Genealogy::Relationship::Name - Return a genealogical relationship name from ste
 
 # VERSION
 
-Version 0.02
+Version 0.03
 
 # SYNOPSIS
 
