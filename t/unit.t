@@ -2,7 +2,6 @@
 
 # unit.t - black-box tests for public API of Genealogy::Relationship::Name
 # Tests are strictly driven by the POD API documentation.
-# Non-core dependencies outside this module are mocked via Test::Mockingbird.
 
 use utf8;
 use open ':std', ':encoding(UTF-8)'; # Tells Perl to output UTF-8 to the terminal
@@ -10,7 +9,6 @@ use strict;
 use warnings;
 
 use Test::Most;
-use Test::Mockingbird;
 
 use Log::Abstraction;
 use lib 'lib', '../lib';
