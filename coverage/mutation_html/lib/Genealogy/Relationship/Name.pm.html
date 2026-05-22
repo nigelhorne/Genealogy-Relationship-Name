@@ -308,7 +308,7 @@ Approximate LCSAJ segments: 17<br>
 </span><span class="">   16: use Params::Validate::Strict 0.31;
 </span><span class="">   17: use Readonly;
 </span><span class="">   18: 
-</span><span class="">   19: our $VERSION = &#39;0.02&#39;;
+</span><span class="">   19: our $VERSION = &#39;0.03&#39;;
 </span><span class="">   20: 
 </span><span class="">   21: # ---------------------------------------------------------------------------
 </span><span class="">   22: # Constants &acirc;&#128;&#147; relationship table keys
@@ -1988,7 +1988,7 @@ Approximate LCSAJ segments: 17<br>
 </span><span class=""> 1696: 
 </span><span class=""> 1697: =head1 VERSION
 </span><span class=""> 1698: 
-</span><span class=""> 1699: Version 0.02
+</span><span class=""> 1699: Version 0.03
 </span><span class=""> 1700: 
 </span><span class=""> 1701: =head1 SYNOPSIS
 </span><span class=""> 1702: 
@@ -2333,15 +2333,15 @@ Approximate LCSAJ segments: 17<br>
 </span><span class=""> 2029: 
 </span><span class=""> 2030: 	# Swiss German (de-CH) maps to its own table before subtag stripping,
 </span><span class=""> 2031: 	# because it uses &#39;ss&#39; where standard German uses Eszett
-</span><span class=""> 2032: 	if($lang eq &#39;de-ch&#39;) {
-</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch."> 2033: 		$lang = &#39;de_ch&#39;;
+</span><span class="survived-1 tooltip" data-tooltip="Mutation survived. Add targeted tests to validate this branch."> 2032: 	if($lang eq &#39;de-ch&#39;) {
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 1, Killed: 0, Survived: 1)</summary>
 					<ul>
-				<li><b>COND_INV_2033_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>COND_INV_2032_2: Invert condition if to unless</b><br>MEDIUM: Add tests asserting both true and false outcomes
 </li></ul></details>
-<span class=""> 2034: 	} else {
+<span class=""> 2033: 		$lang = &#39;de_ch&#39;;
+</span><span class=""> 2034: 	} else {
 </span><span class=""> 2035: 		# Strip any region subtag (e.g. &#39;en-GB&#39; -&gt; &#39;en&#39;) after lowercasing
 </span><span class=""> 2036: 		($lang) = split /-/, $lang;
 </span><span class=""> 2037: 	}
@@ -2359,13 +2359,12 @@ Approximate LCSAJ segments: 17<br>
 </span><span class=""> 2049: 	             ? $table-&gt;{$side_key}
 </span><span class=""> 2050: 	             : $table-&gt;{$key};
 </span><span class=""> 2051: 
-</span><span class=""> 2052: 	return $result;
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values."> 2053: }
+</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths."> 2052: 	return $result;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_2053_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_2052_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -2373,7 +2372,7 @@ Approximate LCSAJ segments: 17<br>
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_2053_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+							</li><li><b>RETURN_UNDEF_2052_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -2382,7 +2381,8 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class=""> 2054: 
+<span class=""> 2053: }
+</span><span class=""> 2054: 
 </span><span class=""> 2055: # ---------------------------------------------------------------------------
 </span><span class=""> 2056: # Public method: supported_languages()
 </span><span class=""> 2057: # ---------------------------------------------------------------------------
@@ -2427,13 +2427,12 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class=""> 2096: sub supported_languages {
 </span><span class=""> 2097: 	# Return the sorted set of keys from the master dispatch table
 </span><span class=""> 2098: 	my @langs = sort keys %RELATIONSHIP_TABLES;
-</span><span class=""> 2099: 	return wantarray ? @langs : \@langs;
-</span><span class="survived-2 tooltip" data-tooltip="Return value mutation survived. Add tests asserting exact return values. Boolean logic mutation survived. Add tests covering both true and false paths."> 2100: }
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values."> 2099: 	return wantarray ? @langs : \@langs;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_2100_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_2099_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -2441,7 +2440,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_2100_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+							</li><li><b>RETURN_UNDEF_2099_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -2450,7 +2449,8 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class=""> 2101: 
+<span class=""> 2100: }
+</span><span class=""> 2101: 
 </span><span class=""> 2102: # ---------------------------------------------------------------------------
 </span><span class=""> 2103: # Public method: known_sexes()
 </span><span class=""> 2104: # ---------------------------------------------------------------------------
@@ -2498,13 +2498,12 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </span><span class=""> 2146: sub known_sexes {
 </span><span class=""> 2147: 	# Return the two valid sex codes in sorted order
 </span><span class=""> 2148: 	my @sexes = sort($SEX_FEMALE, $SEX_MALE);
-</span><span class=""> 2149: 	return wantarray ? @sexes : \@sexes;
-</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values."> 2150: }
+</span><span class="survived-2 tooltip" data-tooltip="Boolean logic mutation survived. Add tests covering both true and false paths. Return value mutation survived. Add tests asserting exact return values."> 2149: 	return wantarray ? @sexes : \@sexes;
 </span>
 					<details class="mutant-details">
 					<summary>Mutants (Total: 2, Killed: 0, Survived: 2)</summary>
 					<ul>
-				<li><b>BOOL_NEGATE_2150_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
+				<li><b>BOOL_NEGATE_2149_2: Negate boolean return expression</b><br>MEDIUM: Add tests asserting both true and false outcomes
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -2512,7 +2511,7 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 ok( !func(INPUT), &#39;Verify boolean branch behaviour&#39; );
 </pre>
 								</div>
-							</li><li><b>RETURN_UNDEF_2150_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
+							</li><li><b>RETURN_UNDEF_2149_2: Replace return expression with undef</b><br>LOW: Mutation survived, but impact may be minor
 
 								<div class="suggested-test">
 								<div class="suggest-label">🧪 Suggested Test</div>
@@ -2521,7 +2520,8 @@ is( func(INPUT), EXPECTED, &#39;Verify correct return value&#39; );
 </pre>
 								</div>
 							</li></ul></details>
-<span class=""> 2151: 
+<span class=""> 2150: }
+</span><span class=""> 2151: 
 </span><span class=""> 2152: 1;
 </span><span class=""> 2153: 
 </span><span class=""> 2154: __END__
