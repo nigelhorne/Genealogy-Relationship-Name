@@ -160,6 +160,7 @@ Readonly::Hash my %EN_MALE_RELATIONSHIPS => (
 	'10,8' => 'seventh cousin twice-removed',
 	'10,9' => 'eighth cousin once-removed',
 	'10,10' => 'ninth cousin',
+	'11,1' => 'eigth great-uncle',
 	'12,1' => 'ninth great-uncle',
 );
 
@@ -285,6 +286,7 @@ Readonly::Hash my %EN_FEMALE_RELATIONSHIPS => (
 	'10,8' => 'seventh cousin twice-removed',
 	'10,9' => 'eighth cousin once-removed',
 	'10,10' => 'ninth cousin',
+	'11,1' => 'eigth great-aunt',
 	'12,1' => 'ninth great-aunt',
 );
 
@@ -415,6 +417,7 @@ Readonly::Hash my %FR_MALE_RELATIONSHIPS => (
 	'10,8' => 'cousin au huitieme degre deux fois eloigne',
 	'10,9' => 'cousin au neuvieme degre une fois eloigne',
 	'10,10' => 'cousin au dixieme degre',
+	'11,1' => "huit\N{U+0153}me grand-oncle",
 	'12,1' => "neuvi\N{U+0153}me grand-oncle",
 );
 
@@ -540,6 +543,7 @@ Readonly::Hash my %FR_FEMALE_RELATIONSHIPS => (
 	'10,8' => 'cousine au huitieme degre deux fois eloignee',
 	'10,9' => 'cousine au neuvieme degre une fois eloignee',
 	'10,10' => 'cousine au dixieme degre',
+	'11,1' => "huit\N{U+0153}me grand-tant",
 	'12,1' => "neuvi\N{U+0153}me grand-tant",
 );
 
@@ -669,6 +673,7 @@ Readonly::Hash my %DE_MALE_RELATIONSHIPS => (
 	'10,8' => 'Cousin siebten Grades zweimal entfernt',
 	'10,9' => 'Cousin achten Grades einmal entfernt',
 	'10,10' => 'Cousin neunten Grades',
+	'11,1' => 'achtens grossonkel',
 	'12,1' => 'neuntens grossonkel',
 );
 
@@ -794,6 +799,7 @@ Readonly::Hash my %DE_FEMALE_RELATIONSHIPS => (
 	'10,8' => 'Cousine siebten Grades zweimal entfernt',
 	'10,9' => 'Cousine achten Grades einmal entfernt',
 	'10,10' => 'Cousine neunten Grades',
+	'11,1' => 'achtens grosstante',
 	'12,1' => 'neuntens grosstante',
 );
 
