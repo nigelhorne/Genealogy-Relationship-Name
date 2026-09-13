@@ -162,6 +162,7 @@ Readonly::Hash my %EN_MALE_RELATIONSHIPS => (
 	'10,10' => 'ninth cousin',
 	'11,1' => 'eigth great-uncle',
 	'12,1' => 'ninth great-uncle',
+	'13,1' => 'tenth great-uncle',
 );
 
 Readonly::Hash my %EN_FEMALE_RELATIONSHIPS => (
@@ -288,6 +289,7 @@ Readonly::Hash my %EN_FEMALE_RELATIONSHIPS => (
 	'10,10' => 'ninth cousin',
 	'11,1' => 'eigth great-aunt',
 	'12,1' => 'ninth great-aunt',
+	'13,1' => 'tenth great-aunt',
 );
 
 # ---------------------------------------------------------------------------
@@ -419,6 +421,7 @@ Readonly::Hash my %FR_MALE_RELATIONSHIPS => (
 	'10,10' => 'cousin au dixieme degre',
 	'11,1' => "huit\N{U+0153}me grand-oncle",
 	'12,1' => "neuvi\N{U+0153}me grand-oncle",
+	'13,1' => "dixi\N{U+0153}me grand-oncle",
 );
 
 Readonly::Hash my %FR_FEMALE_RELATIONSHIPS => (
@@ -545,6 +548,7 @@ Readonly::Hash my %FR_FEMALE_RELATIONSHIPS => (
 	'10,10' => 'cousine au dixieme degre',
 	'11,1' => "huit\N{U+0153}me grand-tant",
 	'12,1' => "neuvi\N{U+0153}me grand-tant",
+	'13,1' => "dixi\N{U+0153}me grand-tant",
 );
 
 # ---------------------------------------------------------------------------
@@ -675,6 +679,7 @@ Readonly::Hash my %DE_MALE_RELATIONSHIPS => (
 	'10,10' => 'Cousin neunten Grades',
 	'11,1' => 'achtens grossonkel',
 	'12,1' => 'neuntens grossonkel',
+	'13,1' => 'zehntens grossonkel',
 );
 
 Readonly::Hash my %DE_FEMALE_RELATIONSHIPS => (
@@ -801,6 +806,7 @@ Readonly::Hash my %DE_FEMALE_RELATIONSHIPS => (
 	'10,10' => 'Cousine neunten Grades',
 	'11,1' => 'achtens grosstante',
 	'12,1' => 'neuntens grosstante',
+	'13,1' => 'zehntens grosstante',
 );
 
 # ---------------------------------------------------------------------------
@@ -931,6 +937,7 @@ Readonly::Hash my %DE_CH_MALE_RELATIONSHIPS => (
 	'10,9' => 'Cousin achten Grades einmal entfernt',
 	'10,10' => 'Cousin neunten Grades',
 	'12,1' => 'neuntens grossonkel',
+	'13,1' => 'zehntens grossonkel',
 );
 
 Readonly::Hash my %DE_CH_FEMALE_RELATIONSHIPS => (
@@ -1056,6 +1063,7 @@ Readonly::Hash my %DE_CH_FEMALE_RELATIONSHIPS => (
 	'10,9' => 'Cousine achten Grades einmal entfernt',
 	'10,10' => 'Cousine neunten Grades',
 	'12,1' => 'neuntens grosstant',
+	'13,1' => 'zehntens grosstant',
 );
 
 # ---------------------------------------------------------------------------
