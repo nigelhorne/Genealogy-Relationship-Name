@@ -163,6 +163,7 @@ Readonly::Hash my %EN_MALE_RELATIONSHIPS => (
 	'11,1' => 'eigth great-uncle',
 	'12,1' => 'ninth great-uncle',
 	'13,1' => 'tenth great-uncle',
+	'16,1' => 'thirteenth great-uncle',
 	'17,1' => 'fourteenth great-uncle',
 );
 
@@ -291,6 +292,7 @@ Readonly::Hash my %EN_FEMALE_RELATIONSHIPS => (
 	'11,1' => 'eigth great-aunt',
 	'12,1' => 'ninth great-aunt',
 	'13,1' => 'tenth great-aunt',
+	'16,1' => 'thirteenth great-aunt',
 	'17,1' => 'fourteenth great-aunt',
 );
 
