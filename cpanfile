@@ -3,12 +3,10 @@
 requires 'perl', '5.010';
 
 requires 'Carp';
-requires 'IPC::System::Simple';
 requires 'Object::Configure';
 requires 'Params::Get';
 requires 'Params::Validate::Strict', '0.31';
 requires 'Readonly';
-requires 'Readonly::Values::Months';
 requires 'autodie';
 
 on 'configure' => sub {
@@ -16,11 +14,12 @@ on 'configure' => sub {
 };
 
 on 'test' => sub {
+	requires 'IPC::System::Simple';
+	requires 'Log::Abstraction';
+	requires 'Scalar::Util';
 	requires 'Test::DescribeMe';
 	requires 'Test::Most';
 	requires 'Test::Needs';
-	requires 'Test::Returns';
-	requires 'Test::Which';
 };
 
 on 'develop' => sub {

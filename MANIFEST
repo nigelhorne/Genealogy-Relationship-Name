@@ -6,7 +6,6 @@ Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 README.md
-relationships.txt
 t/edge_cases.t
 t/eof.t
 t/eol.t

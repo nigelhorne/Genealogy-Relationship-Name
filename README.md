@@ -13,7 +13,7 @@ Version 0.03
     my $namer = Genealogy::Relationship::Name->new();
 
     my $name = $namer->name(
-        steps_to_ancestor   => 2,
+        steps_to_ancestor  => 2,
         steps_from_ancestor => 3,
         sex                 => 'F',
     );
@@ -38,8 +38,8 @@ The relationship tables were originally embedded in the `gedcom` and `ged2site`
 distributions inside `Gedcom::Individual::relationship_up()`; this module
 extracts them into a reusable, installable CPAN distribution.
 
-Supported languages: `en` (English, default), `de` (German), `es` (Spanish),
-`fa` (Farsi/Persian), `fr` (French), `la` (Classical Latin).
+Supported languages: `en` (English, default), `de` (German), `de_ch` (Swiss
+German), `es` (Spanish), `fa` (Farsi/Persian), `fr` (French), `la` (Classical Latin).
 
 # METHODS
 
@@ -97,6 +97,13 @@ unknown scalar values as configuration file paths).  The `logger` key is
 therefore stashed before the `configure()` call and restored afterward.
 Any future object-valued constructor arguments must follow the same pattern.
 
+The `language` argument is stored without validation at construction time.
+Validation (regex match + table lookup) occurs at the first `name()` call.
+An invalid language passed to `new()` will therefore not be detected until
+`name()` is called.  To catch the error earlier, call
+`$namer->name(..., language => $lang)` with a test pair immediately
+after construction.
+
 ### EXAMPLE
 
     use Genealogy::Relationship::Name;
@@ -126,7 +133,7 @@ Any future object-valued constructor arguments must follow the same pattern.
 #### Input
 
     {
-        language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/i, optional => 1 },
+        language => { type => 'string', regex => qr/^(?:en|de(?:[-_]ch)?|es|fa|fr|la)/, optional => 1 },
         logger   => { type => 'object', optional => 1 },
     }
 
@@ -164,8 +171,9 @@ code, returns a localised relationship-name string.
 
 - `language` (string, optional)
 
-    BCP-47-style language tag (only the primary subtag is used).
-    Supported values: `en` (default), `de`, `es`, `fa`, `fr`, `la`.
+    BCP-47-style language tag.
+    Supported values: `en` (default), `de`, `de_ch` (Swiss German, may also
+    be supplied as the BCP-47 tag `de-CH`), `es`, `fa`, `fr`, `la`.
 
     Note: `fa` (Farsi/Persian) values are stored as `\N{U+XXXX}` Unicode
     escapes and render correctly in any Unicode-aware context.  `la`
@@ -219,7 +227,7 @@ is not found in the lookup table.
         steps_to_ancestor   => { type => 'integer', minimum => 0 },
         steps_from_ancestor => { type => 'integer', minimum => 0 },
         sex                 => { type => 'string', memberof => ['M', 'F'] },
-        language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/, optional => 1 },
+        language => { type => 'string', regex => qr/^(?:en|de(?:[-_]ch)?|es|fa|fr|la)/, optional => 1 },
         # person is handled before validate_strict (PVS infers constraints from objects)
         family_side => { type => 'string', memberof => ['paternal','maternal'], optional => 1 },
     }

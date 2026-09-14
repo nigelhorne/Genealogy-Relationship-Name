@@ -795,6 +795,18 @@ subtest 'Regression: FR female table no English text and correct gender' => sub 
 	unlike($f87, qr/\bonce-removed\b/, 'fr 8,7 F has no English "once-removed"');
 };
 
+subtest 'Regression: de_ch underscore form accepted by name() (API contract)' => sub {
+	plan tests => 2;
+
+	my $namer = Genealogy::Relationship::Name->new();
+
+	# supported_languages() returns 'de_ch' (underscore); passing that back to
+	# name() must not croak.  Previously the validation regex only matched 'de-ch'.
+	my $m = eval { $namer->name(steps_to_ancestor => 2, steps_from_ancestor => 0, sex => 'M', language => 'de_ch') };
+	ok(!$@, 'de_ch (underscore) accepted without croak');
+	is($m, 'Grossvater', 'de_ch => Grossvater');
+};
+
 subtest 'Regression: DE-CH 11,1 entries present (were missing)' => sub {
 	plan tests => 2;
 

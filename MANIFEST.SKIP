@@ -73,4 +73,5 @@ mutation.json
 ^xt/mutant_\d
 CLAUDE.md
 \.claude
+^relationships\.txt$
 \.circleci

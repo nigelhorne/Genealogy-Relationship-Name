@@ -1833,7 +1833,7 @@ Version 0.03
     my $namer = Genealogy::Relationship::Name->new();
 
     my $name = $namer->name(
-        steps_to_ancestor   => 2,
+        steps_to_ancestor  => 2,
         steps_from_ancestor => 3,
         sex                 => 'F',
     );
@@ -1858,8 +1858,8 @@ The relationship tables were originally embedded in the C<gedcom> and C<ged2site
 distributions inside C<Gedcom::Individual::relationship_up()>; this module
 extracts them into a reusable, installable CPAN distribution.
 
-Supported languages: C<en> (English, default), C<de> (German), C<es> (Spanish),
-C<fa> (Farsi/Persian), C<fr> (French), C<la> (Classical Latin).
+Supported languages: C<en> (English, default), C<de> (German), C<de_ch> (Swiss
+German), C<es> (Spanish), C<fa> (Farsi/Persian), C<fr> (French), C<la> (Classical Latin).
 
 =head1 METHODS
 
@@ -1921,6 +1921,13 @@ unknown scalar values as configuration file paths).  The C<logger> key is
 therefore stashed before the C<configure()> call and restored afterward.
 Any future object-valued constructor arguments must follow the same pattern.
 
+The C<language> argument is stored without validation at construction time.
+Validation (regex match + table lookup) occurs at the first C<name()> call.
+An invalid language passed to C<new()> will therefore not be detected until
+C<name()> is called.  To catch the error earlier, call
+C<< $namer->name(..., language => $lang) >> with a test pair immediately
+after construction.
+
 =head3 EXAMPLE
 
     use Genealogy::Relationship::Name;
@@ -1950,7 +1957,7 @@ Any future object-valued constructor arguments must follow the same pattern.
 =head4 Input
 
     {
-        language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/i, optional => 1 },
+        language => { type => 'string', regex => qr/^(?:en|de(?:[-_]ch)?|es|fa|fr|la)/, optional => 1 },
         logger   => { type => 'object', optional => 1 },
     }
 
@@ -2021,8 +2028,9 @@ Sex of person B.  Must be C<'M'> (male) or C<'F'> (female).
 
 =item C<language> (string, optional)
 
-BCP-47-style language tag (only the primary subtag is used).
-Supported values: C<en> (default), C<de>, C<es>, C<fa>, C<fr>, C<la>.
+BCP-47-style language tag.
+Supported values: C<en> (default), C<de>, C<de_ch> (Swiss German, may also
+be supplied as the BCP-47 tag C<de-CH>), C<es>, C<fa>, C<fr>, C<la>.
 
 Note: C<fa> (Farsi/Persian) values are stored as C<\N{U+XXXX}> Unicode
 escapes and render correctly in any Unicode-aware context.  C<la>
@@ -2083,7 +2091,7 @@ is not found in the lookup table.
 	steps_to_ancestor   => { type => 'integer', minimum => 0 },
 	steps_from_ancestor => { type => 'integer', minimum => 0 },
 	sex                 => { type => 'string', memberof => ['M', 'F'] },
-        language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/, optional => 1 },
+        language => { type => 'string', regex => qr/^(?:en|de(?:[-_]ch)?|es|fa|fr|la)/, optional => 1 },
 	# person is handled before validate_strict (PVS infers constraints from objects)
 	family_side => { type => 'string', memberof => ['paternal','maternal'], optional => 1 },
     }
@@ -2107,7 +2115,7 @@ sub name {
 			steps_to_ancestor   => { type => 'integer', minimum => 0 },
 			steps_from_ancestor => { type => 'integer', minimum => 0 },
 			sex                 => { type => 'string', memberof => ['M', 'F'] },
-			language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/, optional => 1 },
+			language => { type => 'string', regex => qr/^(?:en|de(?:[-_]ch)?|es|fa|fr|la)/, optional => 1 },
 			person              => { type => 'object', optional => 1 },
 			family_side         => { type => 'string', memberof => ['paternal','maternal'],
 			                         optional => 1 },
