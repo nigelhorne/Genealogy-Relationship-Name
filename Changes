@@ -1,6 +1,6 @@
 Revision history for Genealogy::Relationship::Name
 
-0.04
+0.04	Sun Sep 13 09:28:42 PM EDT 2026
 	[Enhancements]
 	- Completed high-step uncle/aunt translations (steps 11-18) for all
 	  supported languages: fr, de, de_ch, es, and fa (Farsi).  FR adds
