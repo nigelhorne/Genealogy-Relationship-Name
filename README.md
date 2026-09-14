@@ -60,7 +60,8 @@ file via [Object::Configure](https://metacpan.org/pod/Object%3A%3AConfigure).
 - `language` (string, optional)
 
     Default BCP-47 language tag (primary subtag only) for all `name()` calls
-    on this object.  Supported values: `en` (default), `fr`, `de`.  May be
+    on this object.  Supported values: `en` (default), `de`, `de_ch` (Swiss
+    German), `es`, `fa` (Farsi/Persian), `fr`, `la` (Classical Latin).  May be
     overridden per-call by passing `language` to `name()`.
 
 - `logger`
@@ -125,7 +126,7 @@ Any future object-valued constructor arguments must follow the same pattern.
 #### Input
 
     {
-        language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/, optional => 1 },
+        language => { type => 'string', regex => qr/^(?:en|de(?:-ch)?|es|fa|fr|la)/i, optional => 1 },
         logger   => { type => 'object', optional => 1 },
     }
 
@@ -139,8 +140,6 @@ Any future object-valued constructor arguments must follow the same pattern.
 ## name
 
 Returns the name of the relationship between person A and person B.
-
-### PURPOSE
 
 Given the number of steps from person A up to the nearest common ancestor
 (`steps_to_ancestor`) and the number of steps from that ancestor down to
@@ -231,23 +230,6 @@ is not found in the lookup table.
         type     => 'string',
         optional => 1,     # undef when the combination is not tabulated
     }
-
-### FORMAL SPECIFICATION
-
-    name ______________________________________________________
-    [In]  steps_to_ancestor   : N0
-          steps_from_ancestor : N0
-          sex                 : {M, F}
-          language            : {en, es, fa, fr, de, la}?  (default en)
-          person              : Object?
-    [Out] result              : String | undef
-
-    Let key      == steps_to_ancestor ++ "," ++ steps_from_ancestor
-    Let side_key == key ++ "," ++ family_side  if family_side defined
-    Let table    == RELATIONSHIP_TABLES(language)(sex)
-    result == table(side_key)  if family_side defined and side_key in dom table
-           == table(key)       if key in dom table
-           == undef            otherwise
 
 ## supported\_languages
 
@@ -387,15 +369,22 @@ dispatch path.
 
 # BUGS AND LIMITATIONS
 
-The lookup tables currently cover steps 0-6 in both directions.  Relationships
-further removed (seventh cousin, etc.) return `undef`.  Pull requests adding
-deeper tables are welcome.
+The direct-line and cousin tables cover steps 0-10 in both directions.
+Some language tables have sparser coverage at high step counts (e.g. Latin
+has no classical term beyond 6th-degree ancestors, and returns `undef`).
+The French tables use two overlapping naming conventions (_arrière-petit-cousin_
+vs _cousin au N-ième degré_) that are not applied fully consistently; a
+native-French genealogist's review of the higher-step entries would be welcome.
+The `person` argument to `name()` is forwarded to the logger as `ctx`
+when an error occurs, but Log::Abstraction's per-call `ctx` override
+API may not be available in all versions; test your logger integration
+if you rely on this behaviour.
 
 # TODO
 
-- Extract and integrate the Latin relationship handling code currently
-embedded in the `gedcom` and `ged2site` programs, adding `la` as a
-supported language alongside `en`, `fr`, and `de`.
+- Add Readme section documenting the French dual-naming convention
+(_arrière-petit-cousin_ vs _cousin au N-ième degré_) and the depth at which
+each language's table becomes sparse.
 
 # SEE ALSO
 
@@ -468,14 +457,17 @@ You can also look for information at:
     [In]  steps_to_ancestor   : N0
           steps_from_ancestor : N0
           sex                 : {M, F}
-          language            : {en, fr, de}?  (default en)
+          language            : {en, es, fa, fr, de, de_ch, la}?  (default en)
           person              : Object?
+          family_side         : {paternal, maternal}?
     [Out] result              : String | undef
 
-    Let key == steps_to_ancestor ++ "," ++ steps_from_ancestor
-    Let table == RELATIONSHIP_TABLES(language)(sex)
-    result == table(key)  if key in dom table
-           == undef       otherwise
+    Let key      == steps_to_ancestor ++ "," ++ steps_from_ancestor
+    Let side_key == key ++ "," ++ family_side  if family_side defined
+    Let table    == RELATIONSHIP_TABLES(language)(sex)
+    result == table(side_key)  if family_side defined and side_key in dom table
+           == table(key)       if key in dom table
+           == undef            otherwise
 
 ## supported\_languages
 
