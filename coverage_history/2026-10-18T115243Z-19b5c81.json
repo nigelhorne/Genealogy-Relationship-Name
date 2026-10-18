@@ -1,0 +1,193 @@
+{
+   "runs" : [
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324382.13585,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "-e",
+         "start" : 1792324376.73749,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324376.89609,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "-e",
+         "start" : 1792324376.89594,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324377.6371,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "t/edge_cases.t",
+         "start" : 1792324377.31131,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324377.97592,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "t/eof.t",
+         "start" : 1792324377.97563,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324378.22381,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "t/eol.t",
+         "start" : 1792324378.22347,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324378.81709,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "t/extended_tests.t",
+         "start" : 1792324378.61842,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324379.43977,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "t/function.t",
+         "start" : 1792324379.32331,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324380.04525,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "t/integration.t",
+         "start" : 1792324379.94215,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324380.60906,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "t/locales.t",
+         "start" : 1792324380.53965,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324381.1477,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "t/mutant_survivors.t",
+         "start" : 1792324381.09106,
+         "version" : "0.04"
+      },
+      {
+         "OS" : "linux",
+         "abstract" : "Return a genealogical relationship name from step counts",
+         "dir" : "/home/runner/work/Genealogy-Relationship-Name/Genealogy-Relationship-Name",
+         "finish" : 1792324381.89246,
+         "name" : "Genealogy-Relationship-Name",
+         "perl" : "5.40.5",
+         "run" : "t/unit.t",
+         "start" : 1792324381.61916,
+         "version" : "0.04"
+      }
+   ],
+   "summary" : {
+      "Total" : {
+         "branch" : {
+            "covered" : 17,
+            "error" : 1,
+            "percentage" : 94.4444444444444,
+            "total" : 18,
+            "uncoverable" : 0
+         },
+         "condition" : {
+            "covered" : 11,
+            "error" : 3,
+            "percentage" : 78.5714285714286,
+            "total" : 14,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 66,
+            "percentage" : 100,
+            "total" : 66
+         },
+         "subroutine" : {
+            "covered" : 13,
+            "percentage" : 100,
+            "total" : 13
+         },
+         "total" : {
+            "covered" : 107,
+            "error" : 4,
+            "percentage" : 96.3963963963964,
+            "total" : 111,
+            "uncoverable" : 0
+         }
+      },
+      "lib/Genealogy/Relationship/Name.pm" : {
+         "branch" : {
+            "covered" : 17,
+            "error" : 1,
+            "percentage" : 94.4444444444444,
+            "total" : 18,
+            "uncoverable" : 0
+         },
+         "condition" : {
+            "covered" : 11,
+            "error" : 3,
+            "percentage" : 78.5714285714286,
+            "total" : 14,
+            "uncoverable" : 0
+         },
+         "statement" : {
+            "covered" : 66,
+            "percentage" : 100,
+            "total" : 66
+         },
+         "subroutine" : {
+            "covered" : 13,
+            "percentage" : 100,
+            "total" : 13
+         },
+         "total" : {
+            "covered" : 107,
+            "error" : 4,
+            "percentage" : 96.3963963963964,
+            "total" : 111,
+            "uncoverable" : 0
+         }
+      }
+   }
+}
